@@ -1,4 +1,5 @@
 mod day;
+mod result;
 mod year;
 
 pub use day::{AocDay, Day};

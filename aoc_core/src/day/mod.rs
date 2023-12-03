@@ -1,54 +1,73 @@
 mod parser;
 mod part;
 
-use std::{collections::HashMap, fs::File, io::Read, path::Path};
+use std::{collections::BTreeMap, fs, path::PathBuf, time::Instant};
 
-use self::{parser::Parser, part::Part};
+use crate::result::{DayResult, ParserResult, PartResult};
+
+use self::{parser::DayParser, part::DayPart};
 
 pub trait AocDay {
-    fn run(&mut self, part: Option<String>);
+    fn run(&self) -> DayResult;
 }
 
 impl<T> AocDay for Day<T> {
-    fn run(&mut self, part: Option<String>) {
-        for file in &mut self.files {
-            let mut input = String::new();
-            file.read_to_string(&mut input).unwrap();
-            let parsed = self.parser.run(input);
+    fn run(&self) -> DayResult {
+        let day_instant = Instant::now();
 
-            if let Some(name) = &part {
-                let answer = self.parts[name].run(&parsed);
-                println!("{name}: {answer}");
-            } else {
-                for (name, part) in &self.parts {
-                    let answer = part.run(&parsed);
-                    println!("{name}: {answer}");
-                }
+        let mut parsers = Vec::new();
+        let mut parts = Vec::new();
+
+        for file in &self.files {
+            let input = fs::read_to_string(file).unwrap();
+            let parser_instant = Instant::now();
+            let parsed = self.parser.run(input);
+            parsers.push(ParserResult::new(file.to_owned(), parser_instant.elapsed()));
+
+            for (name, part) in &self.parts {
+                let part_instant = Instant::now();
+                let answer = part.run(&parsed);
+
+                parts.push(PartResult::new(
+                    name.to_owned(),
+                    file.to_owned(),
+                    answer,
+                    part_instant.elapsed(),
+                ));
             }
         }
+
+        DayResult::new(parsers, parts, day_instant.elapsed())
     }
 }
 
 pub struct Day<T> {
-    parser: Parser<T>,
-    parts: HashMap<String, Part<T>>,
-    files: Vec<File>,
+    parser: DayParser<T>,
+    parts: BTreeMap<String, DayPart<T>>,
+    files: Vec<PathBuf>,
 }
 
 impl<T> Day<T> {
     pub fn new(parser: impl Fn(String) -> T + 'static) -> Self {
         Self {
-            parser: Parser::new(parser),
-            parts: HashMap::new(),
+            parser: DayParser::new(parser),
+            parts: BTreeMap::new(),
             files: Vec::new(),
         }
     }
 
     pub fn add_part(&mut self, name: String, part: impl Fn(&T) -> String + 'static) {
-        self.parts.insert(name, Part::new(part));
+        self.parts.insert(name, DayPart::new(part));
     }
 
-    pub fn add_file(&mut self, path: impl AsRef<Path>) {
-        self.files.push(File::open(path).unwrap());
+    pub fn add_file(&mut self, path: impl Into<PathBuf>) {
+        let path: PathBuf = path.into();
+
+        if !path.exists() {
+            eprintln!("The given path '{path:?}' does not exist");
+            return;
+        }
+
+        self.files.push(path);
     }
 }

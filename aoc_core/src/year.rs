@@ -1,26 +1,32 @@
-use std::collections::HashMap;
+use std::{collections::BTreeMap, time::Instant};
 
-use crate::day::AocDay;
+use crate::{day::AocDay, result::YearResult};
 
 pub struct Year {
-    days: HashMap<String, Box<dyn AocDay>>,
+    name: String,
+    days: BTreeMap<String, Box<dyn AocDay>>,
 }
 
 impl Year {
-    pub fn new() -> Self {
+    pub fn new(name: &str) -> Self {
         Self {
-            days: Default::default(),
+            name: name.to_owned(),
+            days: BTreeMap::new(),
         }
     }
 
-    pub fn register_day(&mut self, name: String, day: impl AocDay + 'static) {
-        self.days.insert(name, Box::new(day));
+    pub fn register_day(&mut self, name: &str, day: impl AocDay + 'static) {
+        self.days.insert(name.to_owned(), Box::new(day));
     }
 
-    pub fn run(&mut self) {
+    pub fn run(&mut self) -> YearResult {
+        let instant = Instant::now();
+        let mut days = BTreeMap::new();
+
         for (name, day) in &mut self.days {
-            println!("{name}: ");
-            day.run(None);
+            days.insert(name.to_owned(), day.run());
         }
+
+        YearResult::new(self.name.to_owned(), days, instant.elapsed())
     }
 }

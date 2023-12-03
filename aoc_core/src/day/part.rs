@@ -1,8 +1,8 @@
-pub struct Part<T>(Box<dyn Fn(&T) -> String + 'static>);
+pub struct DayPart<T>(Box<dyn Fn(&T) -> String + 'static>);
 
-impl<T> Part<T> {
+impl<T> DayPart<T> {
     pub fn new(part: impl Fn(&T) -> String + 'static) -> Self {
-        Part(Box::new(part))
+        DayPart(Box::new(part))
     }
 
     pub fn run(&self, value: &T) -> String {
