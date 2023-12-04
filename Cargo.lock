@@ -16,7 +16,7 @@ name = "aoc"
 version = "0.1.0"
 dependencies = [
  "aoc_core",
- "regex",
+ "year2023",
 ]
 
 [[package]]
@@ -121,4 +121,12 @@ dependencies = [
  "libredox",
  "numtoa",
  "redox_termios",
+]
+
+[[package]]
+name = "year2023"
+version = "0.1.0"
+dependencies = [
+ "aoc_core",
+ "regex",
 ]
