@@ -1,7 +1,13 @@
 mod parser;
 mod part;
 
-use std::{collections::BTreeMap, fs, path::PathBuf, time::Instant};
+use std::{
+    collections::BTreeMap,
+    fs,
+    panic::Location,
+    path::{Path, PathBuf},
+    time::Instant,
+};
 
 use self::{parser::DayParser, part::DayPart};
 use crate::{
@@ -64,14 +70,17 @@ impl<T> AocDay<T> {
         self.parts.insert(name, DayPart::new(part));
     }
 
-    pub fn add_file(&mut self, path: impl Into<PathBuf>) {
-        let path: PathBuf = path.into();
+    #[track_caller]
+    pub fn add_file(&mut self, path: impl AsRef<Path>) {
+        let mut full_path = PathBuf::from(Location::caller().file());
+        full_path.pop();
+        full_path.push(path);
 
-        if !path.exists() {
-            eprintln!("The given path '{path:?}' does not exist");
+        if !full_path.exists() {
+            eprintln!("The given path '{full_path:?}' does not exist");
             return;
         }
 
-        self.files.push(path);
+        self.files.push(full_path);
     }
 }

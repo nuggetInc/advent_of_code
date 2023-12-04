@@ -4,8 +4,8 @@ pub fn day04() -> impl Day {
     let mut solution = AocDay::new(YearDay::Day04, parse);
     solution.add_part("Part 1".into(), part_1);
     solution.add_part("Part 2".into(), part_2);
-    solution.add_file("solutions/year2023/src/day04/test.txt");
-    solution.add_file("solutions/year2023/src/day04/input.txt");
+    solution.add_file("test.txt");
+    solution.add_file("input.txt");
     solution
 }
 
