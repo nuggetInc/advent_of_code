@@ -3,9 +3,8 @@ mod part;
 
 use std::{collections::BTreeMap, fs, path::PathBuf, time::Instant};
 
-use crate::result::{DayResult, ParserResult, PartResult};
-
 use self::{parser::DayParser, part::DayPart};
+use crate::result::{DayResult, ParserResult, PartResult};
 
 pub trait Day {
     fn run(&self) -> DayResult;

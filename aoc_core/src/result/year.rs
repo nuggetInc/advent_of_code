@@ -1,5 +1,6 @@
 use core::fmt;
 use std::time::Duration;
+
 use termion::color::{Black, Fg, Reset};
 
 use super::DayResult;

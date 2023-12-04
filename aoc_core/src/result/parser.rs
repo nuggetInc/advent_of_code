@@ -1,6 +1,6 @@
 use core::fmt;
-use std::ffi::OsStr;
-use std::{path::PathBuf, time::Duration};
+use std::{ffi::OsStr, path::PathBuf, time::Duration};
+
 use termion::color::{Black, Fg, Reset};
 pub struct ParserResult {
     file: PathBuf,
