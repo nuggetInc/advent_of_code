@@ -2,7 +2,7 @@ use aoc_core::{AocDay, Day, YearDay};
 
 pub fn day() -> impl Day {
     let mut solution = AocDay::new(YearDay::Day04, parse);
-    solution.part_1(part_1);
+    solution.part_1(part_one);
     solution.part_2(part_2);
     solution.add_file("test.txt");
     solution.add_file("input.txt");
@@ -36,7 +36,7 @@ fn parse(input: String) -> Vec<Card> {
         .collect()
 }
 
-fn part_1(cards: &Vec<Card>) -> String {
+fn part_one(cards: &Vec<Card>) -> String {
     let mut total = 0;
 
     for card in cards {

@@ -4,8 +4,8 @@ use aoc_core::{AocDay, Day, YearDay};
 
 pub fn day() -> impl Day {
     let mut solution = AocDay::new(YearDay::Day03, parse);
-    solution.part_1(part_1);
-    solution.part_2(part_2);
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("test.txt");
     solution.add_file("input.txt");
     solution
@@ -46,7 +46,7 @@ fn parse(input: String) -> (Vec<u32>, Vec<Vec<Cell>>) {
     (numbers, map)
 }
 
-fn part_1((numbers, map): &(Vec<u32>, Vec<Vec<Cell>>)) -> String {
+fn part_one((numbers, map): &(Vec<u32>, Vec<Vec<Cell>>)) -> String {
     let mut marked = HashSet::new();
 
     for (row_index, row) in map.iter().enumerate() {
@@ -72,7 +72,7 @@ fn part_1((numbers, map): &(Vec<u32>, Vec<Vec<Cell>>)) -> String {
         .to_string()
 }
 
-fn part_2((numbers, map): &(Vec<u32>, Vec<Vec<Cell>>)) -> String {
+fn part_two((numbers, map): &(Vec<u32>, Vec<Vec<Cell>>)) -> String {
     let mut sum = 0;
     for (row_index, row) in map.iter().enumerate() {
         for (cell_index, cell) in row.iter().enumerate() {

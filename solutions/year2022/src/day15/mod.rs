@@ -1,0 +1,124 @@
+use aoc_core::{AocDay, Day, YearDay};
+use regex::Regex;
+
+pub fn day() -> impl Day {
+    let mut solution = AocDay::new(YearDay::Day15, parse);
+    solution.part_1(part_one);
+    solution.part_2(part_two);
+    solution.add_file("input.txt");
+    solution
+}
+
+fn part_one(sensors: &Vec<Sensor>) -> String {
+    const Y: i64 = 2000000;
+
+    let mut min_x = 0;
+    let mut max_x = 0;
+
+    for sensor in sensors {
+        let distance_y = (Y - sensor.position.y).abs();
+        let radius = sensor.distance();
+
+        if sensor.position.x - radius + distance_y < min_x {
+            min_x = sensor.position.x - radius + distance_y;
+        }
+        if sensor.position.x + radius - distance_y > max_x {
+            max_x = sensor.position.x + radius - distance_y;
+        }
+    }
+
+    let mut count = 0;
+
+    for x in min_x..=max_x {
+        let position = Position::new(x, Y);
+
+        if sensors.iter().any(|sensor| {
+            sensor.beacon != position && sensor.distance() >= sensor.position.distance(&position)
+        }) {
+            count += 1;
+        }
+    }
+
+    count.to_string()
+}
+
+fn part_two(sensors: &Vec<Sensor>) -> String {
+    const SIZE: i64 = 4000000;
+
+    for y in 0..=SIZE {
+        let mut x = 0;
+        'inner: while x <= SIZE {
+            let position = Position::new(x, y);
+
+            for sensor in sensors {
+                let radius = sensor.distance();
+                let distance = sensor.position.distance(&position);
+
+                if distance <= radius {
+                    x = sensor.position.x + sensor.distance() - (y - sensor.position.y).abs() + 1;
+                    continue 'inner;
+                }
+            }
+
+            return (x * 4000000 + y).to_string();
+        }
+    }
+
+    todo!()
+}
+
+fn parse(input: String) -> Vec<Sensor> {
+    let regex =
+        Regex::new(r"Sensor at x=(?P<sx>-?\d+), y=(?P<sy>-?\d+): closest beacon is at x=(?P<bx>-?\d+), y=(?P<by>-?\d+)")
+            .unwrap();
+
+    let mut sensors = Vec::new();
+
+    for line in input.split_terminator("\n") {
+        let captures = regex.captures(line).unwrap();
+
+        let sx = captures["sx"].parse().unwrap();
+        let sy = captures["sy"].parse().unwrap();
+        let bx = captures["bx"].parse().unwrap();
+        let by = captures["by"].parse().unwrap();
+
+        let sensor = Sensor::new(Position::new(sx, sy), Position::new(bx, by));
+        sensors.push(sensor);
+    }
+
+    sensors
+}
+
+#[derive(Debug, PartialEq, Eq)]
+struct Sensor {
+    position: Position,
+    beacon: Position,
+}
+
+impl Sensor {
+    fn new(position: Position, beacon: Position) -> Self {
+        Self { position, beacon }
+    }
+
+    fn distance(&self) -> i64 {
+        self.position.distance(&self.beacon)
+    }
+
+    // fn find_edges(&self, rhs: &Self) -> Option<(Position, Position)> {}
+}
+
+#[derive(Debug, PartialEq, Eq)]
+struct Position {
+    x: i64,
+    y: i64,
+}
+
+impl Position {
+    fn new(x: i64, y: i64) -> Self {
+        Self { x, y }
+    }
+
+    fn distance(&self, rhs: &Self) -> i64 {
+        (self.x - rhs.x).abs() + (self.y - rhs.y).abs()
+    }
+}

@@ -1,0 +1,8 @@
+[package]
+name = "year2022"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+aoc_core = { path = "../../aoc_core" }
+regex = "1.10.2"
