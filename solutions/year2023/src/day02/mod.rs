@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use aoc_core::{AocDay, Day, YearDay};
 use regex::Regex;
 
-pub fn day02() -> impl Day {
+pub fn day() -> impl Day {
     let mut solution = AocDay::new(YearDay::Day02, parse);
     solution.add_part("Part 1".into(), part_1);
     solution.add_part("Part 2".into(), part_2);

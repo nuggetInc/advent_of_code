@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use aoc_core::{AocDay, Day, YearDay};
 
-pub fn day03() -> impl Day {
+pub fn day() -> impl Day {
     let mut solution = AocDay::new(YearDay::Day03, parse);
     solution.add_part("Part 1".into(), part_1);
     solution.add_part("Part 2".into(), part_2);
