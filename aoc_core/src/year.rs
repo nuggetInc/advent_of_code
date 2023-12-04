@@ -15,8 +15,12 @@ impl Year {
         }
     }
 
-    pub fn register_day(&mut self, index: YearDay, day: impl Day + 'static) {
+    pub fn add_day(&mut self, index: YearDay, day: impl Day + 'static) {
         self.days.insert(index, Box::new(day));
+    }
+
+    pub fn get_day(&self, index: &YearDay) -> Option<&dyn Day> {
+        self.days.get(index).map(Box::as_ref)
     }
 
     pub fn run(&mut self) -> YearResult {
