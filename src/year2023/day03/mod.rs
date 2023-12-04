@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use aoc_core::{AocDay, Day};
 
 pub fn day03() -> impl Day {
-    let mut solution = AocDay::new(parse);
+    let mut solution = AocDay::new("Day 03", parse);
     solution.add_part("Part 1".into(), part_1);
     solution.add_part("Part 2".into(), part_2);
     solution.add_file("src/year2023/day03/test.txt");

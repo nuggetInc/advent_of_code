@@ -17,12 +17,14 @@ version = "0.1.0"
 dependencies = [
  "aoc_core",
  "regex",
- "termion",
 ]
 
 [[package]]
 name = "aoc_core"
 version = "0.1.0"
+dependencies = [
+ "termion",
+]
 
 [[package]]
 name = "bitflags"

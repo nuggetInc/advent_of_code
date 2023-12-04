@@ -37,19 +37,21 @@ impl<T> Day for AocDay<T> {
             }
         }
 
-        DayResult::new(parsers, parts, day_instant.elapsed())
+        DayResult::new(self.name.clone(), parsers, parts, day_instant.elapsed())
     }
 }
 
 pub struct AocDay<T> {
+    name: String,
     parser: DayParser<T>,
     parts: BTreeMap<String, DayPart<T>>,
     files: Vec<PathBuf>,
 }
 
 impl<T> AocDay<T> {
-    pub fn new(parser: impl Fn(String) -> T + 'static) -> Self {
+    pub fn new(name: &str, parser: impl Fn(String) -> T + 'static) -> Self {
         Self {
+            name: name.to_owned(),
             parser: DayParser::new(parser),
             parts: BTreeMap::new(),
             files: Vec::new(),

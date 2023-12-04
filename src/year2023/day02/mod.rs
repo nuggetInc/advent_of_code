@@ -4,7 +4,7 @@ use aoc_core::{AocDay, Day};
 use regex::Regex;
 
 pub fn day02() -> impl Day {
-    let mut solution = AocDay::new(parse);
+    let mut solution = AocDay::new("Day 02", parse);
     solution.add_part("Part 1".into(), part_1);
     solution.add_part("Part 2".into(), part_2);
     solution.add_file("src/year2023/day02/test.txt");

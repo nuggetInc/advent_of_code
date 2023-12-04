@@ -21,10 +21,10 @@ impl Year {
 
     pub fn run(&mut self) -> YearResult {
         let instant = Instant::now();
-        let mut days = BTreeMap::new();
+        let mut days = Vec::new();
 
-        for (name, day) in &mut self.days {
-            days.insert(name.to_owned(), day.run());
+        for (_, day) in &mut self.days {
+            days.push(day.run());
         }
 
         YearResult::new(self.name.to_owned(), days, instant.elapsed())
