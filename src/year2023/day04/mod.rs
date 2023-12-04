@@ -10,32 +10,30 @@ pub fn day04() -> impl Day {
 }
 
 fn parse(input: String) -> Vec<Card> {
-    let mut cards = Vec::new();
+    input
+        .split_terminator('\n')
+        .map(|line| {
+            let card_split = line.split(':');
 
-    for line in input.split_terminator('\n') {
-        let mut card_split = line.split(':');
-        card_split.next();
+            let mut numbers_split = card_split.skip(1).next().unwrap().split('|');
 
-        let mut numbers_split = card_split.next().unwrap().split('|');
+            let winning = numbers_split
+                .next()
+                .unwrap()
+                .split(' ')
+                .filter_map(|s| s.parse().ok())
+                .collect();
 
-        let winning = numbers_split
-            .next()
-            .unwrap()
-            .split(' ')
-            .filter_map(|s| s.parse().ok())
-            .collect();
+            let ours = numbers_split
+                .next()
+                .unwrap()
+                .split(' ')
+                .filter_map(|s| s.parse().ok())
+                .collect();
 
-        let ours = numbers_split
-            .next()
-            .unwrap()
-            .split(' ')
-            .filter_map(|s| s.parse().ok())
-            .collect();
-
-        cards.push(Card::new(winning, ours));
-    }
-
-    cards
+            Card::new(winning, ours)
+        })
+        .collect()
 }
 
 fn part_1(cards: &Vec<Card>) -> String {
@@ -54,8 +52,10 @@ fn part_1(cards: &Vec<Card>) -> String {
 
 fn part_2(cards: &Vec<Card>) -> String {
     let mut counts = vec![1; cards.len()];
+    let mut sum = 0;
 
     for index in 0..cards.len() {
+        sum += counts[index];
         let winning = cards[index].winning();
 
         if winning == 0 {
@@ -67,7 +67,7 @@ fn part_2(cards: &Vec<Card>) -> String {
         }
     }
 
-    counts.into_iter().sum::<u32>().to_string()
+    sum.to_string()
 }
 
 #[derive(Debug)]
