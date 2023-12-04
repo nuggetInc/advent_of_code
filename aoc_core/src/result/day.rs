@@ -4,8 +4,9 @@ use std::time::Duration;
 use termion::color::{Black, Fg, Reset};
 
 use super::{ParserResult, PartResult};
+use crate::YearDay;
 pub struct DayResult {
-    name: String,
+    day: YearDay,
     parsers: Vec<ParserResult>,
     parts: Vec<PartResult>,
     elapsed: Duration,
@@ -13,13 +14,13 @@ pub struct DayResult {
 
 impl DayResult {
     pub fn new(
-        name: String,
+        day: YearDay,
         parsers: Vec<ParserResult>,
         parts: Vec<PartResult>,
         elapsed: Duration,
     ) -> Self {
         Self {
-            name,
+            day,
             parsers,
             parts,
             elapsed,
@@ -32,7 +33,7 @@ impl fmt::Display for DayResult {
         writeln!(
             f,
             "{: <40}{}{: >20?}{}",
-            self.name,
+            self.day,
             Fg(Black),
             self.elapsed,
             Fg(Reset),

@@ -4,7 +4,10 @@ mod part;
 use std::{collections::BTreeMap, fs, path::PathBuf, time::Instant};
 
 use self::{parser::DayParser, part::DayPart};
-use crate::result::{DayResult, ParserResult, PartResult};
+use crate::{
+    result::{DayResult, ParserResult, PartResult},
+    YearDay,
+};
 
 pub trait Day {
     fn run(&self) -> DayResult;
@@ -36,21 +39,21 @@ impl<T> Day for AocDay<T> {
             }
         }
 
-        DayResult::new(self.name.clone(), parsers, parts, day_instant.elapsed())
+        DayResult::new(self.day.clone(), parsers, parts, day_instant.elapsed())
     }
 }
 
 pub struct AocDay<T> {
-    name: String,
+    day: YearDay,
     parser: DayParser<T>,
     parts: BTreeMap<String, DayPart<T>>,
     files: Vec<PathBuf>,
 }
 
 impl<T> AocDay<T> {
-    pub fn new(name: &str, parser: impl Fn(String) -> T + 'static) -> Self {
+    pub fn new(day: YearDay, parser: impl Fn(String) -> T + 'static) -> Self {
         Self {
-            name: name.to_owned(),
+            day,
             parser: DayParser::new(parser),
             parts: BTreeMap::new(),
             files: Vec::new(),
