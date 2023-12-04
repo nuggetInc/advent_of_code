@@ -45,24 +45,33 @@ fn part_2(lines: &Vec<String>) -> String {
     ];
 
     for line in lines {
-        let mut numbers = Vec::new();
-        for (index, char) in line.char_indices() {
-            if char.is_numeric() {
-                numbers.push(char);
+        'outer: for (index, char) in line.char_indices() {
+            if char.is_digit(10) {
+                total += char.to_digit(10).unwrap() * 10;
+                break;
             } else {
                 for (from, to) in REPLACE {
                     if line[index..].starts_with(from) {
-                        numbers.push(to);
+                        total += to.to_digit(10).unwrap() * 10;
+                        break 'outer;
                     }
                 }
             }
         }
 
-        let mut number = String::new();
-        number.push(*numbers.first().unwrap());
-        number.push(*numbers.last().unwrap());
-
-        total += number.parse::<i32>().unwrap();
+        'outer: for (index, char) in line.char_indices().rev() {
+            if char.is_digit(10) {
+                total += char.to_digit(10).unwrap();
+                break;
+            } else {
+                for (from, to) in REPLACE {
+                    if line[index..].starts_with(from) {
+                        total += to.to_digit(10).unwrap();
+                        break 'outer;
+                    }
+                }
+            }
+        }
     }
 
     total.to_string()
