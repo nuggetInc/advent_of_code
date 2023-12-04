@@ -6,4 +6,5 @@ My solutions to advent of code challenges.
 
 execute `cargo run` to run the whole of 2023
 
-execute `cargo run -- x` to run only day x
+execute `cargo run -- 20**` to run only year the given year
+execute `cargo run -- 20** x` to run only day x within that year

@@ -1,16 +1,13 @@
 use std::env;
 
 fn main() {
-    let mut year2022 = year2022::year();
-    let mut year2023 = year2023::year();
-
     let mut args = env::args();
     args.next();
 
     if let Some(year_raw) = args.next() {
         let mut year = match year_raw.as_str() {
-            "2022" => year2022,
-            "2023" => year2023,
+            "2022" => year2022::year(),
+            "2023" => year2023::year(),
             _ => panic!(
                 "The specified day to run is invalid or not implemented: '{}'",
                 year_raw
@@ -36,7 +33,7 @@ fn main() {
             println!("{result}");
         }
     } else {
-        let result = year2023.run();
+        let result = year2023::year().run();
         println!("{result}");
     }
 }
