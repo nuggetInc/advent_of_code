@@ -24,7 +24,7 @@ impl fmt::Display for PartResult {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "{: <15}{}{: <15}{}{: <15}{}{: >15?}{}",
+            "{}{} - {: <27}{}Answer: {: <18}{}{: >18?}{}",
             self.name,
             Fg(Black),
             self.file.file_name().and_then(OsStr::to_str).unwrap(),

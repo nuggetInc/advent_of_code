@@ -17,9 +17,9 @@ impl fmt::Display for ParserResult {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "{: <40}{}{: >20?}{}",
-            self.file.file_name().and_then(OsStr::to_str).unwrap(),
+            "Parsing{} - {: <30}{: >40?}{}",
             Fg(Black),
+            self.file.file_name().and_then(OsStr::to_str).unwrap(),
             self.elapsed,
             Fg(Reset),
         )

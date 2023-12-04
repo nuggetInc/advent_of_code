@@ -24,7 +24,7 @@ impl fmt::Display for YearResult {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(
             f,
-            "{: <40}{}{: >20?}{}",
+            "{: <40}{}{: >40?}{}",
             self.name,
             Fg(Black),
             self.elapsed,

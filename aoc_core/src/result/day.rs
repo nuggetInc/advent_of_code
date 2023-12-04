@@ -32,7 +32,7 @@ impl fmt::Display for DayResult {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(
             f,
-            "{: <40}{}{: >20?}{}",
+            "{: <40}{}{: >40?}{}",
             self.day.to_string(),
             Fg(Black),
             self.elapsed,

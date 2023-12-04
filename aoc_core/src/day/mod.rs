@@ -2,7 +2,6 @@ mod parser;
 mod part;
 
 use std::{
-    collections::BTreeMap,
     fs,
     panic::Location,
     path::{Path, PathBuf},
@@ -32,12 +31,24 @@ impl<T> Day for AocDay<T> {
             let parsed = self.parser.run(input);
             parsers.push(ParserResult::new(file.to_owned(), parser_instant.elapsed()));
 
-            for (name, part) in &self.parts {
+            if let Some(part) = &self.part_1 {
                 let part_instant = Instant::now();
                 let answer = part.run(&parsed);
 
                 parts.push(PartResult::new(
-                    name.to_owned(),
+                    "Part 1".to_owned(),
+                    file.to_owned(),
+                    answer,
+                    part_instant.elapsed(),
+                ));
+            }
+
+            if let Some(part) = &self.part_2 {
+                let part_instant = Instant::now();
+                let answer = part.run(&parsed);
+
+                parts.push(PartResult::new(
+                    "Part 2".to_owned(),
                     file.to_owned(),
                     answer,
                     part_instant.elapsed(),
@@ -52,7 +63,8 @@ impl<T> Day for AocDay<T> {
 pub struct AocDay<T> {
     day: YearDay,
     parser: DayParser<T>,
-    parts: BTreeMap<String, DayPart<T>>,
+    part_1: Option<DayPart<T>>,
+    part_2: Option<DayPart<T>>,
     files: Vec<PathBuf>,
 }
 
@@ -61,13 +73,18 @@ impl<T> AocDay<T> {
         Self {
             day,
             parser: DayParser::new(parser),
-            parts: BTreeMap::new(),
+            part_1: None,
+            part_2: None,
             files: Vec::new(),
         }
     }
 
-    pub fn add_part(&mut self, name: String, part: impl Fn(&T) -> String + 'static) {
-        self.parts.insert(name, DayPart::new(part));
+    pub fn part_1(&mut self, part: impl Fn(&T) -> String + 'static) {
+        self.part_1 = Some(DayPart::new(part));
+    }
+
+    pub fn part_2(&mut self, part: impl Fn(&T) -> String + 'static) {
+        self.part_2 = Some(DayPart::new(part));
     }
 
     #[track_caller]
