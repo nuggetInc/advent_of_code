@@ -1,10 +1,10 @@
 use std::{collections::BTreeMap, time::Instant};
 
-use crate::{day::AocDay, result::YearResult};
+use crate::{day::Day, result::YearResult};
 
 pub struct Year {
     name: String,
-    days: BTreeMap<String, Box<dyn AocDay>>,
+    days: BTreeMap<String, Box<dyn Day>>,
 }
 
 impl Year {
@@ -15,7 +15,7 @@ impl Year {
         }
     }
 
-    pub fn register_day(&mut self, name: &str, day: impl AocDay + 'static) {
+    pub fn register_day(&mut self, name: &str, day: impl Day + 'static) {
         self.days.insert(name.to_owned(), Box::new(day));
     }
 

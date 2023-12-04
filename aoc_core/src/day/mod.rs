@@ -7,11 +7,11 @@ use crate::result::{DayResult, ParserResult, PartResult};
 
 use self::{parser::DayParser, part::DayPart};
 
-pub trait AocDay {
+pub trait Day {
     fn run(&self) -> DayResult;
 }
 
-impl<T> AocDay for Day<T> {
+impl<T> Day for AocDay<T> {
     fn run(&self) -> DayResult {
         let day_instant = Instant::now();
 
@@ -41,13 +41,13 @@ impl<T> AocDay for Day<T> {
     }
 }
 
-pub struct Day<T> {
+pub struct AocDay<T> {
     parser: DayParser<T>,
     parts: BTreeMap<String, DayPart<T>>,
     files: Vec<PathBuf>,
 }
 
-impl<T> Day<T> {
+impl<T> AocDay<T> {
     pub fn new(parser: impl Fn(String) -> T + 'static) -> Self {
         Self {
             parser: DayParser::new(parser),
