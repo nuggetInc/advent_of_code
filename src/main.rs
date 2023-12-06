@@ -9,7 +9,7 @@ fn main() {
             "2022" => year2022::year(),
             "2023" => year2023::year(),
             _ => panic!(
-                "The specified day to run is invalid or not implemented: '{}'",
+                "The specified year to run is invalid or not implemented: '{}'",
                 year_raw
             ),
         };

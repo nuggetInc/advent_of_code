@@ -3,7 +3,7 @@ use aoc_core::{AocDay, Day, YearDay};
 pub fn day() -> impl Day {
     let mut solution = AocDay::new(YearDay::Day04, parse);
     solution.part_1(part_one);
-    solution.part_2(part_2);
+    solution.part_2(part_two);
     solution.add_file("test.txt");
     solution.add_file("input.txt");
     solution
@@ -50,7 +50,7 @@ fn part_one(cards: &Vec<Card>) -> String {
     total.to_string()
 }
 
-fn part_2(cards: &Vec<Card>) -> String {
+fn part_two(cards: &Vec<Card>) -> String {
     let mut counts = vec![1; cards.len()];
     let mut sum = 0;
 
