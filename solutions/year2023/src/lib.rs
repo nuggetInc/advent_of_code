@@ -6,6 +6,7 @@ mod day03;
 mod day04;
 mod day05;
 mod day06;
+mod day07;
 
 pub fn year() -> Year {
     let mut year = Year::new("Advent of Code 2023");
@@ -16,6 +17,7 @@ pub fn year() -> Year {
     year.add_day(YearDay::Day04, day04::day());
     year.add_day(YearDay::Day05, day05::day());
     year.add_day(YearDay::Day06, day06::day());
+    year.add_day(YearDay::Day07, day07::day());
 
     year
 }
