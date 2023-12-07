@@ -24,17 +24,33 @@ impl PartResult {
 
 impl fmt::Display for PartResult {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{}{} - {: <27}{}Answer: {: <18}{}{: >18?}{}",
-            self.part,
-            Fg(Black),
-            self.file.file_name().and_then(OsStr::to_str).unwrap(),
-            Fg(Reset),
-            self.answer,
-            Fg(Black),
-            self.elapsed,
-            Fg(Reset),
-        )
+        if self.answer.contains('\n') {
+            writeln!(
+                f,
+                "{}{} - {: <28}{}Answer:{}{: >36?}{}",
+                self.part,
+                Fg(Black),
+                self.file.file_name().and_then(OsStr::to_str).unwrap(),
+                Fg(Reset),
+                Fg(Black),
+                self.elapsed,
+                Fg(Reset),
+            )?;
+
+            write!(f, "{}", self.answer)
+        } else {
+            write!(
+                f,
+                "{}{} - {: <28}{}Answer:{: <18}{}{: >18?}{}",
+                self.part,
+                Fg(Black),
+                self.file.file_name().and_then(OsStr::to_str).unwrap(),
+                Fg(Reset),
+                self.answer,
+                Fg(Black),
+                self.elapsed,
+                Fg(Reset),
+            )
+        }
     }
 }
