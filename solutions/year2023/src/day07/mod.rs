@@ -1,12 +1,12 @@
 use std::fmt::Display;
 
-use aoc_core::{AocDay, Day, YearDay};
+use aoc_core::{Day, YearDay};
 use itertools::Itertools;
 
-pub fn day() -> impl Day {
-    let mut solution = AocDay::new(YearDay::Day05, parse);
-    solution.part_1(part_one);
-    solution.part_2(part_two);
+pub fn day() -> Day {
+    let mut solution = Day::new(YearDay::Day05);
+    solution.part_1(parse, part_one);
+    solution.part_2(parse, part_two);
     solution.add_file("test.txt");
     solution.add_file("input.txt");
     solution
@@ -45,10 +45,13 @@ fn parse(input: String) -> Vec<Play> {
         .collect()
 }
 
-fn part_one(plays: &Vec<Play>) -> String {
+fn part_one(plays: Vec<Play>) -> String {
     plays
         .into_iter()
-        .map(|play| (play, play.hand()))
+        .map(|play| {
+            let hand = play.hand();
+            (play, hand)
+        })
         .sorted_by(|play, other| {
             play.1
                 .cmp(&other.1)
@@ -61,8 +64,7 @@ fn part_one(plays: &Vec<Play>) -> String {
         .to_string()
 }
 
-fn part_two(plays: &Vec<Play>) -> String {
-    let mut plays = plays.clone();
+fn part_two(mut plays: Vec<Play>) -> String {
     for play in &mut plays {
         for card in &mut play.cards {
             if *card == Card::Jack {

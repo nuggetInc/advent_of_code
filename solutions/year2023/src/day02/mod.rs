@@ -1,12 +1,12 @@
 use std::collections::HashMap;
 
-use aoc_core::{AocDay, Day, YearDay};
+use aoc_core::{Day, YearDay};
 use regex::Regex;
 
-pub fn day() -> impl Day {
-    let mut solution = AocDay::new(YearDay::Day02, parse);
-    solution.part_1(part_one);
-    solution.part_2(part_two);
+pub fn day() -> Day {
+    let mut solution = Day::new(YearDay::Day02);
+    solution.part_1(parse, part_one);
+    solution.part_2(parse, part_two);
     solution.add_file("test.txt");
     solution.add_file("input.txt");
     solution
@@ -47,7 +47,7 @@ fn parse(input: String) -> Vec<Game> {
     games
 }
 
-fn part_one(games: &Vec<Game>) -> String {
+fn part_one(games: Vec<Game>) -> String {
     let mut sum = 0;
 
     for game in games {
@@ -73,7 +73,7 @@ fn part_one(games: &Vec<Game>) -> String {
     sum.to_string()
 }
 
-fn part_two(games: &Vec<Game>) -> String {
+fn part_two(games: Vec<Game>) -> String {
     let mut sum = 0;
 
     for game in games {

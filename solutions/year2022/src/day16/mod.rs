@@ -1,16 +1,16 @@
 use std::collections::{HashMap, HashSet};
 
-use aoc_core::{AocDay, Day, YearDay};
+use aoc_core::{Day, YearDay};
 use regex::Regex;
 
-pub fn day() -> impl Day {
-    let mut solution = AocDay::new(YearDay::Day16, parse);
-    solution.part_1(part_one);
+pub fn day() -> Day {
+    let mut solution = Day::new(YearDay::Day16);
+    solution.part_1(parse, part_one);
     solution.add_file("input.txt");
     solution
 }
 
-fn part_one(valves: &HashMap<String, Valve>) -> String {
+fn part_one(valves: HashMap<String, Valve>) -> String {
     let mut valves = valves.clone();
 
     let keys = valves.keys().map(String::clone).collect::<Vec<_>>();

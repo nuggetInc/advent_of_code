@@ -1,16 +1,16 @@
 use std::collections::HashSet;
 
-use aoc_core::{AocDay, Day, YearDay};
+use aoc_core::{Day, YearDay};
 
-pub fn day() -> impl Day {
-    let mut solution = AocDay::new(YearDay::Day14, parse);
-    solution.part_1(part_one);
-    solution.part_2(part_two);
+pub fn day() -> Day {
+    let mut solution = Day::new(YearDay::Day14);
+    solution.part_1(parse, part_one);
+    solution.part_2(parse, part_two);
     solution.add_file("input.txt");
     solution
 }
 
-fn part_one(walls: &Vec<Vec<(u32, u32)>>) -> String {
+fn part_one(walls: Vec<Vec<(u32, u32)>>) -> String {
     let mut occupied = HashSet::new();
 
     let mut bottom_y = 0;
@@ -67,7 +67,7 @@ fn part_one(walls: &Vec<Vec<(u32, u32)>>) -> String {
     count.to_string()
 }
 
-fn part_two(walls: &Vec<Vec<(u32, u32)>>) -> String {
+fn part_two(walls: Vec<Vec<(u32, u32)>>) -> String {
     let mut occupied = HashSet::new();
 
     let mut bottom_y = 0;

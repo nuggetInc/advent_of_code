@@ -1,9 +1,9 @@
-use aoc_core::{AocDay, Day, YearDay};
+use aoc_core::{Day, YearDay};
 
-pub fn day() -> impl Day {
-    let mut solution = AocDay::new(YearDay::Day01, parse);
-    solution.part_1(part_one);
-    solution.part_2(part_two);
+pub fn day() -> Day {
+    let mut solution = Day::new(YearDay::Day01);
+    solution.part_1(parse, part_one);
+    solution.part_2(parse, part_two);
     solution.add_file("test.txt");
     solution.add_file("input.txt");
     solution
@@ -13,7 +13,7 @@ fn parse(input: String) -> Vec<String> {
     input.split_terminator('\n').map(str::to_owned).collect()
 }
 
-fn part_one(lines: &Vec<String>) -> String {
+fn part_one(lines: Vec<String>) -> String {
     let mut total = 0;
 
     for line in lines {
@@ -28,7 +28,7 @@ fn part_one(lines: &Vec<String>) -> String {
     total.to_string()
 }
 
-fn part_two(lines: &Vec<String>) -> String {
+fn part_two(lines: Vec<String>) -> String {
     let mut total = 0;
 
     const REPLACE: [(&str, char); 10] = [

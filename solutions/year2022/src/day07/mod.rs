@@ -1,20 +1,20 @@
 use std::collections::HashMap;
 
-use aoc_core::{AocDay, Day, YearDay};
+use aoc_core::{Day, YearDay};
 
-pub fn day() -> impl Day {
-    let mut solution = AocDay::new(YearDay::Day07, parse);
-    solution.part_1(part_one);
-    solution.part_2(part_two);
+pub fn day() -> Day {
+    let mut solution = Day::new(YearDay::Day07);
+    solution.part_1(parse, part_one);
+    solution.part_2(parse, part_two);
     solution.add_file("input.txt");
     solution
 }
 
-fn part_one(root: &Directory) -> String {
+fn part_one(root: Directory) -> String {
     let mut sum = 0;
 
     let mut directories = Vec::new();
-    directories.push(root);
+    directories.push(&root);
 
     while let Some(directory) = directories.pop() {
         directories.extend(directory.items.iter().filter_map(|(_, item)| match item {
@@ -32,11 +32,11 @@ fn part_one(root: &Directory) -> String {
     sum.to_string()
 }
 
-fn part_two(root: &Directory) -> String {
+fn part_two(root: Directory) -> String {
     let mut sizes = Vec::new();
 
     let mut directories = Vec::new();
-    directories.push(root);
+    directories.push(&root);
 
     while let Some(directory) = directories.pop() {
         directories.extend(directory.items.iter().filter_map(|(_, item)| match item {

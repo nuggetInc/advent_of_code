@@ -1,15 +1,15 @@
-use aoc_core::{AocDay, Day, YearDay};
+use aoc_core::{Day, YearDay};
 use regex::Regex;
 
-pub fn day() -> impl Day {
-    let mut solution = AocDay::new(YearDay::Day05, |x| x);
-    solution.part_1(part_one);
-    solution.part_2(part_two);
+pub fn day() -> Day {
+    let mut solution = Day::new(YearDay::Day05);
+    solution.part_1(|x| x, part_one);
+    solution.part_2(|x| x, part_two);
     solution.add_file("input.txt");
     solution
 }
 
-fn part_one(input: &String) -> String {
+fn part_one(input: String) -> String {
     let (crates, procedures) = input.split_once("\n\n").unwrap();
 
     let mut lines: Vec<&str> = crates.split("\n").collect();
@@ -58,7 +58,7 @@ fn part_one(input: &String) -> String {
     output.to_string()
 }
 
-fn part_two(input: &String) -> String {
+fn part_two(input: String) -> String {
     let (crates, procedures) = input.split_once("\n\n").unwrap();
 
     let mut lines: Vec<&str> = crates.split("\n").collect();

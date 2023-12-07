@@ -1,17 +1,17 @@
 use std::collections::VecDeque;
 
-use aoc_core::{AocDay, Day, YearDay};
+use aoc_core::{Day, YearDay};
 use regex::Regex;
 
-pub fn day() -> impl Day {
-    let mut solution = AocDay::new(YearDay::Day11, parse);
-    solution.part_1(part_one);
-    solution.part_2(part_two);
+pub fn day() -> Day {
+    let mut solution = Day::new(YearDay::Day11);
+    solution.part_1(parse, part_one);
+    solution.part_2(parse, part_two);
     solution.add_file("input.txt");
     solution
 }
 
-fn part_one(monkeys: &Vec<Monkey>) -> String {
+fn part_one(monkeys: Vec<Monkey>) -> String {
     let mut monkeys = monkeys.clone();
 
     let mut inspects = vec![0; monkeys.len()];
@@ -45,7 +45,7 @@ fn part_one(monkeys: &Vec<Monkey>) -> String {
     (inspects[0] * inspects[1]).to_string()
 }
 
-fn part_two(monkeys: &Vec<Monkey>) -> String {
+fn part_two(monkeys: Vec<Monkey>) -> String {
     let mut monkeys = monkeys.clone();
 
     let mut inspects = vec![0_i64; monkeys.len()];

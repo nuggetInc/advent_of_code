@@ -1,14 +1,14 @@
-use aoc_core::{AocDay, Day, YearDay};
+use aoc_core::{Day, YearDay};
 
-pub fn day() -> impl Day {
-    let mut solution = AocDay::new(YearDay::Day10, |x| x);
-    solution.part_1(part_one);
-    solution.part_2(part_two);
+pub fn day() -> Day {
+    let mut solution = Day::new(YearDay::Day10);
+    solution.part_1(|x| x, part_one);
+    solution.part_2(|x| x, part_two);
     solution.add_file("input.txt");
     solution
 }
 
-fn part_one(input: &String) -> String {
+fn part_one(input: String) -> String {
     let mut sum = 0;
     let mut x = 1;
     let mut cycle = 1;
@@ -39,7 +39,7 @@ fn part_one(input: &String) -> String {
     sum.to_string()
 }
 
-fn part_two(input: &String) -> String {
+fn part_two(input: String) -> String {
     let mut crt = String::new();
     let mut x = 1;
     let mut cycle = 0;

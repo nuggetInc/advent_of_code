@@ -1,18 +1,16 @@
 use std::cmp::Ordering;
 
-use aoc_core::{AocDay, Day, YearDay};
+use aoc_core::{Day, YearDay};
 
-pub fn day() -> impl Day {
-    let mut solution = AocDay::new(YearDay::Day13, |x| x);
-    solution.part_1(part_one);
-    solution.part_2(part_two);
+pub fn day() -> Day {
+    let mut solution = Day::new(YearDay::Day13);
+    solution.part_1(parse_input1, part_one);
+    solution.part_2(parse_input2, part_two);
     solution.add_file("input.txt");
     solution
 }
 
-fn part_one(input: &String) -> String {
-    let pairs = parse_input1(input);
-
+fn part_one(pairs: Vec<(Value, Value)>) -> String {
     let mut sum = 0;
     let mut index = 0;
 
@@ -31,9 +29,7 @@ fn part_one(input: &String) -> String {
     sum.to_string()
 }
 
-fn part_two(input: &String) -> String {
-    let mut values = parse_input2(input);
-
+fn part_two(mut values: Vec<Value>) -> String {
     let value2 = Value::List(vec![Value::List(vec![Value::Integer(2)])]);
     let value6 = Value::List(vec![Value::List(vec![Value::Integer(6)])]);
 
@@ -56,7 +52,7 @@ fn part_two(input: &String) -> String {
     product.to_string()
 }
 
-fn parse_input1(input: &String) -> Vec<(Value, Value)> {
+fn parse_input1(input: String) -> Vec<(Value, Value)> {
     let mut pairs = Vec::new();
 
     for pair in input.split("\n\n") {
@@ -74,7 +70,7 @@ fn parse_input1(input: &String) -> Vec<(Value, Value)> {
     pairs
 }
 
-fn parse_input2(input: &String) -> Vec<Value> {
+fn parse_input2(input: String) -> Vec<Value> {
     let mut values = Vec::new();
 
     for line in input.split("\n") {

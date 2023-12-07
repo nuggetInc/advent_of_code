@@ -1,9 +1,9 @@
-use aoc_core::{AocDay, Day, YearDay};
+use aoc_core::{Day, YearDay};
 
-pub fn day() -> impl Day {
-    let mut solution = AocDay::new(YearDay::Day08, parse);
-    solution.part_1(part_one);
-    solution.part_2(part_two);
+pub fn day() -> Day {
+    let mut solution = Day::new(YearDay::Day08);
+    solution.part_1(parse, part_one);
+    solution.part_2(parse, part_two);
     solution.add_file("input.txt");
     solution
 }
@@ -20,7 +20,7 @@ fn parse(input: String) -> Grid {
     Grid::new(grid, width, height)
 }
 
-fn part_one(grid: &Grid) -> String {
+fn part_one(grid: Grid) -> String {
     let mut visible = 0;
 
     for y in 0..grid.height {
@@ -34,7 +34,7 @@ fn part_one(grid: &Grid) -> String {
     visible.to_string()
 }
 
-fn part_two(grid: &Grid) -> String {
+fn part_two(grid: Grid) -> String {
     let mut highest_score = 0;
 
     for y in 0..grid.height {

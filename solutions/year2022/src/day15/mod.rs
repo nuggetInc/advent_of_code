@@ -1,21 +1,21 @@
-use aoc_core::{AocDay, Day, YearDay};
+use aoc_core::{Day, YearDay};
 use regex::Regex;
 
-pub fn day() -> impl Day {
-    let mut solution = AocDay::new(YearDay::Day15, parse);
-    solution.part_1(part_one);
-    solution.part_2(part_two);
+pub fn day() -> Day {
+    let mut solution = Day::new(YearDay::Day15);
+    solution.part_1(parse, part_one);
+    solution.part_2(parse, part_two);
     solution.add_file("input.txt");
     solution
 }
 
-fn part_one(sensors: &Vec<Sensor>) -> String {
+fn part_one(sensors: Vec<Sensor>) -> String {
     const Y: i64 = 2000000;
 
     let mut min_x = 0;
     let mut max_x = 0;
 
-    for sensor in sensors {
+    for sensor in &sensors {
         let distance_y = (Y - sensor.position.y).abs();
         let radius = sensor.distance();
 
@@ -42,7 +42,7 @@ fn part_one(sensors: &Vec<Sensor>) -> String {
     count.to_string()
 }
 
-fn part_two(sensors: &Vec<Sensor>) -> String {
+fn part_two(sensors: Vec<Sensor>) -> String {
     const SIZE: i64 = 4000000;
 
     for y in 0..=SIZE {
@@ -50,7 +50,7 @@ fn part_two(sensors: &Vec<Sensor>) -> String {
         'inner: while x <= SIZE {
             let position = Position::new(x, y);
 
-            for sensor in sensors {
+            for sensor in &sensors {
                 let radius = sensor.distance();
                 let distance = sensor.position.distance(&position);
 

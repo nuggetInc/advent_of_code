@@ -1,10 +1,13 @@
+mod yearday;
 use std::{collections::BTreeMap, time::Instant};
 
-use crate::{day::Day, result::YearResult, YearDay};
+pub use yearday::YearDay;
+
+use crate::{day::Day, result::YearResult};
 
 pub struct Year {
     name: String,
-    days: BTreeMap<YearDay, Box<dyn Day>>,
+    days: BTreeMap<YearDay, Day>,
 }
 
 impl Year {
@@ -15,12 +18,12 @@ impl Year {
         }
     }
 
-    pub fn add_day(&mut self, index: YearDay, day: impl Day + 'static) {
-        self.days.insert(index, Box::new(day));
+    pub fn add_day(&mut self, index: YearDay, day: Day) {
+        self.days.insert(index, day);
     }
 
-    pub fn get_day(&self, index: &YearDay) -> Option<&dyn Day> {
-        self.days.get(index).map(Box::as_ref)
+    pub fn get_day(&self, index: &YearDay) -> Option<&Day> {
+        self.days.get(index)
     }
 
     pub fn run(&mut self) -> YearResult {

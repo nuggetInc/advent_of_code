@@ -1,12 +1,12 @@
 use std::ops::Range;
 
-use aoc_core::{AocDay, Day, YearDay};
+use aoc_core::{Day, YearDay};
 use itertools::Itertools;
 
-pub fn day() -> impl Day {
-    let mut solution = AocDay::new(YearDay::Day05, parse);
-    solution.part_1(part_one);
-    solution.part_2(part_two);
+pub fn day() -> Day {
+    let mut solution = Day::new(YearDay::Day05);
+    solution.part_1(parse, part_one);
+    solution.part_2(parse, part_two);
     solution.add_file("test.txt");
     solution.add_file("input.txt");
     solution
@@ -42,7 +42,7 @@ fn parse(input: String) -> Almanac {
     Almanac::new(seeds, maps)
 }
 
-fn part_one(almanac: &Almanac) -> String {
+fn part_one(almanac: Almanac) -> String {
     let mut values = almanac.seeds.clone();
 
     for map in &almanac.maps {
@@ -64,7 +64,7 @@ fn part_one(almanac: &Almanac) -> String {
     values.into_iter().min().unwrap().to_string()
 }
 
-fn part_two(almanac: &Almanac) -> String {
+fn part_two(almanac: Almanac) -> String {
     let mut values: Vec<_> = almanac
         .seeds
         .iter()

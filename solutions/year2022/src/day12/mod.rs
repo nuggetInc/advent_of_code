@@ -1,20 +1,20 @@
 use std::collections::{HashSet, VecDeque};
 
-use aoc_core::{AocDay, Day, YearDay};
+use aoc_core::{Day, YearDay};
 
-pub fn day() -> impl Day {
-    let mut solution = AocDay::new(YearDay::Day12, parse);
-    solution.part_1(part_one);
-    solution.part_2(part_two);
+pub fn day() -> Day {
+    let mut solution = Day::new(YearDay::Day12);
+    solution.part_1(parse, part_one);
+    solution.part_2(parse, part_two);
     solution.add_file("input.txt");
     solution
 }
 
-fn part_one(map: &Map) -> String {
+fn part_one(map: Map) -> String {
     map.get_steps().to_string()
 }
 
-fn part_two(map: &Map) -> String {
+fn part_two(map: Map) -> String {
     map.get_fewest_steps().to_string()
 }
 

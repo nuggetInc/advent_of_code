@@ -1,90 +1,67 @@
-mod parser;
+mod daypart;
 mod part;
 
 use std::{
-    fs,
+    collections::BTreeMap,
     panic::Location,
     path::{Path, PathBuf},
     time::Instant,
 };
 
-use self::{parser::DayParser, part::DayPart};
-use crate::{
-    result::{DayResult, ParserResult, PartResult},
-    YearDay,
-};
+pub use daypart::DayPart;
 
-pub trait Day {
-    fn run(&self) -> DayResult;
-}
+use self::part::{AocPart, Part};
+use crate::{result::DayResult, year::YearDay};
 
-impl<T> Day for AocDay<T> {
-    fn run(&self) -> DayResult {
-        let day_instant = Instant::now();
-
-        let mut parsers = Vec::new();
-        let mut parts = Vec::new();
-
-        for file in &self.files {
-            let input = fs::read_to_string(file).unwrap();
-            let parser_instant = Instant::now();
-            let parsed = self.parser.run(input);
-            parsers.push(ParserResult::new(file.to_owned(), parser_instant.elapsed()));
-
-            if let Some(part) = &self.part_1 {
-                let part_instant = Instant::now();
-                let answer = part.run(&parsed);
-
-                parts.push(PartResult::new(
-                    "Part 1".to_owned(),
-                    file.to_owned(),
-                    answer,
-                    part_instant.elapsed(),
-                ));
-            }
-
-            if let Some(part) = &self.part_2 {
-                let part_instant = Instant::now();
-                let answer = part.run(&parsed);
-
-                parts.push(PartResult::new(
-                    "Part 2".to_owned(),
-                    file.to_owned(),
-                    answer,
-                    part_instant.elapsed(),
-                ));
-            }
-        }
-
-        DayResult::new(self.day.clone(), parsers, parts, day_instant.elapsed())
-    }
-}
-
-pub struct AocDay<T> {
+pub struct Day {
     day: YearDay,
-    parser: DayParser<T>,
-    part_1: Option<DayPart<T>>,
-    part_2: Option<DayPart<T>>,
+    parts: BTreeMap<DayPart, Box<dyn Part>>,
     files: Vec<PathBuf>,
 }
 
-impl<T> AocDay<T> {
-    pub fn new(day: YearDay, parser: impl Fn(String) -> T + 'static) -> Self {
+impl Day {
+    pub fn new(day: YearDay) -> Self {
         Self {
             day,
-            parser: DayParser::new(parser),
-            part_1: None,
-            part_2: None,
+            parts: BTreeMap::new(),
             files: Vec::new(),
         }
     }
 
-    pub fn part_1(&mut self, part: impl Fn(&T) -> String + 'static) {
-        self.part_1 = Some(DayPart::new(part));
+    pub fn run(&self) -> DayResult {
+        let instant = Instant::now();
+
+        let mut parts = Vec::new();
+
+        for file in &self.files {
+            for (_, part) in &self.parts {
+                parts.push(part.run(file));
+            }
+        }
+
+        DayResult::new(self.day.clone(), parts, instant.elapsed())
     }
 
-    pub fn part_2(&mut self, part: impl Fn(&T) -> String + 'static) {
-        self.part_2 = Some(DayPart::new(part));
+    pub fn part_1<T: 'static>(
+        &mut self,
+        parser: impl Fn(String) -> T + 'static,
+        part: impl Fn(T) -> String + 'static,
+    ) {
+        self.parts.insert(
+            DayPart::Part1,
+            Box::new(AocPart::new(DayPart::Part1, parser, part)),
+        );
+    }
+
+    pub fn part_2<T: 'static>(
+        &mut self,
+        parser: impl Fn(String) -> T + 'static,
+        part: impl Fn(T) -> String + 'static,
+    ) {
+        self.parts.insert(
+            DayPart::Part2,
+            Box::new(AocPart::new(DayPart::Part2, parser, part)),
+        );
     }
 
     #[track_caller]
