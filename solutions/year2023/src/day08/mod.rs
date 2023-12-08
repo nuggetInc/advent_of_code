@@ -56,7 +56,6 @@ fn part_two((directions, nodes): (Vec<Direction>, Vec<(usize, usize)>)) -> Strin
     let mut multiple = 1_u64;
 
     for mut position in (parse_node("11A")..=parse_node("ZZA")).step_by(36) {
-        println!("test");
         if nodes[position] == (0, 0) {
             continue;
         }
