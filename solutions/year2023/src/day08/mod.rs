@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use aoc_core::{Day, YearDay};
 use num::Integer;
 
@@ -12,36 +10,41 @@ pub fn day() -> Day {
     solution
 }
 
-fn parse(input: String) -> (Vec<Direction>, HashMap<String, (String, String)>) {
+fn parse(input: String) -> (Vec<Direction>, Vec<(usize, usize)>) {
     let mut lines = input.split_terminator('\n');
 
     let directions = lines.next().unwrap().chars().map(Direction::from).collect();
 
-    let nodes = lines
-        .skip(1)
-        .map(|line| {
-            let (name, to) = line.split_once(" = (").unwrap();
-            let (left, right) = to.split_once(", ").unwrap();
+    let mut nodes = vec![(0, 0); parse_node("ZZZ") + 1];
 
-            (name.to_owned(), (left.to_owned(), right[0..3].to_owned()))
-        })
-        .collect();
+    for line in lines.skip(1) {
+        let node = parse_node(&line[0..3]);
+        let left = parse_node(&line[7..10]);
+        let right = parse_node(&line[12..15]);
+
+        nodes[node] = (left, right)
+    }
 
     (directions, nodes)
 }
 
-fn part_one((directions, nodes): (Vec<Direction>, HashMap<String, (String, String)>)) -> String {
-    let mut position = &"AAA".to_owned();
+fn parse_node(input: &str) -> usize {
+    usize::from_str_radix(input, 36).unwrap()
+}
+
+fn part_one((directions, nodes): (Vec<Direction>, Vec<(usize, usize)>)) -> String {
+    let mut position = parse_node("AAA");
     let mut steps = 0;
 
     for direction in directions.iter().cycle() {
-        match direction {
-            Direction::Left => position = &nodes[position].0,
-            Direction::Right => position = &nodes[position].1,
-        }
+        position = match direction {
+            Direction::Left => nodes[position].0,
+            Direction::Right => nodes[position].1,
+        };
 
         steps += 1;
-        if position == "ZZZ" {
+        // Same as parse_node("ZZZ")
+        if position == 46655 {
             break;
         }
     }
@@ -49,29 +52,30 @@ fn part_one((directions, nodes): (Vec<Direction>, HashMap<String, (String, Strin
     steps.to_string()
 }
 
-fn part_two((directions, nodes): (Vec<Direction>, HashMap<String, (String, String)>)) -> String {
-    let mut step_counts = Vec::new();
+fn part_two((directions, nodes): (Vec<Direction>, Vec<(usize, usize)>)) -> String {
+    let mut multiple = 1_u64;
 
-    for mut position in nodes.keys().filter(|key| key.ends_with('A')) {
+    for mut position in (parse_node("11A")..=parse_node("ZZA")).step_by(36) {
+        println!("test");
+        if nodes[position] == (0, 0) {
+            continue;
+        }
+
         let mut steps = 0;
 
         for direction in directions.iter().cycle() {
-            match direction {
-                Direction::Left => position = &nodes[position].0,
-                Direction::Right => position = &nodes[position].1,
-            }
+            position = match direction {
+                Direction::Left => nodes[position].0,
+                Direction::Right => nodes[position].1,
+            };
 
             steps += 1;
-            if position.ends_with('Z') {
+            // Same as checking if it ends with a 'Z'
+            if position % 36 == 35 {
                 break;
             }
         }
 
-        step_counts.push(steps);
-    }
-
-    let mut multiple = 1_u64;
-    for steps in step_counts {
         multiple = multiple.lcm(&steps);
     }
 
