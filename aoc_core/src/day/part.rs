@@ -15,7 +15,7 @@ impl<T> Part for AocPart<T> {
         let parsed = (self.parser)(input);
         let answer = (self.solution)(parsed);
 
-        PartResult::new(self.part.clone(), file.clone(), answer, instant.elapsed())
+        PartResult::new(self.part, file.clone(), answer, instant.elapsed())
     }
 }
 

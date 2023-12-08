@@ -1,6 +1,6 @@
 use core::fmt;
 
-#[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum YearDay {
     Day01,
     Day02,
@@ -27,6 +27,38 @@ pub enum YearDay {
     Day23,
     Day24,
     Day25,
+}
+
+impl YearDay {
+    pub fn folder_name(&self) -> &'static str {
+        match self {
+            Self::Day01 => "day01",
+            Self::Day02 => "day02",
+            Self::Day03 => "day03",
+            Self::Day04 => "day04",
+            Self::Day05 => "day05",
+            Self::Day06 => "day06",
+            Self::Day07 => "day07",
+            Self::Day08 => "day08",
+            Self::Day09 => "day09",
+            Self::Day10 => "day10",
+            Self::Day11 => "day11",
+            Self::Day12 => "day12",
+            Self::Day13 => "day13",
+            Self::Day14 => "day14",
+            Self::Day15 => "day15",
+            Self::Day16 => "day16",
+            Self::Day17 => "day17",
+            Self::Day18 => "day18",
+            Self::Day19 => "day19",
+            Self::Day20 => "day20",
+            Self::Day21 => "day21",
+            Self::Day22 => "day22",
+            Self::Day23 => "day23",
+            Self::Day24 => "day24",
+            Self::Day25 => "day25",
+        }
+    }
 }
 
 impl fmt::Display for YearDay {
@@ -94,6 +126,38 @@ impl TryFrom<&String> for YearDay {
             "Day24" | "D24" | "24" => Ok(Self::Day24),
             "Day25" | "D25" | "25" => Ok(Self::Day25),
             _ => Err(()),
+        }
+    }
+}
+
+impl From<YearDay> for u32 {
+    fn from(value: YearDay) -> Self {
+        match value {
+            YearDay::Day01 => 1,
+            YearDay::Day02 => 2,
+            YearDay::Day03 => 3,
+            YearDay::Day04 => 4,
+            YearDay::Day05 => 5,
+            YearDay::Day06 => 6,
+            YearDay::Day07 => 7,
+            YearDay::Day08 => 8,
+            YearDay::Day09 => 9,
+            YearDay::Day10 => 10,
+            YearDay::Day11 => 11,
+            YearDay::Day12 => 12,
+            YearDay::Day13 => 13,
+            YearDay::Day14 => 14,
+            YearDay::Day15 => 15,
+            YearDay::Day16 => 16,
+            YearDay::Day17 => 17,
+            YearDay::Day18 => 18,
+            YearDay::Day19 => 19,
+            YearDay::Day20 => 20,
+            YearDay::Day21 => 21,
+            YearDay::Day22 => 22,
+            YearDay::Day23 => 23,
+            YearDay::Day24 => 24,
+            YearDay::Day25 => 25,
         }
     }
 }

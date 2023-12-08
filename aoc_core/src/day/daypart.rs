@@ -1,6 +1,6 @@
 use core::fmt;
 
-#[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum DayPart {
     Part1,
     Part2,

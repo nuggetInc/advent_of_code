@@ -39,7 +39,7 @@ impl Day {
             }
         }
 
-        DayResult::new(self.day.clone(), parts, instant.elapsed())
+        DayResult::new(self.day, parts, instant.elapsed())
     }
 
     pub fn part_1<T: 'static>(
