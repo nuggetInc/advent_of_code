@@ -41,7 +41,7 @@ impl fmt::Display for PartResult {
         } else {
             write!(
                 f,
-                "{}{} - {: <28}{}Answer:{: <18}{}{: >18?}{}",
+                "{}{} - {: <27}{}Answer: {: <18}{}{: >18?}{}",
                 self.part,
                 Fg(Black),
                 self.file.file_name().and_then(OsStr::to_str).unwrap(),
