@@ -2,15 +2,10 @@ mod day;
 mod result;
 mod year;
 
-use std::{
-    fs::File,
-    io::{self, BufWriter, Write},
-    time::Instant,
-};
+use std::{fs::File, io::Write};
 
 pub use day::Day;
-use ego_tree::NodeRef;
-use scraper::{Html, Node, Selector};
+use scraper::{Html, Selector};
 pub use year::{Year, YearDay};
 
 
@@ -21,88 +16,32 @@ pub fn download_problem(year: u32, day: YearDay) {
     let response = client.get(&url).header("Cookie", COOKIE).send().unwrap();
     let text = response.text().unwrap();
 
-    let instant = Instant::now();
-
-    let mut file = BufWriter::new(
-        File::create(format!(
-            "solutions/year{}/src/{}/README.md",
-            year,
-            day.folder_name()
-        ))
-        .unwrap(),
-    );
+    let mut file = File::create(format!(
+        "solutions/year{}/src/{}/README.md",
+        year,
+        day.folder_name()
+    ))
+    .unwrap();
 
     let document = Html::parse_document(&text);
     let articles_selector = Selector::parse("body > main > article").unwrap();
 
-    writeln!(file, "view the original on [adventofcode.com]({})", url).unwrap();
+    writeln!(
+        file,
+        "view the original on <a href={}>adventofcode.com</a>",
+        url
+    )
+    .unwrap();
+
     for article in document.select(&articles_selector) {
-        write_children(&mut file, *article).unwrap();
+        writeln!(
+            file,
+            "{}",
+            article
+                .inner_html()
+                .replace("<em>", "<b>")
+                .replace("</em>", "</b>")
+        )
+        .unwrap();
     }
-
-    println!("{:?}", instant.elapsed());
-}
-
-fn write_children(file: &mut BufWriter<File>, node: NodeRef<'_, Node>) -> io::Result<()> {
-    for child in node.children() {
-        match child.value() {
-            Node::Element(element) => match element.name() {
-                "h2" => {
-                    write!(file, "## ")?;
-                    write_children(file, child)?;
-                    writeln!(file)?;
-                }
-                "p" => {
-                    write_children(file, child)?;
-                    writeln!(file)?;
-                }
-                "pre" => {
-                    writeln!(file, "```")?;
-                    write_children(file, child)?;
-                    writeln!(file, "```")?;
-                }
-                "code" => match node.value() {
-                    Node::Element(element) => {
-                        if element.name() == "pre" {
-                            write_children(file, child)?;
-                        } else {
-                            write!(file, "`")?;
-                            write_children(file, child)?;
-                            write!(file, "`")?;
-                        }
-                    }
-                    _ => (),
-                },
-                "em" => {
-                    write!(file, "**")?;
-                    write_children(file, child)?;
-                    write!(file, "**")?;
-                }
-                "ul" => {
-                    write_children(file, child)?;
-                }
-                "li" => {
-                    write!(file, "- ")?;
-                    write_children(file, child)?;
-                }
-                "a" => {
-                    write!(file, "[")?;
-                    write_children(file, child)?;
-                    write!(
-                        file,
-                        "]({})",
-                        element.attr("href").expect("anchor tag doesn't have href")
-                    )?;
-                }
-                "span" => {
-                    write_children(file, child)?;
-                }
-                _ => unimplemented!("Tag not implemented: '{}'", element.name()),
-            },
-            Node::Text(text) => write!(file, "{}", text.to_string())?,
-            _ => (),
-        }
-    }
-
-    Ok(())
 }

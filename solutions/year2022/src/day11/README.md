@@ -1,13 +1,8 @@
-view the original on [adventofcode.com](https://adventofcode.com/2022/day/11)
-## --- Day 11: Monkey in the Middle ---
-As you finally start making your way upriver, you realize your pack is much lighter than you remember. Just then, one of the items from your pack goes flying overhead. Monkeys are playing [Keep Away](https://en.wikipedia.org/wiki/Keep_away) with your missing things!
-
-To get your stuff back, you need to be able to predict where the monkeys will throw your items. After some careful observation, you realize the monkeys operate based on **how worried you are about each item**.
-
-You take some notes (your puzzle input) on the items each monkey currently has, how worried you are about those items, and how the monkey makes decisions based on your worry level. For example:
-
-```
-Monkey 0:
+view the original on <a href=https://adventofcode.com/2022/day/11>adventofcode.com</a>
+<h2>--- Day 11: Monkey in the Middle ---</h2><p>As you finally start making your way upriver, you realize your pack is much lighter than you remember. Just then, one of the items from your pack goes flying overhead. Monkeys are playing <a href="https://en.wikipedia.org/wiki/Keep_away" target="_blank">Keep Away</a> with your missing things!</p>
+<p>To get your stuff back, you need to be able to predict where the monkeys will throw your items. After some careful observation, you realize the monkeys operate based on <b>how worried you are about each item</b>.</p>
+<p>You take some notes (your puzzle input) on the items each monkey currently has, how worried you are about those items, and how the monkey makes decisions based on your worry level. For example:</p>
+<pre><code>Monkey 0:
   Starting items: 79, 98
   Operation: new = old * 19
   Test: divisible by 23
@@ -34,30 +29,23 @@ Monkey 3:
   Test: divisible by 17
     If true: throw to monkey 0
     If false: throw to monkey 1
-```
-
-Each monkey has several attributes:
-
-
-- `Starting items` lists your **worry level** for each item the monkey is currently holding in the order they will be inspected.
-- `Operation` shows how your worry level changes as that monkey inspects an item. (An operation like `new = old * 5` means that your worry level after the monkey inspected the item is five times whatever your worry level was before inspection.)
-- `Test` shows how the monkey uses your worry level to decide where to throw an item next.
-  
-  - `If true` shows what happens with an item if the `Test` was true.
-  - `If false` shows what happens with an item if the `Test` was false.
-  
-
-
-After each monkey inspects an item but before it tests your worry level, your relief that the monkey's inspection didn't damage the item causes your worry level to be **divided by three** and rounded down to the nearest integer.
-
-The monkeys take turns inspecting and throwing items. On a single monkey's **turn**, it inspects and throws all of the items it is holding one at a time and in the order listed. Monkey `0` goes first, then monkey `1`, and so on until each monkey has had one turn. The process of each monkey taking a single turn is called a **round**.
-
-When a monkey throws an item to another monkey, the item goes on the **end** of the recipient monkey's list. A monkey that starts a round with no items could end up inspecting and throwing many items by the time its turn comes around. If a monkey is holding no items at the start of its turn, its turn ends.
-
-In the above example, the first round proceeds as follows:
-
-```
-Monkey 0:
+</code></pre>
+<p>Each monkey has several attributes:</p>
+<ul>
+<li><code>Starting items</code> lists your <b>worry level</b> for each item the monkey is currently holding in the order they will be inspected.</li>
+<li><code>Operation</code> shows how your worry level changes as that monkey inspects an item. (An operation like <code>new = old * 5</code> means that your worry level after the monkey inspected the item is five times whatever your worry level was before inspection.)</li>
+<li><code>Test</code> shows how the monkey uses your worry level to decide where to throw an item next.
+  <ul>
+  <li><code>If true</code> shows what happens with an item if the <code>Test</code> was true.</li>
+  <li><code>If false</code> shows what happens with an item if the <code>Test</code> was false.</li>
+  </ul>
+</li>
+</ul>
+<p>After each monkey inspects an item but before it tests your worry level, your relief that the monkey's inspection didn't damage the item causes your worry level to be <b>divided by three</b> and rounded down to the nearest integer.</p>
+<p>The monkeys take turns inspecting and throwing items. On a single monkey's <b>turn</b>, it inspects and throws all of the items it is holding one at a time and in the order listed. Monkey <code>0</code> goes first, then monkey <code>1</code>, and so on until each monkey has had one turn. The process of each monkey taking a single turn is called a <b>round</b>.</p>
+<p>When a monkey throws an item to another monkey, the item goes on the <b>end</b> of the recipient monkey's list. A monkey that starts a round with no items could end up inspecting and throwing many items by the time its turn comes around. If a monkey is holding no items at the start of its turn, its turn ends.</p>
+<p>In the above example, the first round proceeds as follows:</p>
+<pre><code>Monkey 0:
   Monkey inspects an item with a worry level of 79.
     Worry level is multiplied by 19 to 1501.
     Monkey gets bored with item. Worry level is divided by 3 to 500.
@@ -131,23 +119,16 @@ Monkey 3:
     Monkey gets bored with item. Worry level is divided by 3 to 1046.
     Current worry level is not divisible by 17.
     Item with worry level 1046 is thrown to monkey 1.
-```
-
-After round 1, the monkeys are holding items with these worry levels:
-
-```
-Monkey 0: 20, 23, 27, 26
+</code></pre>
+<p>After round 1, the monkeys are holding items with these worry levels:</p>
+<pre><code>Monkey 0: 20, 23, 27, 26
 Monkey 1: 2080, 25, 167, 207, 401, 1046
 Monkey 2: 
 Monkey 3: 
-```
-
-Monkeys 2 and 3 aren't holding any items at the end of the round; they both inspected items during the round and threw them all before the round ended.
-
-This process continues for a few more rounds:
-
-```
-After round 2, the monkeys are holding items with these worry levels:
+</code></pre>
+<p>Monkeys 2 and 3 aren't holding any items at the end of the round; they both inspected items during the round and threw them all before the round ended.</p>
+<p>This process continues for a few more rounds:</p>
+<pre><code>After round 2, the monkeys are holding items with these worry levels:
 Monkey 0: 695, 10, 71, 135, 350
 Monkey 1: 43, 49, 58, 55, 362
 Monkey 2: 
@@ -216,32 +197,21 @@ Monkey 0: 10, 12, 14, 26, 34
 Monkey 1: 245, 93, 53, 199, 115
 Monkey 2: 
 Monkey 3: 
-```
-
-Chasing all of the monkeys at once is impossible; you're going to have to focus on the **two most active** monkeys if you want any hope of getting your stuff back. Count the **total number of times each monkey inspects items** over 20 rounds:
-
-```
-**Monkey 0 inspected items 101 times.**
+</code></pre>
+<p>Chasing all of the monkeys at once is impossible; you're going to have to focus on the <b>two most active</b> monkeys if you want any hope of getting your stuff back. Count the <b>total number of times each monkey inspects items</b> over 20 rounds:</p>
+<pre><code><b>Monkey 0 inspected items 101 times.</b>
 Monkey 1 inspected items 95 times.
 Monkey 2 inspected items 7 times.
-**Monkey 3 inspected items 105 times.**
-```
+<b>Monkey 3 inspected items 105 times.</b>
+</code></pre>
+<p>In this example, the two most active monkeys inspected items 101 and 105 times. The level of <b>monkey business</b> in this situation can be found by multiplying these together: <code><b>10605</b></code>.</p>
+<p>Figure out which monkeys to chase by counting how many items they inspect over 20 rounds. <b>What is the level of monkey business after 20 rounds of stuff-slinging simian shenanigans?</b></p>
 
-In this example, the two most active monkeys inspected items 101 and 105 times. The level of **monkey business** in this situation can be found by multiplying these together: `**10605**`.
-
-Figure out which monkeys to chase by counting how many items they inspect over 20 rounds. **What is the level of monkey business after 20 rounds of stuff-slinging simian shenanigans?**
-
-## --- Part Two ---
-You're worried you might not ever get your items back. So worried, in fact, that your relief that a monkey's inspection didn't damage an item **no longer causes your worry level to be divided by three**.
-
-Unfortunately, that relief was all that was keeping your worry levels from reaching **ridiculous levels**. You'll need to **find another way to keep your worry levels manageable**.
-
-At this rate, you might be putting up with these monkeys for a **very long time** - possibly **`10000` rounds**!
-
-With these new rules, you can still figure out the monkey business after 10000 rounds. Using the same example above:
-
-```
-== After round 1 ==
+<h2 id="part2">--- Part Two ---</h2><p>You're worried you might not ever get your items back. So worried, in fact, that your relief that a monkey's inspection didn't damage an item <b>no longer causes your worry level to be divided by three</b>.</p>
+<p>Unfortunately, that relief was all that was keeping your worry levels from reaching <b>ridiculous levels</b>. You'll need to <b>find another way to keep your worry levels manageable</b>.</p>
+<p>At this rate, you might be putting up with these monkeys for a <b>very long time</b> - possibly <b><code>10000</code> rounds</b>!</p>
+<p>With these new rules, you can still figure out the <span title="Monkey business monkey business monkey business, monkey numbers... is this working?">monkey business</span> after 10000 rounds. Using the same example above:</p>
+<pre><code>== After round 1 ==
 Monkey 0 inspected items 2 times.
 Monkey 1 inspected items 4 times.
 Monkey 2 inspected items 3 times.
@@ -308,13 +278,11 @@ Monkey 2 inspected items 1746 times.
 Monkey 3 inspected items 46807 times.
 
 == After round 10000 ==
-**Monkey 0 inspected items 52166 times.**
+<b>Monkey 0 inspected items 52166 times.</b>
 Monkey 1 inspected items 47830 times.
 Monkey 2 inspected items 1938 times.
-**Monkey 3 inspected items 52013 times.**
-```
-
-After 10000 rounds, the two most active monkeys inspected items 52166 and 52013 times. Multiplying these together, the level of **monkey business** in this situation is now `**2713310158**`.
-
-Worry levels are no longer divided by three after each item is inspected; you'll need to find another way to keep your worry levels manageable. Starting again from the initial state in your puzzle input, **what is the level of monkey business after 10000 rounds?**
+<b>Monkey 3 inspected items 52013 times.</b>
+</code></pre>
+<p>After 10000 rounds, the two most active monkeys inspected items 52166 and 52013 times. Multiplying these together, the level of <b>monkey business</b> in this situation is now <code><b>2713310158</b></code>.</p>
+<p>Worry levels are no longer divided by three after each item is inspected; you'll need to find another way to keep your worry levels manageable. Starting again from the initial state in your puzzle input, <b>what is the level of monkey business after 10000 rounds?</b></p>
 

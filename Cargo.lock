@@ -52,7 +52,6 @@ dependencies = [
 name = "aoc_core"
 version = "0.1.0"
 dependencies = [
- "ego-tree",
  "reqwest",
  "scraper",
  "termion",
