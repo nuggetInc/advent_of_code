@@ -1,6 +1,7 @@
 use std::{fs, io, path::PathBuf, time::Instant};
 
-use crate::{result::PartResult, PartId};
+use super::result::PartResult;
+use crate::PartId;
 
 pub trait Part {
     fn run(&self, file: &PathBuf) -> io::Result<PartResult>;

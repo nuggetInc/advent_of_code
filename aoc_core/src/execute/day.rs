@@ -1,5 +1,3 @@
-mod part;
-
 use std::{
     collections::BTreeMap,
     io,
@@ -8,8 +6,11 @@ use std::{
     time::Instant,
 };
 
-use self::part::{AocPart, Part};
-use crate::{result::DayResult, DayId, PartId};
+use super::{
+    part::{AocPart, Part},
+    result::DayResult,
+};
+use crate::{DayId, PartId};
 
 pub struct Day {
     day: DayId,

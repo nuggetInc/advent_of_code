@@ -1,14 +1,10 @@
-mod day;
 mod download;
-mod result;
-mod year;
+mod execute;
 
 use std::{num::ParseIntError, ops::Deref, str::FromStr};
 
-pub use day::*;
 pub use download::download_problem;
-pub use result::*;
-pub use year::*;
+pub use execute::*;
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct YearId(u16);

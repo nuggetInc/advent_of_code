@@ -1,6 +1,7 @@
 use std::{collections::BTreeMap, io, panic::Location, time::Instant};
 
-use crate::{day::Day, result::YearResult, DayId, YearId};
+use super::{day::Day, result::YearResult};
+use crate::{DayId, YearId};
 
 pub struct Year {
     year: YearId,
