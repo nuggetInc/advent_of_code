@@ -4,6 +4,7 @@ use std::time::Duration;
 use termion::color::{Black, Fg, Reset};
 
 use super::DayResult;
+
 pub struct YearResult {
     name: String,
     days: Vec<DayResult>,

@@ -30,7 +30,10 @@ impl fmt::Display for PartResult {
                 "{}{} - {: <28}{}Answer:{}{: >36?}{}",
                 self.part,
                 Fg(Black),
-                self.file.file_name().and_then(OsStr::to_str).unwrap(),
+                self.file
+                    .file_name()
+                    .and_then(OsStr::to_str)
+                    .expect("Couldn't get input filename"),
                 Fg(Reset),
                 Fg(Black),
                 self.elapsed,
@@ -44,7 +47,10 @@ impl fmt::Display for PartResult {
                 "{}{} - {: <27}{}Answer: {: <18}{}{: >18?}{}",
                 self.part,
                 Fg(Black),
-                self.file.file_name().and_then(OsStr::to_str).unwrap(),
+                self.file
+                    .file_name()
+                    .and_then(OsStr::to_str)
+                    .expect("Couldn't get input filename"),
                 Fg(Reset),
                 self.answer,
                 Fg(Black),

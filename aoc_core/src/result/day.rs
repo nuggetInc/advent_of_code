@@ -5,6 +5,7 @@ use termion::color::{Black, Fg, Reset};
 
 use super::PartResult;
 use crate::year::YearDay;
+
 pub struct DayResult {
     day: YearDay,
     parts: Vec<PartResult>,

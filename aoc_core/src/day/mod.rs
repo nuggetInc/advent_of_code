@@ -3,6 +3,7 @@ mod part;
 
 use std::{
     collections::BTreeMap,
+    io,
     panic::Location,
     path::{Path, PathBuf},
     time::Instant,
@@ -32,18 +33,18 @@ impl Day {
         self.day
     }
 
-    pub fn run(&self) -> DayResult {
+    pub fn run(&self) -> io::Result<DayResult> {
         let instant = Instant::now();
 
         let mut parts = Vec::new();
 
         for file in &self.files {
             for (_, part) in &self.parts {
-                parts.push(part.run(file));
+                parts.push(part.run(file)?);
             }
         }
 
-        DayResult::new(self.day, parts, instant.elapsed())
+        Ok(DayResult::new(self.day, parts, instant.elapsed()))
     }
 
     pub fn part_1<T: 'static>(

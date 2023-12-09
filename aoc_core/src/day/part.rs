@@ -1,21 +1,26 @@
-use std::{fs, path::PathBuf, time::Instant};
+use std::{fs, io, path::PathBuf, time::Instant};
 
 use super::daypart::DayPart;
 use crate::result::PartResult;
 
 pub trait Part {
-    fn run(&self, file: &PathBuf) -> PartResult;
+    fn run(&self, file: &PathBuf) -> io::Result<PartResult>;
 }
 
 impl<T> Part for AocPart<T> {
-    fn run(&self, file: &PathBuf) -> PartResult {
-        let input = fs::read_to_string(file).unwrap();
+    fn run(&self, file: &PathBuf) -> io::Result<PartResult> {
+        let input = fs::read_to_string(file)?;
 
         let instant = Instant::now();
         let parsed = (self.parser)(input);
         let answer = (self.solution)(parsed);
 
-        PartResult::new(self.part, file.clone(), answer, instant.elapsed())
+        Ok(PartResult::new(
+            self.part,
+            file.clone(),
+            answer,
+            instant.elapsed(),
+        ))
     }
 }
 

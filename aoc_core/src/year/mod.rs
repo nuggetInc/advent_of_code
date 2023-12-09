@@ -1,5 +1,5 @@
 mod yearday;
-use std::{collections::BTreeMap, panic::Location, time::Instant};
+use std::{collections::BTreeMap, io, panic::Location, time::Instant};
 
 pub use yearday::YearDay;
 
@@ -36,14 +36,18 @@ impl Year {
         self.days.get(index)
     }
 
-    pub fn run(&mut self) -> YearResult {
+    pub fn run(&mut self) -> io::Result<YearResult> {
         let instant = Instant::now();
         let mut days = Vec::new();
 
         for (_, day) in &mut self.days {
-            days.push(day.run());
+            days.push(day.run()?);
         }
 
-        YearResult::new(self.name.to_owned(), days, instant.elapsed())
+        Ok(YearResult::new(
+            self.name.to_owned(),
+            days,
+            instant.elapsed(),
+        ))
     }
 }
