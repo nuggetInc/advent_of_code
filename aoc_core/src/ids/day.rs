@@ -18,11 +18,11 @@ impl FromStr for DayId {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         if s.starts_with("Day") || s.starts_with("day") {
-            s[3..].parse()
+            Ok(Self(s[3..].parse()?))
         } else if s.starts_with("D") || s.starts_with("d") {
-            s[1..].parse()
+            Ok(Self(s[1..].parse()?))
         } else {
-            s.parse()
+            Ok(Self(s.parse()?))
         }
     }
 }
