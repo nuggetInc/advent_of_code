@@ -82,7 +82,19 @@ fn write_children(file: &mut File, node: NodeRef<'_, Node>) -> io::Result<()> {
                     write!(file, "- ")?;
                     write_children(file, child)?;
                 }
-                _ => (),
+                "a" => {
+                    write!(file, "[")?;
+                    write_children(file, child)?;
+                    write!(
+                        file,
+                        "]({})",
+                        element.attr("href").expect("anchor tag doesn't have href")
+                    )?;
+                }
+                "span" => {
+                    write_children(file, child)?;
+                }
+                _ => unimplemented!("Tag not implemented: '{}'", element.name()),
             },
             Node::Text(text) => write!(file, "{}", text.to_string())?,
             _ => (),

@@ -3,7 +3,7 @@ You feel the ground rumble again as the distress signal leads you to a large net
 
 The sensors aren't very powerful, but that's okay; your handheld device indicates that you're close enough to the source of the distress signal to use them. You pull the emergency sensor system out of your pack, hit the big button on top, and the sensors zoom off down the tunnels.
 
-Once a sensor finds a spot it thinks will give it a good reading, it attaches itself to a hard surface and begins monitoring for the nearest signal source **beacon**. Sensors and beacons always exist at integer coordinates. Each sensor knows its own position and can **determine the position of a beacon precisely**; however, sensors can only lock on to the one beacon **closest to the sensor** as measured by the . (There is never a tie where two beacons are the same distance to a sensor.)
+Once a sensor finds a spot it thinks will give it a good reading, it attaches itself to a hard surface and begins monitoring for the nearest signal source **beacon**. Sensors and beacons always exist at integer coordinates. Each sensor knows its own position and can **determine the position of a beacon precisely**; however, sensors can only lock on to the one beacon **closest to the sensor** as measured by the [Manhattan distance](https://en.wikipedia.org/wiki/Taxicab_geometry). (There is never a tie where two beacons are the same distance to a sensor.)
 
 It doesn't take long for the sensors to report back their positions and closest beacons (your puzzle input). For example:
 
@@ -90,7 +90,7 @@ This isn't necessarily a comprehensive map of all beacons in the area, though. B
 
 This sensor's closest beacon is at `2,10`, and so you know there are no beacons that close or closer (in any positions marked `#`).
 
-None of the detected beacons seem to be producing the distress signal, so you'll need to  where the distress beacon is by working out where it **isn't**. For now, keep things simple by counting the positions where a beacon cannot possibly be along just a single row.
+None of the detected beacons seem to be producing the distress signal, so you'll need to work out where the distress beacon is by working out where it **isn't**. For now, keep things simple by counting the positions where a beacon cannot possibly be along just a single row.
 
 So, suppose you have an arrangement of beacons and sensors like in the example above and, just in the row where `y=10`, you'd like to count the number of positions a beacon cannot possibly exist. The coverage from all sensors near that row looks like this:
 

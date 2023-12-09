@@ -5,7 +5,7 @@ Correction: the distress signal leads you behind a giant waterfall! There seems 
 
 As you begin to make your way deeper underground, you feel the ground rumble for a moment. Sand begins pouring into the cave! If you don't quickly figure out where the sand is going, you could quickly become trapped!
 
-Fortunately, your  with analyzing the path of falling material will come in handy here. You scan a two-dimensional vertical slice of the cave above you (your puzzle input) and discover that it is mostly **air** with structures made of **rock**.
+Fortunately, your [familiarity](/2018/day/17) with analyzing the path of falling material will come in handy here. You scan a two-dimensional vertical slice of the cave above you (your puzzle input) and discover that it is mostly **air** with structures made of **rock**.
 
 Your scan traces the path of each solid rock structure and reports the `x,y` coordinates that form the shape of the path, where `x` represents distance to the right and `y` represents distance down. Each path appears as a single line of text in your scan. After the first point of each path, each point indicates the end of a straight horizontal or vertical line to be drawn from the previous point. For example:
 
@@ -137,7 +137,7 @@ Once all `**24**` units of sand shown above have come to rest, all further sand 
 Using your scan, simulate the falling sand. **How many units of sand come to rest before sand starts flowing into the abyss below?**
 
 ## --- Part Two ---
-You realize you misread the scan. There isn't an  at the bottom of the scan - there's floor, and you're standing on it!
+You realize you misread the scan. There isn't an endless void at the bottom of the scan - there's floor, and you're standing on it!
 
 You don't have time to scan the floor, so assume the floor is an infinite horizontal line with a `y` coordinate equal to **two plus the highest `y` coordinate** of any point in your scan.
 

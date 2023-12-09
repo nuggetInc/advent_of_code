@@ -5,7 +5,7 @@ The device the Elves gave you has problems with more than just its communication
 
 ```
 $ system-update --please --pretty-please-with-sugar-on-top
-: No space left on device
+Error: No space left on device
 ```
 
 Perhaps you can delete some files to make space for the update?

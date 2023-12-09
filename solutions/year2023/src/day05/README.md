@@ -3,11 +3,11 @@ You take the boat and find the gardener right where you were told he would be: m
 
 "A water source? Island Island **is** the water source!" You point out that Snow Island isn't receiving any water.
 
-"Oh, we had to stop the water because we **ran out of sand** to  it with! Can't make snow with dirty water. Don't worry, I'm sure we'll get more sand soon; we only turned off the water a few days... weeks... oh no." His face sinks into a look of horrified realization.
+"Oh, we had to stop the water because we **ran out of sand** to [filter](https://en.wikipedia.org/wiki/Sand_filter) it with! Can't make snow with dirty water. Don't worry, I'm sure we'll get more sand soon; we only turned off the water a few days... weeks... oh no." His face sinks into a look of horrified realization.
 
 "I've been so busy making sure everyone here has food that I completely forgot to check why we stopped getting more sand! There's a ferry leaving soon that is headed over in that direction - it's much faster than your boat. Could you please go check it out?"
 
-You barely have time to agree to this request when he brings up another. "While you wait for the ferry, maybe you can help us with our **food production problem**. The latest Island Island  just arrived and we're having trouble making sense of it."
+You barely have time to agree to this request when he brings up another. "While you wait for the ferry, maybe you can help us with our **food production problem**. The latest Island Island [Almanac](https://en.wikipedia.org/wiki/Almanac) just arrived and we're having trouble making sense of it."
 
 The almanac (your puzzle input) lists all of the seeds that need to be planted. It also lists what type of soil to use with each kind of seed, what type of fertilizer to use with each kind of soil, what type of water to use with each kind of fertilizer, and so on. Every type of seed, soil, fertilizer and so on is identified with a number, but numbers are reused by each category - that is, soil `123` and fertilizer `123` aren't necessarily related to each other.
 
@@ -53,7 +53,7 @@ The almanac starts by listing which seeds need to be planted: seeds `79`, `14`, 
 
 The rest of the almanac contains a list of **maps** which describe how to convert numbers from a **source category** into numbers in a **destination category**. That is, the section that starts with `seed-to-soil map:` describes how to convert a **seed number** (the source) to a **soil number** (the destination). This lets the gardener and his team know which soil to use with which seeds, which water to use with which fertilizer, and so on.
 
-Rather than list every source number and its corresponding destination number one by one, the maps describe entire **ranges** of numbers that can be converted. Each line within a map contains : the **destination range start**, the **source range start**, and the **range length**.
+Rather than list every source number and its corresponding destination number one by one, the maps describe entire **ranges** of numbers that can be converted. Each line within a map contains three numbers: the **destination range start**, the **source range start**, and the **range length**.
 
 Consider again the example `seed-to-soil map`:
 

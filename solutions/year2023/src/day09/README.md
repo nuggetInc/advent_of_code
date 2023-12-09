@@ -1,9 +1,9 @@
 ## --- Day 9: Mirage Maintenance ---
-You ride the camel through the sandstorm and stop where the ghost's maps told you to stop. 
+You ride the camel through the sandstorm and stop where the ghost's maps told you to stop. The sandstorm subsequently subsides, somehow seeing you standing at an **oasis**!
 
 The camel goes to get some water and you stretch your neck. As you look up, you discover what must be yet another giant floating island, this one made of metal! That must be where the **parts to fix the sand machines** come from.
 
-There's even a  partially buried in the sand here; once the sun rises and heats up the sand, you might be able to use the glider and the hot air to get all the way up to the metal island!
+There's even a [hang glider](https://en.wikipedia.org/wiki/Hang_gliding) partially buried in the sand here; once the sun rises and heats up the sand, you might be able to use the glider and the hot air to get all the way up to the metal island!
 
 While you wait for the sun to rise, you admire the oasis hidden here in the middle of Desert Island. It must have a delicate ecosystem; you might as well take some ecological readings while you wait. Maybe you can report any environmental instabilities you find to someone so the oasis can be around for the next sandstorm-worn traveler.
 
@@ -87,4 +87,25 @@ So, the next value of the third history is `**68**`.
 If you find the next value for each history in this example and add them together, you get `**114**`.
 
 Analyze your OASIS report and extrapolate the next value for each history. **What is the sum of these extrapolated values?**
+
+## --- Part Two ---
+Of course, it would be nice to have **even more history** included in your report. Surely it's safe to just **extrapolate backwards** as well, right?
+
+For each history, repeat the process of finding differences until the sequence of differences is entirely zero. Then, rather than adding a zero to the end and filling in the next values of each previous sequence, you should instead add a zero to the **beginning** of your sequence of zeroes, then fill in new **first** values for each previous sequence.
+
+In particular, here is what the third example history looks like when extrapolating back in time:
+
+```
+**5**  10  13  16  21  30  45
+  **5**   3   3   5   9  15
+   **-2**   0   2   4   6
+      **2**   2   2   2
+        **0**   0   0
+```
+
+Adding the new values on the left side of each sequence from bottom to top eventually reveals the new left-most history value: `**5**`.
+
+Doing this for the remaining example data above results in previous values of `**-3**` for the first history and `**0**` for the second history. Adding all three new values together produces `**2**`.
+
+Analyze your OASIS report again, this time extrapolating the **previous** value for each history. **What is the sum of these extrapolated values?**
 

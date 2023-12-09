@@ -33,7 +33,7 @@ For example:
 [1,[2,[3,[4,[5,6,0]]]],8,9]
 ```
 
- Each list starts with `[`, ends with `]`, and contains zero or more comma-separated values (either integers or other lists). Each packet is always a list and appears on its own line.
+Packet data consists of lists and integers. Each list starts with `[`, ends with `]`, and contains zero or more comma-separated values (either integers or other lists). Each packet is always a list and appears on its own line.
 
 When comparing two values, the first value is called **left** and the second value is called **right**. Then:
 

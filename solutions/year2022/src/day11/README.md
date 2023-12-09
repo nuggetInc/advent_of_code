@@ -1,5 +1,5 @@
 ## --- Day 11: Monkey in the Middle ---
-As you finally start making your way upriver, you realize your pack is much lighter than you remember. Just then, one of the items from your pack goes flying overhead. Monkeys are playing  with your missing things!
+As you finally start making your way upriver, you realize your pack is much lighter than you remember. Just then, one of the items from your pack goes flying overhead. Monkeys are playing [Keep Away](https://en.wikipedia.org/wiki/Keep_away) with your missing things!
 
 To get your stuff back, you need to be able to predict where the monkeys will throw your items. After some careful observation, you realize the monkeys operate based on **how worried you are about each item**.
 
@@ -237,7 +237,7 @@ Unfortunately, that relief was all that was keeping your worry levels from reach
 
 At this rate, you might be putting up with these monkeys for a **very long time** - possibly **`10000` rounds**!
 
-With these new rules, you can still figure out the  after 10000 rounds. Using the same example above:
+With these new rules, you can still figure out the monkey business after 10000 rounds. Using the same example above:
 
 ```
 == After round 1 ==

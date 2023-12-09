@@ -1,9 +1,9 @@
 ## --- Day 7: Camel Cards ---
-Your all-expenses-paid trip turns out to be a one-way, five-minute ride in an . (At least it's a !) It drops you off at the edge of a vast desert and descends back to Island Island.
+Your all-expenses-paid trip turns out to be a one-way, five-minute ride in an [airship](https://en.wikipedia.org/wiki/Airship). (At least it's a **cool** airship!) It drops you off at the edge of a vast desert and descends back to Island Island.
 
 "Did you bring the parts?"
 
-You turn around to see an Elf completely covered in white clothing, wearing goggles, and riding a large .
+You turn around to see an Elf completely covered in white clothing, wearing goggles, and riding a large [camel](https://en.wikipedia.org/wiki/Dromedary).
 
 "Did you bring the parts?" she asks again, louder this time. You aren't sure what parts she's looking for; you're here to figure out why the sand stopped.
 
@@ -13,7 +13,7 @@ After riding a bit across the sands of Desert Island, you can see what look like
 
 You've already assumed it'll be your job to figure out why the parts stopped when she asks if you can help. You agree automatically.
 
-Because the journey will take a few days, she offers to teach you the game of **Camel Cards**. Camel Cards is sort of similar to  except it's designed to be easier to play while riding a camel.
+Because the journey will take a few days, she offers to teach you the game of **Camel Cards**. Camel Cards is sort of similar to [poker](https://en.wikipedia.org/wiki/List_of_poker_hands) except it's designed to be easier to play while riding a camel.
 
 In Camel Cards, you get a list of **hands**, and your goal is to order them based on the **strength** of each hand. A hand consists of **five cards** labeled one of `A`, `K`, `Q`, `J`, `T`, `9`, `8`, `7`, `6`, `5`, `4`, `3`, or `2`. The relative strength of each card follows this order, where `A` is the highest and `2` is the lowest.
 
@@ -58,7 +58,7 @@ Now, you can determine the total winnings of this set of hands by adding up the 
 Find the rank of every hand in your set. **What are the total winnings?**
 
 ## --- Part Two ---
-To make things a little more interesting, the Elf introduces one additional rule. Now, `J` cards are  - wildcards that can act like whatever card would make the hand the strongest type possible.
+To make things a little more interesting, the Elf introduces one additional rule. Now, `J` cards are [jokers](https://en.wikipedia.org/wiki/Joker_(playing_card)) - wildcards that can act like whatever card would make the hand the strongest type possible.
 
 To balance this, **`J` cards are now the weakest** individual cards, weaker even than `2`. The other cards stay in the same order: `A`, `K`, `Q`, `T`, `9`, `8`, `7`, `6`, `5`, `4`, `3`, `2`, `J`.
 
