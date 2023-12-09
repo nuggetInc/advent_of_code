@@ -1,3 +1,4 @@
+view the original on [adventofcode.com](https://adventofcode.com/2023/day/3)
 ## --- Day 3: Gear Ratios ---
 You and the Elf eventually reach a [gondola lift](https://en.wikipedia.org/wiki/Gondola_lift) station; he says the gondola lift will take you up to the **water source**, but this is as far as he can bring you. You go inside.
 

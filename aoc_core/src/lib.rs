@@ -4,12 +4,12 @@ mod year;
 
 use std::{
     fs::File,
-    io::{self, Write},
+    io::{self, BufWriter, Write},
+    time::Instant,
 };
 
 pub use day::Day;
 use ego_tree::NodeRef;
-use reqwest::Url;
 use scraper::{Html, Node, Selector};
 pub use year::{Year, YearDay};
 
@@ -17,30 +17,33 @@ pub use year::{Year, YearDay};
 pub fn download_problem(year: u32, day: YearDay) {
     let client = reqwest::blocking::Client::new();
 
-    let url = Url::parse(&format!(
-        "https://adventofcode.com/{}/day/{}",
-        year,
-        u32::from(day)
-    ))
-    .unwrap();
-    let response = client.get(url).header("Cookie", COOKIE).send().unwrap();
+    let url = format!("https://adventofcode.com/{}/day/{}", year, u32::from(day));
+    let response = client.get(&url).header("Cookie", COOKIE).send().unwrap();
     let text = response.text().unwrap();
 
-    let mut file = File::create(format!(
-        "solutions/year{}/src/{}/README.md",
-        year,
-        day.folder_name()
-    ))
-    .unwrap();
+    let instant = Instant::now();
+
+    let mut file = BufWriter::new(
+        File::create(format!(
+            "solutions/year{}/src/{}/README.md",
+            year,
+            day.folder_name()
+        ))
+        .unwrap(),
+    );
 
     let document = Html::parse_document(&text);
     let articles_selector = Selector::parse("body > main > article").unwrap();
+
+    writeln!(file, "view the original on [adventofcode.com]({})", url).unwrap();
     for article in document.select(&articles_selector) {
         write_children(&mut file, *article).unwrap();
     }
+
+    println!("{:?}", instant.elapsed());
 }
 
-fn write_children(file: &mut File, node: NodeRef<'_, Node>) -> io::Result<()> {
+fn write_children(file: &mut BufWriter<File>, node: NodeRef<'_, Node>) -> io::Result<()> {
     for child in node.children() {
         match child.value() {
             Node::Element(element) => match element.name() {
