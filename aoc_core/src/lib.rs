@@ -42,6 +42,7 @@ pub fn download_problem(year: u32, day: YearDay) {
                 .inner_html()
                 .replace("<em>", "<b>")
                 .replace("</em>", "</b>")
+                .replace(r#" target="_blank""#, "")
         )
         .unwrap();
     }
