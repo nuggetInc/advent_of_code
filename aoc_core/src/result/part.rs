@@ -3,16 +3,17 @@ use std::{ffi::OsStr, path::PathBuf, time::Duration};
 
 use termion::color::{Black, Fg, Reset};
 
-use crate::day::DayPart;
+use crate::PartId;
+
 pub struct PartResult {
-    part: DayPart,
+    part: PartId,
     file: PathBuf,
     answer: String,
     elapsed: Duration,
 }
 
 impl PartResult {
-    pub fn new(part: DayPart, file: PathBuf, answer: String, elapsed: Duration) -> Self {
+    pub fn new(part: PartId, file: PathBuf, answer: String, elapsed: Duration) -> Self {
         Self {
             part,
             file,
@@ -28,7 +29,7 @@ impl fmt::Display for PartResult {
             writeln!(
                 f,
                 "{}{} - {: <28}{}Answer:{}{: >36?}{}",
-                self.part,
+                self.part.name(),
                 Fg(Black),
                 self.file
                     .file_name()
@@ -45,7 +46,7 @@ impl fmt::Display for PartResult {
             write!(
                 f,
                 "{}{} - {: <27}{}Answer: {: <18}{}{: >18?}{}",
-                self.part,
+                self.part.name(),
                 Fg(Black),
                 self.file
                     .file_name()

@@ -1,7 +1,6 @@
 use std::{fs, io, path::PathBuf, time::Instant};
 
-use super::daypart::DayPart;
-use crate::result::PartResult;
+use crate::{result::PartResult, PartId};
 
 pub trait Part {
     fn run(&self, file: &PathBuf) -> io::Result<PartResult>;
@@ -25,14 +24,14 @@ impl<T> Part for AocPart<T> {
 }
 
 pub struct AocPart<T> {
-    part: DayPart,
+    part: PartId,
     parser: Box<dyn Fn(String) -> T + 'static>,
     solution: Box<dyn Fn(T) -> String + 'static>,
 }
 
 impl<T> AocPart<T> {
     pub fn new(
-        part: DayPart,
+        part: PartId,
         parser: impl Fn(String) -> T + 'static,
         solution: impl Fn(T) -> String + 'static,
     ) -> Self {

@@ -1,19 +1,16 @@
-mod yearday;
 use std::{collections::BTreeMap, io, panic::Location, time::Instant};
 
-pub use yearday::YearDay;
-
-use crate::{day::Day, result::YearResult};
+use crate::{day::Day, result::YearResult, DayId, YearId};
 
 pub struct Year {
-    name: String,
-    days: BTreeMap<YearDay, Day>,
+    year: YearId,
+    days: BTreeMap<DayId, Day>,
 }
 
 impl Year {
-    pub fn new(name: &str) -> Self {
+    pub fn new(year: impl Into<YearId>) -> Self {
         Self {
-            name: name.to_owned(),
+            year: year.into(),
             days: BTreeMap::new(),
         }
     }
@@ -23,8 +20,8 @@ impl Year {
         if self.days.contains_key(&day.day()) {
             eprintln!(
                 "{}: {} overwritten at {}",
-                self.name,
-                day.day(),
+                self.year.name(),
+                day.day().name(),
                 Location::caller()
             )
         }
@@ -32,8 +29,8 @@ impl Year {
         self.days.insert(day.day(), day);
     }
 
-    pub fn get_day(&self, index: &YearDay) -> Option<&Day> {
-        self.days.get(index)
+    pub fn get_day(&self, index: DayId) -> Option<&Day> {
+        self.days.get(&index)
     }
 
     pub fn run(&mut self) -> io::Result<YearResult> {
@@ -44,10 +41,6 @@ impl Year {
             days.push(day.run()?);
         }
 
-        Ok(YearResult::new(
-            self.name.to_owned(),
-            days,
-            instant.elapsed(),
-        ))
+        Ok(YearResult::new(self.year.name(), days, instant.elapsed()))
     }
 }

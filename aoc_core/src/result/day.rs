@@ -4,16 +4,16 @@ use std::time::Duration;
 use termion::color::{Black, Fg, Reset};
 
 use super::PartResult;
-use crate::year::YearDay;
+use crate::DayId;
 
 pub struct DayResult {
-    day: YearDay,
+    day: DayId,
     parts: Vec<PartResult>,
     elapsed: Duration,
 }
 
 impl DayResult {
-    pub fn new(day: YearDay, parts: Vec<PartResult>, elapsed: Duration) -> Self {
+    pub fn new(day: DayId, parts: Vec<PartResult>, elapsed: Duration) -> Self {
         Self {
             day,
             parts,
@@ -27,7 +27,7 @@ impl fmt::Display for DayResult {
         writeln!(
             f,
             "{: <40}{}{: >40?}{}",
-            self.day.to_string(),
+            self.day.name(),
             Fg(Black),
             self.elapsed,
             Fg(Reset),

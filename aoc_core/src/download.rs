@@ -6,40 +6,40 @@ use std::{
 
 use scraper::{Html, Selector};
 
-use crate::YearDay;
+use crate::{DayId, YearId};
 
-pub fn download_input(year: u32, day: YearDay) {
+pub fn download_input(year: YearId, day: DayId) {
     let client = reqwest::blocking::Client::new();
 
     let cookie = env::var("AOC_SESSION").expect("AOC_SESSION was not set");
 
-    let url = format!(
-        "https://adventofcode.com/{}/day/{}/input",
-        year,
-        u32::from(day)
-    );
+    let url = format!("https://adventofcode.com/{}/day/{}/input", *year, *day);
     let response = client.get(&url).header("Cookie", cookie).send().unwrap();
     let text = response.text().unwrap();
 
     fs::write(
-        format!("solutions/year{}/src/{}/input.txt", year, day.folder_name()),
+        format!(
+            "solutions/{}/src/{}/input.txt",
+            year.folder_name(),
+            day.folder_name()
+        ),
         text,
     )
     .unwrap();
 }
 
-pub fn download_problem(year: u32, day: YearDay) {
+pub fn download_problem(year: YearId, day: DayId) {
     let client = reqwest::blocking::Client::new();
 
     let cookie = env::var("AOC_SESSION").expect("AOC_SESSION was not set");
 
-    let url = format!("https://adventofcode.com/{}/day/{}", year, u32::from(day));
+    let url = format!("https://adventofcode.com/{}/day/{}", *year, *day);
     let response = client.get(&url).header("Cookie", cookie).send().unwrap();
     let text = response.text().unwrap();
 
     let mut file = File::create(format!(
-        "solutions/year{}/src/{}/README.md",
-        year,
+        "solutions/{}/src/{}/README.md",
+        year.folder_name(),
         day.folder_name()
     ))
     .unwrap();

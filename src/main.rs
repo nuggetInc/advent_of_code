@@ -1,6 +1,6 @@
 use std::env::{self, Args};
 
-use aoc_core::download_problem;
+use aoc_core::{download_problem, YearId};
 
 fn main() {
     let mut args = env::args();
@@ -26,16 +26,13 @@ fn run(mut args: Args) {
             ),
         };
 
-        if let Some(yearday_raw) = args.next() {
-            let Ok(yearday) = (&yearday_raw).try_into() else {
-                panic!("The specified day to run is invalid: '{}'", yearday_raw);
+        if let Some(day_raw) = args.next() {
+            let Ok(day) = day_raw.parse() else {
+                panic!("The specified day to run is invalid: '{}'", day_raw);
             };
 
-            let Some(day) = year.get_day(&yearday) else {
-                panic!(
-                    "The specified day to run is not implemented: '{}'",
-                    yearday_raw
-                );
+            let Some(day) = year.get_day(day) else {
+                panic!("The specified day to run is not implemented: '{}'", day_raw);
             };
 
             let result = day.run().expect("Couldn't run day");
@@ -55,24 +52,21 @@ fn download(mut args: Args) {
         panic!("No year or day specified");
     };
 
-    let Ok(year) = year_raw.parse() else {
+    let Ok(year) = year_raw.parse::<YearId>() else {
         panic!("The specified year to download is invalid: '{}'", year_raw);
     };
 
-    if year < 2015 {
+    if *year < 2015 {
         panic!("The specified year must be after 2015");
     }
 
-    let Some(yearday_raw) = args.next() else {
+    let Some(day_raw) = args.next() else {
         panic!("No day specified");
     };
 
-    let Ok(yearday) = (&yearday_raw).try_into() else {
-        panic!(
-            "The specified day to download is invalid: '{}'",
-            yearday_raw
-        );
+    let Ok(day) = day_raw.parse() else {
+        panic!("The specified day to download is invalid: '{}'", day_raw);
     };
 
-    download_problem(year, yearday);
+    download_problem(year, day);
 }

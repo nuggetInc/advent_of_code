@@ -1,9 +1,9 @@
 use std::collections::HashSet;
 
-use aoc_core::{Day, YearDay};
+use aoc_core::Day;
 
 pub fn day() -> Day {
-    let mut solution = Day::new(YearDay::Day14);
+    let mut solution = Day::new(14);
     solution.part_1(parse, part_one);
     solution.part_2(parse, part_two);
     solution.add_file("input.txt");

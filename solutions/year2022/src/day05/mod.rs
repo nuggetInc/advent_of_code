@@ -1,8 +1,8 @@
-use aoc_core::{Day, YearDay};
+use aoc_core::Day;
 use regex::Regex;
 
 pub fn day() -> Day {
-    let mut solution = Day::new(YearDay::Day05);
+    let mut solution = Day::new(5);
     solution.part_1(|x| x, part_one);
     solution.part_2(|x| x, part_two);
     solution.add_file("input.txt");

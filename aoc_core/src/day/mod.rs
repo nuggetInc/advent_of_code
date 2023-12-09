@@ -1,4 +1,3 @@
-mod daypart;
 mod part;
 
 use std::{
@@ -9,27 +8,25 @@ use std::{
     time::Instant,
 };
 
-pub use daypart::DayPart;
-
 use self::part::{AocPart, Part};
-use crate::{result::DayResult, year::YearDay};
+use crate::{result::DayResult, DayId, PartId};
 
 pub struct Day {
-    day: YearDay,
-    parts: BTreeMap<DayPart, Box<dyn Part>>,
+    day: DayId,
+    parts: BTreeMap<PartId, Box<dyn Part>>,
     files: Vec<PathBuf>,
 }
 
 impl Day {
-    pub fn new(day: YearDay) -> Self {
+    pub fn new(day: impl Into<DayId>) -> Self {
         Self {
-            day,
+            day: day.into(),
             parts: BTreeMap::new(),
             files: Vec::new(),
         }
     }
 
-    pub fn day(&self) -> YearDay {
+    pub fn day(&self) -> DayId {
         self.day
     }
 
@@ -53,8 +50,8 @@ impl Day {
         part: impl Fn(T) -> String + 'static,
     ) {
         self.parts.insert(
-            DayPart::Part1,
-            Box::new(AocPart::new(DayPart::Part1, parser, part)),
+            PartId::PART_1,
+            Box::new(AocPart::new(PartId::PART_1, parser, part)),
         );
     }
 
@@ -64,8 +61,8 @@ impl Day {
         part: impl Fn(T) -> String + 'static,
     ) {
         self.parts.insert(
-            DayPart::Part2,
-            Box::new(AocPart::new(DayPart::Part2, parser, part)),
+            PartId::PART_2,
+            Box::new(AocPart::new(PartId::PART_2, parser, part)),
         );
     }
 

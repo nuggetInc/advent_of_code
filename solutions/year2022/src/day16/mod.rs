@@ -1,10 +1,10 @@
 use std::collections::{HashMap, HashSet};
 
-use aoc_core::{Day, YearDay};
+use aoc_core::Day;
 use regex::Regex;
 
 pub fn day() -> Day {
-    let mut solution = Day::new(YearDay::Day16);
+    let mut solution = Day::new(16);
     solution.part_1(parse, part_one);
     solution.add_file("input.txt");
     solution
