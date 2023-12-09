@@ -1,5 +1,5 @@
 mod yearday;
-use std::{collections::BTreeMap, time::Instant};
+use std::{collections::BTreeMap, panic::Location, time::Instant};
 
 pub use yearday::YearDay;
 
@@ -18,8 +18,18 @@ impl Year {
         }
     }
 
-    pub fn add_day(&mut self, index: YearDay, day: Day) {
-        self.days.insert(index, day);
+    #[track_caller]
+    pub fn add_day(&mut self, day: Day) {
+        if self.days.contains_key(&day.day()) {
+            eprintln!(
+                "{}: {} overwritten at {}",
+                self.name,
+                day.day(),
+                Location::caller()
+            )
+        }
+
+        self.days.insert(day.day(), day);
     }
 
     pub fn get_day(&self, index: &YearDay) -> Option<&Day> {

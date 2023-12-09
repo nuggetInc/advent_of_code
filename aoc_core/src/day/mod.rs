@@ -28,6 +28,10 @@ impl Day {
         }
     }
 
+    pub fn day(&self) -> YearDay {
+        self.day
+    }
+
     pub fn run(&self) -> DayResult {
         let instant = Instant::now();
 

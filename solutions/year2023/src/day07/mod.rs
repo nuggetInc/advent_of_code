@@ -4,7 +4,7 @@ use aoc_core::{Day, YearDay};
 use itertools::Itertools;
 
 pub fn day() -> Day {
-    let mut solution = Day::new(YearDay::Day05);
+    let mut solution = Day::new(YearDay::Day07);
     solution.part_1(parse, part_one);
     solution.part_2(parse, part_two);
     solution.add_file("test.txt");
