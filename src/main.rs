@@ -1,6 +1,6 @@
 use std::env::{self, Args};
 
-use aoc_core::{download_problem, YearId};
+use aoc_core::{create_day, download_problem, YearId};
 
 fn main() {
     let mut args = env::args();
@@ -9,7 +9,8 @@ fn main() {
     if let Some(command_raw) = args.next() {
         match command_raw.as_str() {
             "run" | "r" => run(args),
-            "Download" | "d" => download(args),
+            "download" | "d" => download(args),
+            "create" | "c" => create(args),
             _ => panic!("The specified command is invalid: '{}'", command_raw),
         }
     }
@@ -69,4 +70,28 @@ fn download(mut args: Args) {
     };
 
     download_problem(year, day);
+}
+
+fn create(mut args: Args) {
+    let Some(year_raw) = args.next() else {
+        panic!("No year or day specified");
+    };
+
+    let Ok(year) = year_raw.parse::<YearId>() else {
+        panic!("The specified year to download is invalid: '{}'", year_raw);
+    };
+
+    if *year < 2015 {
+        panic!("The specified year must be after 2015");
+    }
+
+    let Some(day_raw) = args.next() else {
+        panic!("No day specified");
+    };
+
+    let Ok(day) = day_raw.parse() else {
+        panic!("The specified day to download is invalid: '{}'", day_raw);
+    };
+
+    create_day(year, day).unwrap();
 }

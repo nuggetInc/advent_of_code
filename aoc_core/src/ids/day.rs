@@ -9,7 +9,7 @@ impl DayId {
     }
 
     pub fn folder_name(&self) -> String {
-        format!("Day{:02}", self.0)
+        format!("day{:02}", self.0)
     }
 }
 
