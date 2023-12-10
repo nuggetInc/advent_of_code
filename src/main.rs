@@ -1,6 +1,6 @@
 use std::env::{self, Args};
 
-use aoc_core::{create_day, download_problem, YearId};
+use aoc_core::{create_day, download_input, download_problem, YearId};
 
 fn main() {
     let mut args = env::args();
@@ -69,6 +69,7 @@ fn download(mut args: Args) {
         panic!("The specified day to download is invalid: '{}'", day_raw);
     };
 
+    download_input(year, day);
     download_problem(year, day);
 }
 
