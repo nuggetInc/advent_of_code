@@ -1,4 +1,4 @@
-use std::collections::{HashSet, VecDeque};
+use std::collections::BinaryHeap;
 
 use aoc_core::Day;
 use itertools::Itertools;
@@ -69,79 +69,65 @@ fn part_two(map: Map) -> String {
         Direction::Left,
         Direction::Right,
     ] {
-        let mut turn = 0;
-        let mut positions = HashSet::with_capacity(map.size());
-        let mut directions = Vec::with_capacity(map.size());
         let mut position = map.move_position(map.start, direction);
 
-        positions.insert(position);
-        directions.push(direction);
+        let mut positions = BinaryHeap::with_capacity(map.size());
+        positions.push(position);
 
+        let initial_direction = direction;
         while let Some(next) = direction.redirect(map.get(position)) {
-            if next == direction.cw() {
-                turn += 1;
-            } else if next == direction.ccw() {
-                turn -= 1;
-            }
-
             direction = next;
             position = map.move_position(position, direction);
-            positions.insert(position);
-            directions.push(direction);
+            positions.push(position);
         }
 
         if let Tile::Start = map.get(position) {
-            let mut insides = HashSet::new();
-            let mut queue = VecDeque::new();
+            let mut count = 0;
+            let mut do_count = false;
+            let mut last_open = Tile::Ground;
 
-            for direction in directions {
-                let side = if turn < 0 {
-                    map.move_position(position, direction.ccw())
-                } else {
-                    map.move_position(position, direction.cw())
-                };
-                if !positions.contains(&side) && insides.insert(side) {
-                    queue.push_back(side);
-                }
+            let mut positions_iter = positions.into_sorted_vec().into_iter().peekable();
 
-                // Only one side of a bend is added which sometimes causes tiles to be missed
-                let tile = map.get(position);
-                if direction == Direction::Up
-                    && ((tile == Tile::NorthEast && turn < 0)
-                        || (tile == Tile::NorthWest && turn > 0))
-                {
-                    let back = map.move_position_down(position);
-                    if !positions.contains(&back) && insides.insert(back) {
-                        queue.push_back(back);
+            for i in 0..map.size() {
+                if positions_iter.peek() == Some(&Position(i)) {
+                    positions_iter.next();
+
+                    match map.get(Position(i)) {
+                        Tile::Start => match (initial_direction, direction) {
+                            (Direction::Right, Direction::Down)
+                            | (Direction::Up, Direction::Left) => last_open = Tile::NorthEast,
+                            (Direction::Right, Direction::Up)
+                            | (Direction::Down, Direction::Left) => last_open = Tile::SouthEast,
+                            (Direction::Left, Direction::Down)
+                            | (Direction::Up, Direction::Right)
+                                if last_open == Tile::SouthEast =>
+                            {
+                                do_count = !do_count
+                            }
+                            (Direction::Left, Direction::Up)
+                            | (Direction::Down, Direction::Right)
+                                if last_open == Tile::NorthEast =>
+                            {
+                                do_count = !do_count
+                            }
+                            (Direction::Up, Direction::Up) | (Direction::Down, Direction::Down) => {
+                                do_count = !do_count
+                            }
+                            _ => (),
+                        },
+                        Tile::Vertical => do_count = !do_count,
+                        Tile::NorthEast => last_open = Tile::NorthEast,
+                        Tile::NorthWest if last_open == Tile::SouthEast => do_count = !do_count,
+                        Tile::SouthEast => last_open = Tile::SouthEast,
+                        Tile::SouthWest if last_open == Tile::NorthEast => do_count = !do_count,
+                        _ => (),
                     }
-                }
-
-                position = map.move_position(position, direction);
-            }
-
-            while let Some(position) = queue.pop_front() {
-                let up = map.move_position_up(position);
-                if !positions.contains(&up) && insides.insert(up) {
-                    queue.push_back(up);
-                }
-
-                let down = map.move_position_down(position);
-                if !positions.contains(&down) && insides.insert(down) {
-                    queue.push_back(down);
-                }
-
-                let left = map.move_position_left(position);
-                if !positions.contains(&left) && insides.insert(left) {
-                    queue.push_back(left);
-                }
-
-                let right = map.move_position_right(position);
-                if !positions.contains(&right) && insides.insert(right) {
-                    queue.push_back(right);
+                } else if do_count {
+                    count += 1;
                 }
             }
 
-            return insides.len().to_string();
+            return count.to_string();
         }
     }
 
@@ -157,24 +143,6 @@ enum Direction {
 }
 
 impl Direction {
-    fn cw(self) -> Self {
-        match self {
-            Self::Up => Self::Right,
-            Self::Down => Self::Left,
-            Self::Left => Self::Up,
-            Self::Right => Self::Down,
-        }
-    }
-
-    fn ccw(self) -> Self {
-        match self {
-            Self::Up => Self::Left,
-            Self::Down => Self::Right,
-            Self::Left => Self::Down,
-            Self::Right => Self::Up,
-        }
-    }
-
     fn redirect(self, tile: Tile) -> Option<Self> {
         match tile {
             Tile::Start | Tile::Ground => None,
@@ -210,7 +178,7 @@ impl Direction {
     }
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 struct Position(usize);
 
 struct Map {
@@ -233,26 +201,6 @@ impl Map {
     #[inline]
     fn size(&self) -> usize {
         self.grid.len()
-    }
-
-    #[inline]
-    fn move_position_up(&self, position: Position) -> Position {
-        Position(position.0 - self.width)
-    }
-
-    #[inline]
-    fn move_position_down(&self, position: Position) -> Position {
-        Position(position.0 + self.width)
-    }
-
-    #[inline]
-    fn move_position_left(&self, position: Position) -> Position {
-        Position(position.0 - 1)
-    }
-
-    #[inline]
-    fn move_position_right(&self, position: Position) -> Position {
-        Position(position.0 + 1)
     }
 
     fn move_position(&self, position: Position, direction: Direction) -> Position {
