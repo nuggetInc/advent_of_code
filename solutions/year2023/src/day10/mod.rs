@@ -1,6 +1,6 @@
 use std::collections::BinaryHeap;
 
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 use itertools::Itertools;
 
 pub fn day() -> Day {
@@ -38,7 +38,7 @@ fn parse(input: String) -> Map {
     Map::new(grid, width, start)
 }
 
-fn part_one(map: Map) -> String {
+fn part_one(map: Map) -> AocResult<i32> {
     for mut direction in [
         Direction::Up,
         Direction::Down,
@@ -55,14 +55,14 @@ fn part_one(map: Map) -> String {
         }
 
         if let Tile::Start = map.get(position) {
-            return (steps / 2).to_string();
+            return Ok(steps / 2);
         }
     }
 
     unreachable!()
 }
 
-fn part_two(map: Map) -> String {
+fn part_two(map: Map) -> AocResult<usize> {
     for mut direction in [
         Direction::Up,
         Direction::Down,
@@ -125,7 +125,7 @@ fn part_two(map: Map) -> String {
                 }
             }
 
-            return count.to_string();
+            return Ok(count);
         }
     }
 

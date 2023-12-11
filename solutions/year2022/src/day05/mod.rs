@@ -1,4 +1,4 @@
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 use regex::Regex;
 
 pub fn day() -> Day {
@@ -9,7 +9,7 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(input: String) -> String {
+fn part_one(input: String) -> AocResult<String> {
     let (crates, procedures) = input.split_once("\n\n").unwrap();
 
     let mut lines: Vec<&str> = crates.split('\n').collect();
@@ -55,10 +55,10 @@ fn part_one(input: String) -> String {
         output.push(pop);
     }
 
-    output.to_string()
+    Ok(output)
 }
 
-fn part_two(input: String) -> String {
+fn part_two(input: String) -> AocResult<String> {
     let (crates, procedures) = input.split_once("\n\n").unwrap();
 
     let mut lines: Vec<&str> = crates.split('\n').collect();
@@ -111,5 +111,5 @@ fn part_two(input: String) -> String {
         output.push(pop);
     }
 
-    output.to_string()
+    Ok(output)
 }

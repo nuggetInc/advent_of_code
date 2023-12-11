@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(2);
@@ -44,7 +44,7 @@ fn parse(input: String) -> Vec<Game> {
     games
 }
 
-fn part_one(games: Vec<Game>) -> String {
+fn part_one(games: Vec<Game>) -> AocResult<u32> {
     let mut sum = 0;
 
     for game in games {
@@ -65,10 +65,10 @@ fn part_one(games: Vec<Game>) -> String {
         }
     }
 
-    sum.to_string()
+    Ok(sum)
 }
 
-fn part_two(games: Vec<Game>) -> String {
+fn part_two(games: Vec<Game>) -> AocResult<u32> {
     let mut sum = 0;
 
     for game in games {
@@ -89,7 +89,7 @@ fn part_two(games: Vec<Game>) -> String {
         sum += red * green * blue;
     }
 
-    sum.to_string()
+    Ok(sum)
 }
 
 struct Game {

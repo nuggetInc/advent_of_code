@@ -1,4 +1,4 @@
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(1);
@@ -13,7 +13,7 @@ fn parse(input: String) -> Vec<String> {
     input.split_terminator('\n').map(str::to_owned).collect()
 }
 
-fn part_one(lines: Vec<String>) -> String {
+fn part_one(lines: Vec<String>) -> AocResult<i32> {
     let mut total = 0;
 
     for line in lines {
@@ -25,10 +25,10 @@ fn part_one(lines: Vec<String>) -> String {
         total += number.parse::<i32>().unwrap();
     }
 
-    total.to_string()
+    Ok(total)
 }
 
-fn part_two(lines: Vec<String>) -> String {
+fn part_two(lines: Vec<String>) -> AocResult<u32> {
     let mut total = 0;
 
     const REPLACE: [(&str, char); 10] = [
@@ -74,5 +74,5 @@ fn part_two(lines: Vec<String>) -> String {
         }
     }
 
-    total.to_string()
+    Ok(total)
 }

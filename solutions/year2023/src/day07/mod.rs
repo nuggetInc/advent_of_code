@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 use itertools::Itertools;
 
 pub fn day() -> Day {
@@ -45,8 +45,8 @@ fn parse(input: String) -> Vec<Play> {
         .collect()
 }
 
-fn part_one(plays: Vec<Play>) -> String {
-    plays
+fn part_one(plays: Vec<Play>) -> AocResult<u32> {
+    Ok(plays
         .into_iter()
         .map(|play| {
             let hand = play.hand();
@@ -60,11 +60,10 @@ fn part_one(plays: Vec<Play>) -> String {
         .rev()
         .enumerate()
         .map(|(index, play)| (index as u32 + 1) * play.0.bid)
-        .sum::<u32>()
-        .to_string()
+        .sum::<u32>())
 }
 
-fn part_two(mut plays: Vec<Play>) -> String {
+fn part_two(mut plays: Vec<Play>) -> AocResult<u32> {
     for play in &mut plays {
         for card in &mut play.cards {
             if *card == Card::Jack {
@@ -73,7 +72,7 @@ fn part_two(mut plays: Vec<Play>) -> String {
         }
     }
 
-    plays
+    Ok(plays
         .into_iter()
         .map(|play| {
             let hand = play.hand();
@@ -87,8 +86,7 @@ fn part_two(mut plays: Vec<Play>) -> String {
         .rev()
         .enumerate()
         .map(|(index, play)| (index as u32 + 1) * play.0.bid)
-        .sum::<u32>()
-        .to_string()
+        .sum::<u32>())
 }
 
 #[derive(Clone)]

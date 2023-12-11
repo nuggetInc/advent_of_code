@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(3);
@@ -46,7 +46,7 @@ fn parse(input: String) -> (Vec<u32>, Vec<Vec<Cell>>) {
     (numbers, map)
 }
 
-fn part_one((numbers, map): (Vec<u32>, Vec<Vec<Cell>>)) -> String {
+fn part_one((numbers, map): (Vec<u32>, Vec<Vec<Cell>>)) -> AocResult<u32> {
     let mut marked = HashSet::new();
 
     for (row_index, row) in map.iter().enumerate() {
@@ -69,14 +69,10 @@ fn part_one((numbers, map): (Vec<u32>, Vec<Vec<Cell>>)) -> String {
         }
     }
 
-    marked
-        .into_iter()
-        .map(|index| numbers[index])
-        .sum::<u32>()
-        .to_string()
+    Ok(marked.into_iter().map(|index| numbers[index]).sum::<u32>())
 }
 
-fn part_two((numbers, map): (Vec<u32>, Vec<Vec<Cell>>)) -> String {
+fn part_two((numbers, map): (Vec<u32>, Vec<Vec<Cell>>)) -> AocResult<u32> {
     let mut sum = 0;
     for (row_index, row) in map.iter().enumerate() {
         for (cell_index, cell) in row.iter().enumerate() {
@@ -113,7 +109,7 @@ fn part_two((numbers, map): (Vec<u32>, Vec<Vec<Cell>>)) -> String {
         }
     }
 
-    sum.to_string()
+    Ok(sum)
 }
 
 struct Cell {

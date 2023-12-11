@@ -1,4 +1,4 @@
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(4);
@@ -36,7 +36,7 @@ fn parse(input: String) -> Vec<Card> {
         .collect()
 }
 
-fn part_one(cards: Vec<Card>) -> String {
+fn part_one(cards: Vec<Card>) -> AocResult<i32> {
     let mut total = 0;
 
     for card in cards {
@@ -47,10 +47,10 @@ fn part_one(cards: Vec<Card>) -> String {
         }
     }
 
-    total.to_string()
+    Ok(total)
 }
 
-fn part_two(cards: Vec<Card>) -> String {
+fn part_two(cards: Vec<Card>) -> AocResult<i32> {
     let mut counts = vec![1; cards.len()];
     let mut sum = 0;
 
@@ -67,7 +67,7 @@ fn part_two(cards: Vec<Card>) -> String {
         }
     }
 
-    sum.to_string()
+    Ok(sum)
 }
 
 #[derive(Debug)]

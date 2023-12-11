@@ -1,6 +1,6 @@
 use std::ops::Range;
 
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 use itertools::Itertools;
 
 pub fn day() -> Day {
@@ -42,7 +42,7 @@ fn parse(input: String) -> Almanac {
     Almanac::new(seeds, maps)
 }
 
-fn part_one(almanac: Almanac) -> String {
+fn part_one(almanac: Almanac) -> AocResult<i64> {
     let mut values = almanac.seeds.clone();
 
     for map in &almanac.maps {
@@ -61,10 +61,10 @@ fn part_one(almanac: Almanac) -> String {
             .collect()
     }
 
-    values.into_iter().min().unwrap().to_string()
+    Ok(values.into_iter().min().unwrap())
 }
 
-fn part_two(almanac: Almanac) -> String {
+fn part_two(almanac: Almanac) -> AocResult<i64> {
     let mut values: Vec<_> = almanac
         .seeds
         .iter()
@@ -99,12 +99,7 @@ fn part_two(almanac: Almanac) -> String {
         (values, new_values) = (new_values, values)
     }
 
-    values
-        .into_iter()
-        .map(|range| range.start)
-        .min()
-        .unwrap()
-        .to_string()
+    Ok(values.into_iter().map(|range| range.start).min().unwrap())
 }
 
 struct Almanac {

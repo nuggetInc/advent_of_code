@@ -3,17 +3,16 @@ use std::time::Duration;
 
 use termion::color::{Black, Fg, Reset};
 
-use super::PartResult;
-use crate::DayId;
+use crate::{DayId, PartResult};
 
 pub struct DayResult {
     day: DayId,
-    parts: Vec<PartResult>,
+    parts: Vec<Box<dyn PartResult>>,
     elapsed: Duration,
 }
 
 impl DayResult {
-    pub fn new(day: DayId, parts: Vec<PartResult>, elapsed: Duration) -> Self {
+    pub fn new(day: DayId, parts: Vec<Box<dyn PartResult>>, elapsed: Duration) -> Self {
         Self {
             day,
             parts,

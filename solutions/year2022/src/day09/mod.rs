@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(9);
@@ -10,7 +10,7 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(input: String) -> String {
+fn part_one(input: String) -> AocResult<usize> {
     let mut knots = [(0, 0); 2];
 
     let mut set = HashSet::new();
@@ -60,10 +60,10 @@ fn part_one(input: String) -> String {
         }
     }
 
-    set.len().to_string()
+    Ok(set.len())
 }
 
-fn part_two(input: String) -> String {
+fn part_two(input: String) -> AocResult<usize> {
     let mut knots = [(0, 0); 10];
 
     let mut set = HashSet::new();
@@ -113,7 +113,7 @@ fn part_two(input: String) -> String {
         }
     }
 
-    set.len().to_string()
+    Ok(set.len())
 }
 
 enum Direction {

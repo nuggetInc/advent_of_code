@@ -1,4 +1,4 @@
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 use itertools::Itertools;
 
 pub fn day() -> Day {
@@ -22,20 +22,18 @@ fn parse(input: String) -> Vec<Sequence> {
         .collect()
 }
 
-fn part_one(histories: Vec<Sequence>) -> String {
-    histories
+fn part_one(histories: Vec<Sequence>) -> AocResult<i32> {
+    Ok(histories
         .into_iter()
         .map(|history| history.next())
-        .sum::<i32>()
-        .to_string()
+        .sum::<i32>())
 }
 
-fn part_two(histories: Vec<Sequence>) -> String {
-    histories
+fn part_two(histories: Vec<Sequence>) -> AocResult<i32> {
+    Ok(histories
         .into_iter()
         .map(|history| history.previous())
-        .sum::<i32>()
-        .to_string()
+        .sum::<i32>())
 }
 
 struct Sequence(Vec<i32>);

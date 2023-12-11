@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(14);
@@ -10,7 +10,7 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(walls: Vec<Vec<(u32, u32)>>) -> String {
+fn part_one(walls: Vec<Vec<(u32, u32)>>) -> AocResult<i32> {
     let mut occupied = HashSet::new();
 
     let mut bottom_y = 0;
@@ -64,10 +64,10 @@ fn part_one(walls: Vec<Vec<(u32, u32)>>) -> String {
         occupied.insert((x, y));
     }
 
-    count.to_string()
+    Ok(count)
 }
 
-fn part_two(walls: Vec<Vec<(u32, u32)>>) -> String {
+fn part_two(walls: Vec<Vec<(u32, u32)>>) -> AocResult<i32> {
     let mut occupied = HashSet::new();
 
     let mut bottom_y = 0;
@@ -123,7 +123,7 @@ fn part_two(walls: Vec<Vec<(u32, u32)>>) -> String {
         }
     }
 
-    count.to_string()
+    Ok(count)
 }
 
 fn parse(input: String) -> Vec<Vec<(u32, u32)>> {

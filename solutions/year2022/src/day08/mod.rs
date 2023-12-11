@@ -1,4 +1,4 @@
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(8);
@@ -20,7 +20,7 @@ fn parse(input: String) -> Grid {
     Grid::new(grid, width, height)
 }
 
-fn part_one(grid: Grid) -> String {
+fn part_one(grid: Grid) -> AocResult<i32> {
     let mut visible = 0;
 
     for y in 0..grid.height {
@@ -31,10 +31,10 @@ fn part_one(grid: Grid) -> String {
         }
     }
 
-    visible.to_string()
+    Ok(visible)
 }
 
-fn part_two(grid: Grid) -> String {
+fn part_two(grid: Grid) -> AocResult<u32> {
     let mut highest_score = 0;
 
     for y in 0..grid.height {
@@ -47,7 +47,7 @@ fn part_two(grid: Grid) -> String {
         }
     }
 
-    highest_score.to_string()
+    Ok(highest_score)
 }
 
 struct Grid {

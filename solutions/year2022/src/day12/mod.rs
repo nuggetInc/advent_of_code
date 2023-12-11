@@ -1,6 +1,6 @@
 use std::collections::{HashSet, VecDeque};
 
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(12);
@@ -10,12 +10,12 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(map: Map) -> String {
-    map.get_steps().to_string()
+fn part_one(map: Map) -> AocResult<usize> {
+    Ok(map.get_steps())
 }
 
-fn part_two(map: Map) -> String {
-    map.get_fewest_steps().to_string()
+fn part_two(map: Map) -> AocResult<usize> {
+    Ok(map.get_fewest_steps())
 }
 
 fn parse(input: String) -> Map {

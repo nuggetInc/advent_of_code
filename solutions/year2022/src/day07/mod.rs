@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(7);
@@ -10,7 +10,7 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(root: Directory) -> String {
+fn part_one(root: Directory) -> AocResult<usize> {
     let mut sum = 0;
 
     let mut directories = Vec::new();
@@ -29,10 +29,10 @@ fn part_one(root: Directory) -> String {
         }
     }
 
-    sum.to_string()
+    Ok(sum)
 }
 
-fn part_two(root: Directory) -> String {
+fn part_two(root: Directory) -> AocResult<usize> {
     let mut sizes = Vec::new();
 
     let mut directories = Vec::new();
@@ -57,7 +57,7 @@ fn part_two(root: Directory) -> String {
         }
     }
 
-    smallest_size.to_string()
+    Ok(smallest_size)
 }
 
 fn parse(input: String) -> Directory {

@@ -1,6 +1,6 @@
 use std::collections::{HashSet, VecDeque};
 
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(6);
@@ -10,12 +10,12 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(input: String) -> String {
-    find_marker(input, 4).to_string()
+fn part_one(input: String) -> AocResult<usize> {
+    Ok(find_marker(input, 4))
 }
 
-fn part_two(input: String) -> String {
-    find_marker(input, 14).to_string()
+fn part_two(input: String) -> AocResult<usize> {
+    Ok(find_marker(input, 14))
 }
 
 fn find_marker(input: String, size: usize) -> usize {

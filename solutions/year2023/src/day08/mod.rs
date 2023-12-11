@@ -1,4 +1,4 @@
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 use num::Integer;
 
 pub fn day() -> Day {
@@ -32,7 +32,7 @@ fn parse_node(input: &str) -> usize {
     usize::from_str_radix(input, 36).unwrap()
 }
 
-fn part_one((directions, nodes): (Vec<Direction>, Vec<(usize, usize)>)) -> String {
+fn part_one((directions, nodes): (Vec<Direction>, Vec<(usize, usize)>)) -> AocResult<i32> {
     let mut position = parse_node("AAA");
     let mut steps = 0;
 
@@ -49,10 +49,10 @@ fn part_one((directions, nodes): (Vec<Direction>, Vec<(usize, usize)>)) -> Strin
         }
     }
 
-    steps.to_string()
+    Ok(steps)
 }
 
-fn part_two((directions, nodes): (Vec<Direction>, Vec<(usize, usize)>)) -> String {
+fn part_two((directions, nodes): (Vec<Direction>, Vec<(usize, usize)>)) -> AocResult<u64> {
     let mut multiple = 1_u64;
 
     for mut position in (parse_node("11A")..=parse_node("ZZA")).step_by(36) {
@@ -78,7 +78,7 @@ fn part_two((directions, nodes): (Vec<Direction>, Vec<(usize, usize)>)) -> Strin
         multiple = multiple.lcm(&steps);
     }
 
-    multiple.to_string()
+    Ok(multiple)
 }
 
 enum Direction {

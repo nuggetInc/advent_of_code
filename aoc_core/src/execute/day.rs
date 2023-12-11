@@ -1,6 +1,6 @@
 use std::{
     collections::BTreeMap,
-    fs, io,
+    fmt, fs, io,
     panic::Location,
     path::{Path, PathBuf},
     time::Instant,
@@ -10,7 +10,7 @@ use super::{
     part::{AocPart, Part},
     result::DayResult,
 };
-use crate::{DayId, PartId};
+use crate::{AocResult, DayId, PartId};
 
 pub struct Day {
     day: DayId,
@@ -57,10 +57,10 @@ impl Day {
         Ok(DayResult::new(self.day, parts, instant.elapsed()))
     }
 
-    pub fn part_1<T: 'static>(
+    pub fn part_1<Parsed: 'static, Answer: fmt::Display + 'static>(
         &mut self,
-        parser: impl Fn(String) -> T + 'static,
-        part: impl Fn(T) -> String + 'static,
+        parser: impl Fn(String) -> Parsed + 'static,
+        part: impl Fn(Parsed) -> AocResult<Answer> + 'static,
     ) {
         self.parts.insert(
             PartId::PART_1,
@@ -68,10 +68,10 @@ impl Day {
         );
     }
 
-    pub fn part_2<T: 'static>(
+    pub fn part_2<Parsed: 'static, Answer: fmt::Display + 'static>(
         &mut self,
-        parser: impl Fn(String) -> T + 'static,
-        part: impl Fn(T) -> String + 'static,
+        parser: impl Fn(String) -> Parsed + 'static,
+        part: impl Fn(Parsed) -> AocResult<Answer> + 'static,
     ) {
         self.parts.insert(
             PartId::PART_2,

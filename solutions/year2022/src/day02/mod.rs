@@ -1,4 +1,4 @@
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(2);
@@ -8,7 +8,7 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(input: String) -> String {
+fn part_one(input: String) -> AocResult<u32> {
     let mut score: u32 = 0;
 
     for line in input.split('\n') {
@@ -26,10 +26,10 @@ fn part_one(input: String) -> String {
         };
     }
 
-    score.to_string()
+    Ok(score)
 }
 
-fn part_two(input: String) -> String {
+fn part_two(input: String) -> AocResult<u32> {
     let mut score: u32 = 0;
 
     for line in input.split('\n') {
@@ -47,5 +47,5 @@ fn part_two(input: String) -> String {
         };
     }
 
-    score.to_string()
+    Ok(score)
 }

@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 use regex::Regex;
 
 pub fn day() -> Day {
@@ -11,7 +11,7 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(monkeys: Vec<Monkey>) -> String {
+fn part_one(monkeys: Vec<Monkey>) -> AocResult<i32> {
     let mut monkeys = monkeys.clone();
 
     let mut inspects = vec![0; monkeys.len()];
@@ -42,10 +42,10 @@ fn part_one(monkeys: Vec<Monkey>) -> String {
 
     inspects.sort_by(|a, b| b.partial_cmp(a).unwrap());
 
-    (inspects[0] * inspects[1]).to_string()
+    Ok(inspects[0] * inspects[1])
 }
 
-fn part_two(monkeys: Vec<Monkey>) -> String {
+fn part_two(monkeys: Vec<Monkey>) -> AocResult<i64> {
     let mut monkeys = monkeys.clone();
 
     let mut inspects = vec![0_i64; monkeys.len()];
@@ -78,7 +78,7 @@ fn part_two(monkeys: Vec<Monkey>) -> String {
 
     inspects.sort_by(|a, b| b.partial_cmp(a).unwrap());
 
-    (inspects[0] * inspects[1]).to_string()
+    Ok(inspects[0] * inspects[1])
 }
 
 fn parse(input: String) -> Vec<Monkey> {

@@ -1,4 +1,4 @@
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 use regex::Regex;
 
 pub fn day() -> Day {
@@ -9,7 +9,7 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(sensors: Vec<Sensor>) -> String {
+fn part_one(sensors: Vec<Sensor>) -> AocResult<i32> {
     const Y: i64 = 2000000;
 
     let mut min_x = 0;
@@ -39,10 +39,10 @@ fn part_one(sensors: Vec<Sensor>) -> String {
         }
     }
 
-    count.to_string()
+    Ok(count)
 }
 
-fn part_two(sensors: Vec<Sensor>) -> String {
+fn part_two(sensors: Vec<Sensor>) -> AocResult<i64> {
     const SIZE: i64 = 4000000;
 
     for y in 0..=SIZE {
@@ -60,7 +60,7 @@ fn part_two(sensors: Vec<Sensor>) -> String {
                 }
             }
 
-            return (x * 4000000 + y).to_string();
+            return Ok(x * 4000000 + y);
         }
     }
 

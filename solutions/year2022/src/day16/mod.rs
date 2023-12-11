@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 use regex::Regex;
 
 pub fn day() -> Day {
@@ -10,7 +10,7 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(valves: HashMap<String, Valve>) -> String {
+fn part_one(valves: HashMap<String, Valve>) -> AocResult<u32> {
     let mut valves = valves.clone();
 
     let keys = valves.keys().map(String::clone).collect::<Vec<_>>();
@@ -46,7 +46,7 @@ fn part_one(valves: HashMap<String, Valve>) -> String {
 
     let highest = start_search1(&valves);
 
-    highest.to_string()
+    Ok(highest)
 }
 
 fn parse(input: String) -> HashMap<String, Valve> {

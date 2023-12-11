@@ -1,4 +1,4 @@
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(1);
@@ -8,7 +8,7 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(input: String) -> String {
+fn part_one(input: String) -> AocResult<u32> {
     let mut highest = 0;
     for inventory in input.split("\n\n") {
         let calories: u32 = inventory
@@ -21,10 +21,10 @@ fn part_one(input: String) -> String {
         }
     }
 
-    highest.to_string()
+    Ok(highest)
 }
 
-fn part_two(input: String) -> String {
+fn part_two(input: String) -> AocResult<u32> {
     let mut calories: Vec<u32> = input
         .split("\n\n")
         .map(|inventory| {
@@ -36,5 +36,5 @@ fn part_two(input: String) -> String {
         .collect::<Vec<_>>();
     calories.sort();
 
-    calories.into_iter().rev().take(3).sum::<u32>().to_string()
+    Ok(calories.into_iter().rev().take(3).sum::<u32>())
 }

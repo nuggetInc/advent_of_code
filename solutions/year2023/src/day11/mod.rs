@@ -1,4 +1,4 @@
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 use itertools::Itertools;
 
 pub fn day() -> Day {
@@ -36,12 +36,18 @@ fn parse(input: String) -> (Vec<Galaxy>, Vec<bool>, Vec<bool>) {
     (galaxies, galaxies_x, galaxies_y)
 }
 
-fn part_one((galaxies, galaxies_x, galaxies_y): (Vec<Galaxy>, Vec<bool>, Vec<bool>)) -> String {
-    calculate_distances(galaxies, galaxies_x, galaxies_y, 1).to_string()
+fn part_one(
+    (galaxies, galaxies_x, galaxies_y): (Vec<Galaxy>, Vec<bool>, Vec<bool>),
+) -> AocResult<u64> {
+    Ok(calculate_distances(galaxies, galaxies_x, galaxies_y, 1))
 }
 
-fn part_two((galaxies, galaxies_x, galaxies_y): (Vec<Galaxy>, Vec<bool>, Vec<bool>)) -> String {
-    calculate_distances(galaxies, galaxies_x, galaxies_y, 999999).to_string()
+fn part_two(
+    (galaxies, galaxies_x, galaxies_y): (Vec<Galaxy>, Vec<bool>, Vec<bool>),
+) -> AocResult<u64> {
+    Ok(calculate_distances(
+        galaxies, galaxies_x, galaxies_y, 999999,
+    ))
 }
 
 fn calculate_distances(

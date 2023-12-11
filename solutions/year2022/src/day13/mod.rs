@@ -1,6 +1,6 @@
 use std::cmp::Ordering;
 
-use aoc_core::Day;
+use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(13);
@@ -10,7 +10,7 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(pairs: Vec<(Value, Value)>) -> String {
+fn part_one(pairs: Vec<(Value, Value)>) -> AocResult<i32> {
     let mut sum = 0;
     let mut index = 0;
 
@@ -26,10 +26,10 @@ fn part_one(pairs: Vec<(Value, Value)>) -> String {
         }
     }
 
-    sum.to_string()
+    Ok(sum)
 }
 
-fn part_two(mut values: Vec<Value>) -> String {
+fn part_two(mut values: Vec<Value>) -> AocResult<i32> {
     let value2 = Value::List(vec![Value::List(vec![Value::Integer(2)])]);
     let value6 = Value::List(vec![Value::List(vec![Value::Integer(6)])]);
 
@@ -49,7 +49,7 @@ fn part_two(mut values: Vec<Value>) -> String {
         }
     }
 
-    product.to_string()
+    Ok(product)
 }
 
 fn parse_input1(input: String) -> Vec<(Value, Value)> {
