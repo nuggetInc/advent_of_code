@@ -1,6 +1,6 @@
 use std::{
     collections::BTreeMap,
-    io,
+    fs, io,
     panic::Location,
     path::{Path, PathBuf},
     time::Instant,
@@ -36,9 +36,21 @@ impl Day {
 
         let mut parts = Vec::new();
 
-        for file in &self.files {
-            for part in self.parts.values() {
-                parts.push(part.run(file)?);
+        for input_file in &self.files {
+            let mut output_file = input_file.clone();
+            output_file.set_extension("out");
+
+            if output_file.exists() {
+                let output = fs::read_to_string(output_file)?;
+                let mut expected = output.split_terminator('\n');
+
+                for part in self.parts.values() {
+                    parts.push(part.run(input_file, expected.next().map(str::to_owned))?);
+                }
+            } else {
+                for part in self.parts.values() {
+                    parts.push(part.run(input_file, None)?);
+                }
             }
         }
 

@@ -6,7 +6,7 @@ use regex::Regex;
 pub fn day() -> Day {
     let mut solution = Day::new(16);
     solution.part_1(parse, part_one);
-    solution.add_file("input.txt");
+    solution.add_file("files/input.in");
     solution
 }
 

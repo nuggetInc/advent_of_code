@@ -14,9 +14,15 @@ pub fn download_input(year: YearId, day: DayId) -> Result<(), Box<dyn Error>> {
     let url = format!("https://adventofcode.com/{}/day/{}/input", *year, *day);
     let text = client.get(url)?.text()?;
 
+    fs::create_dir(format!(
+        "solutions/{}/src/{}/files",
+        year.folder_name(),
+        day.folder_name()
+    ))?;
+
     fs::write(
         format!(
-            "solutions/{}/src/{}/input.txt",
+            "solutions/{}/src/{}/files/input.in",
             year.folder_name(),
             day.folder_name()
         ),

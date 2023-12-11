@@ -1,5 +1,6 @@
 /target
-/solutions/**/input.txt
+/solutions/**/input.in
+/solutions/**/input.out
 
 .vscode
 .env

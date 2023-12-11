@@ -4,11 +4,11 @@ use super::result::PartResult;
 use crate::PartId;
 
 pub trait Part {
-    fn run(&self, file: &Path) -> io::Result<PartResult>;
+    fn run(&self, file: &Path, expected: Option<String>) -> io::Result<PartResult>;
 }
 
 impl<T> Part for AocPart<T> {
-    fn run(&self, file: &Path) -> io::Result<PartResult> {
+    fn run(&self, file: &Path, expected: Option<String>) -> io::Result<PartResult> {
         let input = fs::read_to_string(file)?;
 
         let instant = Instant::now();
@@ -19,6 +19,7 @@ impl<T> Part for AocPart<T> {
             self.part,
             file.to_owned(),
             answer,
+            expected,
             instant.elapsed(),
         ))
     }

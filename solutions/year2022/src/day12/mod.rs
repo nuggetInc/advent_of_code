@@ -6,7 +6,7 @@ pub fn day() -> Day {
     let mut solution = Day::new(12);
     solution.part_1(parse, part_one);
     solution.part_2(parse, part_two);
-    solution.add_file("input.txt");
+    solution.add_file("files/input.in");
     solution
 }
 
