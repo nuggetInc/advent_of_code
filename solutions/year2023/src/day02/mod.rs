@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 
 use aoc_core::Day;
-use regex::Regex;
 
 pub fn day() -> Day {
     let mut solution = Day::new(2);
@@ -13,15 +12,13 @@ pub fn day() -> Day {
 }
 
 fn parse(input: String) -> Vec<Game> {
-    let regex = Regex::new(r"^Game (\d+): (.+)$").unwrap();
-
     let mut games = Vec::new();
     for line in input.split_terminator('\n') {
-        let captures = regex.captures(line).unwrap();
+        let mut split = line.split(": ");
 
         let mut sets = Vec::new();
-        let id = captures[1].parse().unwrap();
-        for set_raw in captures[2].split("; ") {
+        let id = split.next().unwrap()[5..].parse().unwrap();
+        for set_raw in split.next().unwrap().split("; ") {
             let mut cubes = HashMap::new();
 
             for cube_raw in set_raw.split(", ") {
@@ -61,8 +58,6 @@ fn part_one(games: Vec<Game>) -> String {
                 };
 
                 if !possible {
-                    // println!("{color:?}: {amount}");
-
                     sum -= game.id;
                     break 'outer;
                 }
@@ -77,20 +72,21 @@ fn part_two(games: Vec<Game>) -> String {
     let mut sum = 0;
 
     for game in games {
-        let mut hashmap = HashMap::new();
-        hashmap.insert(Color::Red, 0);
-        hashmap.insert(Color::Green, 0);
-        hashmap.insert(Color::Blue, 0);
+        let mut red = 0;
+        let mut green = 0;
+        let mut blue = 0;
 
         for set in &game.sets {
             for (color, amount) in &set.cubes {
-                if hashmap[color] < *amount {
-                    hashmap.insert(color.to_owned(), *amount);
-                }
+                match color {
+                    Color::Red => red = red.max(*amount),
+                    Color::Green => green = green.max(*amount),
+                    Color::Blue => blue = blue.max(*amount),
+                };
             }
         }
 
-        sum += hashmap[&Color::Red] * hashmap[&Color::Green] * hashmap[&Color::Blue];
+        sum += red * green * blue;
     }
 
     sum.to_string()
