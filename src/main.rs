@@ -73,8 +73,8 @@ fn download(mut args: Args) {
         panic!("The specified day to download is invalid: '{}'", day_raw);
     };
 
-    download_input(year, day);
-    download_problem(year, day);
+    download_input(year, day).unwrap();
+    download_problem(year, day).unwrap();
 }
 
 fn create(mut args: Args) {
