@@ -2,3 +2,4 @@
 /solutions/**/input.txt
 
 .vscode
+.env

@@ -11,7 +11,8 @@ use crate::{DayId, YearId};
 pub fn download_input(year: YearId, day: DayId) {
     let client = reqwest::blocking::Client::new();
 
-    let cookie = env::var("AOC_SESSION").expect("AOC_SESSION was not set");
+    let env = env::var("AOC_SESSION").expect("AOC_SESSION was not set");
+    let cookie = format!("session={}", env);
 
     let url = format!("https://adventofcode.com/{}/day/{}/input", *year, *day);
     let response = client.get(url).header("Cookie", cookie).send().unwrap();
@@ -31,7 +32,8 @@ pub fn download_input(year: YearId, day: DayId) {
 pub fn download_problem(year: YearId, day: DayId) {
     let client = reqwest::blocking::Client::new();
 
-    let cookie = env::var("AOC_SESSION").expect("AOC_SESSION was not set");
+    let env = env::var("AOC_SESSION").expect("AOC_SESSION was not set");
+    let cookie = format!("session={}", env);
 
     let url = format!("https://adventofcode.com/{}/day/{}", *year, *day);
     let response = client.get(&url).header("Cookie", cookie).send().unwrap();

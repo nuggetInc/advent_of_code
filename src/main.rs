@@ -6,6 +6,10 @@ fn main() {
     let mut args = env::args();
     args.next();
 
+    if let Err(error) = dotenvy::dotenv() {
+        eprintln!("Error loading env file: '{}'", error);
+    }
+
     if let Some(command_raw) = args.next() {
         match command_raw.as_str() {
             "run" | "r" => run(args),
