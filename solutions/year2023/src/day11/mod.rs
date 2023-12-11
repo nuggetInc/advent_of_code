@@ -18,9 +18,7 @@ fn parse(input: String) -> (Vec<Galaxy>, Vec<bool>, Vec<bool>) {
     for (y, line) in input.split_terminator('\n').enumerate() {
         galaxies_y.push(false);
         if y == 0 {
-            for _ in 0..line.len() {
-                galaxies_x.push(false);
-            }
+            galaxies_x = vec![false; line.len()];
         }
 
         for (x, char) in line.char_indices() {
@@ -58,8 +56,8 @@ fn calculate_distances(
         for to in (from + 1)..galaxies_x.len() {
             let mut sum = 0;
 
-            for x in from..to {
-                if !galaxies_x[x] {
+            for x in galaxies_x.iter().take(to).skip(from) {
+                if !*x {
                     sum += size_increase;
                 }
             }
@@ -74,8 +72,8 @@ fn calculate_distances(
         for to in (from + 1)..galaxies_y.len() {
             let mut sum = 0;
 
-            for y in from..to {
-                if !galaxies_y[y] {
+            for y in galaxies_y.iter().take(to).skip(from) {
+                if !*y {
                     sum += size_increase;
                 }
             }

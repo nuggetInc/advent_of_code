@@ -13,16 +13,16 @@ pub fn day() -> Day {
 fn part_one(input: String) -> String {
     let mut total = 0;
 
-    for line in input.split("\n") {
+    for line in input.split('\n') {
         let (first, last) = line.split_at(line.len() / 2);
         let first: HashSet<char> = first.chars().collect();
         let second: HashSet<char> = last.chars().collect();
 
         let intersection = first.intersection(&second).next().unwrap();
         if intersection.is_lowercase() {
-            total += intersection.clone() as u32 - 96
+            total += *intersection as u32 - 96
         } else {
-            total += intersection.clone() as u32 - 38
+            total += *intersection as u32 - 38
         };
     }
 
@@ -32,7 +32,7 @@ fn part_one(input: String) -> String {
 fn part_two(input: String) -> String {
     let mut total = 0;
 
-    let mut split = input.split("\n");
+    let mut split = input.split('\n');
 
     while let (Some(first), Some(second), Some(third)) = (split.next(), split.next(), split.next())
     {
@@ -43,9 +43,9 @@ fn part_two(input: String) -> String {
         let intersection: HashSet<char> = first.intersection(&second).map(char::clone).collect();
         let intersection = intersection.intersection(&third).next().unwrap();
         if intersection.is_lowercase() {
-            total += intersection.clone() as u32 - 96
+            total += *intersection as u32 - 96
         } else {
-            total += intersection.clone() as u32 - 38
+            total += *intersection as u32 - 38
         };
     }
 

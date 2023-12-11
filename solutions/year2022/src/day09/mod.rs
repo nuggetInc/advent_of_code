@@ -16,8 +16,8 @@ fn part_one(input: String) -> String {
     let mut set = HashSet::new();
     set.insert(knots[1]);
 
-    for line in input.split("\n") {
-        let mut split = line.split(" ");
+    for line in input.split('\n') {
+        let mut split = line.split(' ');
 
         let direction = match split.next() {
             Some("U") => Direction::Up,
@@ -46,7 +46,7 @@ fn part_one(input: String) -> String {
                 let diff_x: i32 = knots[i - 1].0 - knots[i].0;
                 let diff_y: i32 = knots[i - 1].1 - knots[i].1;
 
-                if diff_x < -1 || diff_x > 1 || diff_y < -1 || diff_y > 1 {
+                if !(-1..=1).contains(&diff_x) || !(-1..=1).contains(&diff_y) {
                     if diff_x != 0 {
                         knots[i].0 += diff_x / diff_x.abs();
                     }
@@ -69,8 +69,8 @@ fn part_two(input: String) -> String {
     let mut set = HashSet::new();
     set.insert(knots[9]);
 
-    for line in input.split("\n") {
-        let mut split = line.split(" ");
+    for line in input.split('\n') {
+        let mut split = line.split(' ');
 
         let direction = match split.next() {
             Some("U") => Direction::Up,
@@ -99,7 +99,7 @@ fn part_two(input: String) -> String {
                 let diff_x: i32 = knots[i - 1].0 - knots[i].0;
                 let diff_y: i32 = knots[i - 1].1 - knots[i].1;
 
-                if diff_x < -1 || diff_x > 1 || diff_y < -1 || diff_y > 1 {
+                if !(-1..=1).contains(&diff_x) || !(-1..=1).contains(&diff_y) {
                     if diff_x != 0 {
                         knots[i].0 += diff_x / diff_x.abs();
                     }

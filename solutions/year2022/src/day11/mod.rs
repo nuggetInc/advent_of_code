@@ -93,7 +93,7 @@ fn parse(input: String) -> Vec<Monkey> {
     let false_regex = Regex::new(r"^    If false: throw to monkey (?P<ident>\d+)$").unwrap();
 
     for lines in input.split("\n\n") {
-        let mut split = lines.split("\n");
+        let mut split = lines.split('\n');
 
         split.next();
 

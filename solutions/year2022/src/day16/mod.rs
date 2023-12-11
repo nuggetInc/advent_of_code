@@ -36,7 +36,7 @@ fn part_one(valves: HashMap<String, Valve>) -> String {
                 valves.remove(&key);
             }
 
-            for (_, valve) in &mut valves {
+            for valve in valves.values_mut() {
                 valve.distances.remove(&key);
             }
 
@@ -54,7 +54,7 @@ fn parse(input: String) -> HashMap<String, Valve> {
 
     let mut valves = HashMap::new();
 
-    for line in input.split_terminator("\n") {
+    for line in input.split_terminator('\n') {
         let captures = regex.captures(line).unwrap();
 
         let name = captures["name"].to_owned();
@@ -77,7 +77,7 @@ fn find_distances(
     distances: &mut HashMap<String, u32>,
     distance: u32,
 ) {
-    for (distance_name, _) in &valves[valve_name].distances {
+    for distance_name in valves[valve_name].distances.keys() {
         if distances.contains_key(distance_name) {
             if distance + 1 < distances[distance_name] {
                 distances.insert(distance_name.clone(), distance + 1);
@@ -96,7 +96,7 @@ fn start_search1(valves: &HashMap<String, Valve>) -> u32 {
     let mut highest = 0;
 
     for (distance_name, distance) in &valves["AA"].distances {
-        let value = search1(distance_name, &valves, &mut HashSet::new(), *distance);
+        let value = search1(distance_name, valves, &mut HashSet::new(), *distance);
         if value > highest {
             highest = value;
         }

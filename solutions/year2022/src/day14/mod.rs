@@ -100,7 +100,7 @@ fn part_two(walls: Vec<Vec<(u32, u32)>>) -> String {
         let mut y = 0;
 
         loop {
-            if y >= bottom_y + 1 {
+            if y > bottom_y {
                 break;
             } else if !occupied.contains(&(x, y + 1)) {
                 y += 1;
@@ -129,11 +129,11 @@ fn part_two(walls: Vec<Vec<(u32, u32)>>) -> String {
 fn parse(input: String) -> Vec<Vec<(u32, u32)>> {
     let mut walls = Vec::new();
 
-    for line in input.split_terminator("\n") {
+    for line in input.split_terminator('\n') {
         let mut wall = Vec::new();
 
         for position in line.split(" -> ") {
-            let (x, y) = position.split_once(",").unwrap();
+            let (x, y) = position.split_once(',').unwrap();
 
             wall.push((x.parse().unwrap(), y.parse().unwrap()));
         }

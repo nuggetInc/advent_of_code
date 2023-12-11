@@ -10,7 +10,7 @@ pub fn day() -> Day {
 
 fn parse(input: String) -> Grid {
     let grid: Vec<Vec<u8>> = input
-        .split("\n")
+        .split('\n')
         .map(|s| s.chars().map(|c| c.to_digit(10).unwrap() as u8).collect())
         .collect();
 
@@ -81,7 +81,7 @@ impl Grid {
             return true;
         };
 
-        return self.grid[y][x] > [maxx1, maxx2, maxy1, maxy2].into_iter().min().unwrap();
+        self.grid[y][x] > [maxx1, maxx2, maxy1, maxy2].into_iter().min().unwrap()
     }
 
     fn max_x(&self, x: impl Iterator<Item = usize>, y: usize) -> Option<u8> {
@@ -169,7 +169,7 @@ impl Grid {
 impl From<&str> for Grid {
     fn from(value: &str) -> Self {
         let grid: Vec<Vec<u8>> = value
-            .split("\n")
+            .split('\n')
             .map(|s| s.chars().map(|c| c.to_digit(10).unwrap() as u8).collect())
             .collect();
 

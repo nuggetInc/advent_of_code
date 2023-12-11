@@ -13,8 +13,8 @@ fn part_one(input: String) -> String {
     let mut x = 1;
     let mut cycle = 1;
 
-    for line in input.split("\n") {
-        let mut split = line.split(" ");
+    for line in input.split('\n') {
+        let mut split = line.split(' ');
 
         if let Some("addx") = split.next() {
             let value: i32 = split.next().unwrap().parse().unwrap();
@@ -44,8 +44,8 @@ fn part_two(input: String) -> String {
     let mut x = 1;
     let mut cycle = 0;
 
-    for line in input.split("\n") {
-        let mut split = line.split(" ");
+    for line in input.split('\n') {
+        let mut split = line.split(' ');
 
         if let Some("addx") = split.next() {
             let value: i32 = split.next().unwrap().parse().unwrap();

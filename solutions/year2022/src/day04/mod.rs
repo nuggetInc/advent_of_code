@@ -11,10 +11,10 @@ pub fn day() -> Day {
 fn part_one(input: String) -> String {
     let mut total = 0;
 
-    for line in input.split("\n") {
-        let (first, second) = line.split_once(",").unwrap();
-        let (first_start, first_end) = first.split_once("-").unwrap();
-        let (second_start, second_end) = second.split_once("-").unwrap();
+    for line in input.split('\n') {
+        let (first, second) = line.split_once(',').unwrap();
+        let (first_start, first_end) = first.split_once('-').unwrap();
+        let (second_start, second_end) = second.split_once('-').unwrap();
 
         let first_start: u32 = first_start.parse().unwrap();
         let first_end: u32 = first_end.parse().unwrap();
@@ -28,7 +28,6 @@ fn part_one(input: String) -> String {
             || (second.contains(&first_start) && second.contains(&first_end))
         {
             total += 1;
-        } else {
         }
     }
 
@@ -38,10 +37,10 @@ fn part_one(input: String) -> String {
 fn part_two(input: String) -> String {
     let mut total = 0;
 
-    for line in input.split("\n") {
-        let (first, second) = line.split_once(",").unwrap();
-        let (first_start, first_end) = first.split_once("-").unwrap();
-        let (second_start, second_end) = second.split_once("-").unwrap();
+    for line in input.split('\n') {
+        let (first, second) = line.split_once(',').unwrap();
+        let (first_start, first_end) = first.split_once('-').unwrap();
+        let (second_start, second_end) = second.split_once('-').unwrap();
 
         let first_start: u32 = first_start.parse().unwrap();
         let first_end: u32 = first_end.parse().unwrap();
@@ -57,7 +56,6 @@ fn part_two(input: String) -> String {
             || second.contains(&first_end)
         {
             total += 1;
-        } else {
         }
     }
 

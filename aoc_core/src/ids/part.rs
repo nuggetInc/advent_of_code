@@ -18,7 +18,7 @@ impl FromStr for PartId {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         if s.starts_with("Part") || s.starts_with("part") {
             Ok(Self(s[4..].parse()?))
-        } else if s.starts_with("P") || s.starts_with("p") {
+        } else if s.starts_with('P') || s.starts_with('p') {
             Ok(Self(s[1..].parse()?))
         } else {
             Ok(Self(s.parse()?))

@@ -12,7 +12,7 @@ pub fn day() -> Day {
 fn part_one(input: String) -> String {
     let (crates, procedures) = input.split_once("\n\n").unwrap();
 
-    let mut lines: Vec<&str> = crates.split("\n").collect();
+    let mut lines: Vec<&str> = crates.split('\n').collect();
 
     let mut stacks: Vec<Vec<char>> = Vec::new();
 
@@ -35,7 +35,7 @@ fn part_one(input: String) -> String {
 
     let regex = Regex::new(r"^move (?P<amount>\d+) from (?P<from>\d+) to (?P<to>\d+)$").unwrap();
 
-    for procedure in procedures.split("\n") {
+    for procedure in procedures.split('\n') {
         let captures = regex.captures(procedure).unwrap();
 
         let amount: usize = captures["amount"].parse().unwrap();
@@ -61,7 +61,7 @@ fn part_one(input: String) -> String {
 fn part_two(input: String) -> String {
     let (crates, procedures) = input.split_once("\n\n").unwrap();
 
-    let mut lines: Vec<&str> = crates.split("\n").collect();
+    let mut lines: Vec<&str> = crates.split('\n').collect();
 
     let mut stacks: Vec<Vec<char>> = Vec::new();
 
@@ -84,7 +84,7 @@ fn part_two(input: String) -> String {
 
     let regex = Regex::new(r"^move (?P<amount>\d+) from (?P<from>\d+) to (?P<to>\d+)$").unwrap();
 
-    for procedure in procedures.split("\n") {
+    for procedure in procedures.split('\n') {
         let captures = regex.captures(procedure).unwrap();
 
         let amount: usize = captures["amount"].parse().unwrap();

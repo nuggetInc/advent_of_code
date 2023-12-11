@@ -56,8 +56,12 @@ fn part_one((numbers, map): (Vec<u32>, Vec<Vec<Cell>>)) -> String {
             };
 
             for x in (cell_index.max(1) - 1)..=(cell_index + 1).min(row.len() - 1) {
-                for y in (row_index.max(1) - 1)..=(row_index + 1).min(map.len() - 1) {
-                    if map[y][x].symbol.is_some() {
+                for map_y in map
+                    .iter()
+                    .take((row_index + 1).min(map.len() - 1) + 1)
+                    .skip(row_index.max(1) - 1)
+                {
+                    if map_y[x].symbol.is_some() {
                         marked.insert(number_index);
                     }
                 }
@@ -87,8 +91,12 @@ fn part_two((numbers, map): (Vec<u32>, Vec<Vec<Cell>>)) -> String {
             let mut neighbors = HashSet::new();
 
             for x in (cell_index.max(1) - 1)..=(cell_index + 1).min(row.len() - 1) {
-                for y in (row_index.max(1) - 1)..=(row_index + 1).min(map.len() - 1) {
-                    let Some(number_index) = map[y][x].number_index else {
+                for map_y in map
+                    .iter()
+                    .take((row_index + 1).min(map.len() - 1) + 1)
+                    .skip(row_index.max(1) - 1)
+                {
+                    let Some(number_index) = map_y[x].number_index else {
                         continue;
                     };
 

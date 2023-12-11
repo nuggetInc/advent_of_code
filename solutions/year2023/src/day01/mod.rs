@@ -46,7 +46,7 @@ fn part_two(lines: Vec<String>) -> String {
 
     for line in lines {
         'outer: for (index, char) in line.char_indices() {
-            if char.is_digit(10) {
+            if char.is_ascii_digit() {
                 total += char.to_digit(10).unwrap() * 10;
                 break;
             } else {
@@ -60,7 +60,7 @@ fn part_two(lines: Vec<String>) -> String {
         }
 
         'outer: for (index, char) in line.char_indices().rev() {
-            if char.is_digit(10) {
+            if char.is_ascii_digit() {
                 total += char.to_digit(10).unwrap();
                 break;
             } else {

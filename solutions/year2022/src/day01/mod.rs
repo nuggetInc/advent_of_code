@@ -12,7 +12,7 @@ fn part_one(input: String) -> String {
     let mut highest = 0;
     for inventory in input.split("\n\n") {
         let calories: u32 = inventory
-            .split("\n")
+            .split('\n')
             .map(|a| a.parse::<u32>().unwrap())
             .sum();
 
@@ -29,7 +29,7 @@ fn part_two(input: String) -> String {
         .split("\n\n")
         .map(|inventory| {
             inventory
-                .split("\n")
+                .split('\n')
                 .map(|a| a.parse::<u32>().unwrap())
                 .sum::<u32>()
         })

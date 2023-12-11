@@ -19,7 +19,7 @@ fn part_two(map: Map) -> String {
 }
 
 fn parse(input: String) -> Map {
-    let lines = input.split_terminator("\n").collect::<Vec<_>>();
+    let lines = input.split_terminator('\n').collect::<Vec<_>>();
 
     let mut start = 0;
     let mut end = 0;
@@ -34,11 +34,11 @@ fn parse(input: String) -> Map {
             match char {
                 'S' => {
                     start = x + y * width;
-                    grid.push('a' as u8);
+                    grid.push(b'a');
                 }
                 'E' => {
                     end = x + y * width;
-                    grid.push('z' as u8);
+                    grid.push(b'z');
                 }
                 _ => grid.push(char as u8),
             }
@@ -124,7 +124,7 @@ impl Map {
         let mut nearest = usize::MAX;
 
         for (position, height) in self.grid.iter().enumerate() {
-            if *height != 'a' as u8 {
+            if *height != b'a' {
                 continue;
             }
 

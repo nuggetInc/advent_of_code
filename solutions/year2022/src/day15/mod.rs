@@ -74,7 +74,7 @@ fn parse(input: String) -> Vec<Sensor> {
 
     let mut sensors = Vec::new();
 
-    for line in input.split_terminator("\n") {
+    for line in input.split_terminator('\n') {
         let captures = regex.captures(line).unwrap();
 
         let sx = captures["sx"].parse().unwrap();

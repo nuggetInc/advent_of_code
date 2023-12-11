@@ -38,7 +38,7 @@ impl Year {
         let instant = Instant::now();
         let mut days = Vec::new();
 
-        for (_, day) in &mut self.days {
+        for day in self.days.values_mut() {
             days.push(day.run()?);
         }
 

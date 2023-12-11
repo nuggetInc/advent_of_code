@@ -65,7 +65,7 @@ fn parse(input: String) -> Directory {
 
     let mut path: Vec<String> = Vec::new();
 
-    let mut lines = input.split("\n").peekable();
+    let mut lines = input.split('\n').peekable();
 
     while let Some(line) = lines.next() {
         if line.starts_with("$ cd") {
@@ -82,7 +82,7 @@ fn parse(input: String) -> Directory {
             while lines.peek().is_some() && !lines.peek().unwrap().starts_with('$') {
                 let line = lines.next().unwrap();
 
-                let mut split = line.split(" ");
+                let mut split = line.split(' ');
                 let first = split.next().unwrap();
                 let second = split.next().unwrap();
 
@@ -157,7 +157,7 @@ impl Directory {
     fn get_size(&self) -> usize {
         let mut sum = 0;
 
-        for (_, item) in &self.items {
+        for item in self.items.values() {
             sum += item.get_size();
         }
 

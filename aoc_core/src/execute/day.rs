@@ -37,7 +37,7 @@ impl Day {
         let mut parts = Vec::new();
 
         for file in &self.files {
-            for (_, part) in &self.parts {
+            for part in self.parts.values() {
                 parts.push(part.run(file)?);
             }
         }

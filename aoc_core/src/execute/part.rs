@@ -1,14 +1,14 @@
-use std::{fs, io, path::PathBuf, time::Instant};
+use std::{fs, io, path::Path, time::Instant};
 
 use super::result::PartResult;
 use crate::PartId;
 
 pub trait Part {
-    fn run(&self, file: &PathBuf) -> io::Result<PartResult>;
+    fn run(&self, file: &Path) -> io::Result<PartResult>;
 }
 
 impl<T> Part for AocPart<T> {
-    fn run(&self, file: &PathBuf) -> io::Result<PartResult> {
+    fn run(&self, file: &Path) -> io::Result<PartResult> {
         let input = fs::read_to_string(file)?;
 
         let instant = Instant::now();
@@ -17,7 +17,7 @@ impl<T> Part for AocPart<T> {
 
         Ok(PartResult::new(
             self.part,
-            file.clone(),
+            file.to_owned(),
             answer,
             instant.elapsed(),
         ))

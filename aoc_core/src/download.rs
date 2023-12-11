@@ -14,7 +14,7 @@ pub fn download_input(year: YearId, day: DayId) {
     let cookie = env::var("AOC_SESSION").expect("AOC_SESSION was not set");
 
     let url = format!("https://adventofcode.com/{}/day/{}/input", *year, *day);
-    let response = client.get(&url).header("Cookie", cookie).send().unwrap();
+    let response = client.get(url).header("Cookie", cookie).send().unwrap();
     let text = response.text().unwrap();
 
     fs::write(

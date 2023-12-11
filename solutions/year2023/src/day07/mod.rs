@@ -107,17 +107,17 @@ impl Play {
         let jokers = counts.remove(&Card::Joker).unwrap_or(0);
         let counts = counts.into_values().sorted().rev().collect_vec();
 
-        if counts.get(0).unwrap_or(&0) + jokers >= 5 {
+        if counts.first().unwrap_or(&0) + jokers >= 5 {
             Hand::Five
-        } else if counts.get(0).unwrap_or(&0) + jokers >= 4 {
+        } else if counts.first().unwrap_or(&0) + jokers >= 4 {
             Hand::Four
-        } else if counts.get(0).unwrap_or(&0) + counts.get(1).unwrap_or(&0) + jokers >= 5 {
+        } else if counts.first().unwrap_or(&0) + counts.get(1).unwrap_or(&0) + jokers >= 5 {
             Hand::Full
-        } else if counts.get(0).unwrap_or(&0) + jokers >= 3 {
+        } else if counts.first().unwrap_or(&0) + jokers >= 3 {
             Hand::Three
-        } else if counts.get(0).unwrap_or(&0) + counts.get(1).unwrap_or(&0) + jokers >= 4 {
+        } else if counts.first().unwrap_or(&0) + counts.get(1).unwrap_or(&0) + jokers >= 4 {
             Hand::Two
-        } else if counts.get(0).unwrap_or(&0) + jokers >= 2 {
+        } else if counts.first().unwrap_or(&0) + jokers >= 2 {
             Hand::One
         } else {
             Hand::High

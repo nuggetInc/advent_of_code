@@ -19,7 +19,7 @@ impl FromStr for YearId {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         if s.starts_with("Year") || s.starts_with("year") {
             Ok(Self(s[4..].parse()?))
-        } else if s.starts_with("Y") || s.starts_with("y") {
+        } else if s.starts_with('Y') || s.starts_with('y') {
             Ok(Self(s[1..].parse()?))
         } else {
             Ok(Self(s.parse()?))

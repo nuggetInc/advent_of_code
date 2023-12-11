@@ -56,7 +56,7 @@ fn parse_input1(input: String) -> Vec<(Value, Value)> {
     let mut pairs = Vec::new();
 
     for pair in input.split("\n\n") {
-        let mut pair = pair.split_terminator("\n");
+        let mut pair = pair.split_terminator('\n');
 
         let left = pair.next().unwrap();
         let right = pair.next().unwrap();
@@ -73,8 +73,8 @@ fn parse_input1(input: String) -> Vec<(Value, Value)> {
 fn parse_input2(input: String) -> Vec<Value> {
     let mut values = Vec::new();
 
-    for line in input.split("\n") {
-        if line == "" {
+    for line in input.split('\n') {
+        if line.is_empty() {
             continue;
         }
 
@@ -107,14 +107,14 @@ fn parse_value(input: &str) -> (Value, &str) {
 
         (Value::List(values), &input[1..input.len()])
     } else {
-        let end = input.find(&[',', ']']).unwrap();
+        let end = input.find([',', ']']).unwrap();
         let integer = input[0..end].parse().unwrap();
 
         (Value::Integer(integer), &input[end..input.len()])
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, Clone)]
+#[derive(Debug, Eq, PartialEq, Clone)]
 enum Value {
     List(Vec<Value>),
     Integer(u32),
@@ -122,39 +122,36 @@ enum Value {
 
 impl PartialOrd for Value {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for Value {
+    fn cmp(&self, other: &Self) -> Ordering {
         match (self, other) {
-            (Value::Integer(left), Value::Integer(right)) => {
-                if left < right {
-                    Some(Ordering::Less)
-                } else if left > right {
-                    Some(Ordering::Greater)
-                } else {
-                    Some(Ordering::Equal)
-                }
-                // left.partial_cmp(right),
-            }
+            (Value::Integer(left), Value::Integer(right)) => left.cmp(right),
             (Value::List(left), Value::List(right)) => {
-                let mut left = left.into_iter();
-                let mut right = right.into_iter();
+                let mut left = left.iter();
+                let mut right = right.iter();
 
                 loop {
                     match (left.next(), right.next()) {
-                        (Some(left), Some(right)) => match left.partial_cmp(right) {
-                            Some(Ordering::Equal) => (),
+                        (Some(left), Some(right)) => match left.cmp(right) {
+                            Ordering::Equal => (),
                             value => return value,
                         },
-                        (None, Some(_)) => return Some(Ordering::Less),
-                        (Some(_), None) => return Some(Ordering::Greater),
-                        (None, None) => return Some(Ordering::Equal),
+                        (None, Some(_)) => return Ordering::Less,
+                        (Some(_), None) => return Ordering::Greater,
+                        (None, None) => return Ordering::Equal,
                     }
                 }
             }
             (Value::List(_), Value::Integer(right)) => {
-                Value::partial_cmp(self, &Value::List(vec![Value::Integer(*right)]))
+                Value::cmp(self, &Value::List(vec![Value::Integer(*right)]))
                 // self.partial_cmp(&Value::List(vec![Value::Integer(*right)]))
             }
             (Value::Integer(left), Value::List(_)) => {
-                Value::partial_cmp(&Value::List(vec![Value::Integer(*left)]), other)
+                Value::cmp(&Value::List(vec![Value::Integer(*left)]), other)
                 // Value::List(vec![Value::Integer(*left)]).partial_cmp(other)
             }
         }

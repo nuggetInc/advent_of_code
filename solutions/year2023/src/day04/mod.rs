@@ -13,9 +13,9 @@ fn parse(input: String) -> Vec<Card> {
     input
         .split_terminator('\n')
         .map(|line| {
-            let card_split = line.split(':');
+            let mut card_split = line.split(':');
 
-            let mut numbers_split = card_split.skip(1).next().unwrap().split('|');
+            let mut numbers_split = card_split.nth(1).unwrap().split('|');
 
             let winning = numbers_split
                 .next()
