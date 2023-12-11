@@ -86,44 +86,42 @@ fn part_two(map: Map) -> String {
             let mut do_count = false;
             let mut last_open = Tile::Ground;
 
-            let mut positions_iter = positions.into_sorted_vec().into_iter().peekable();
+            let mut last_position = Position(0);
+            for position in positions.into_sorted_vec().into_iter() {
+                if do_count && position.0 - last_position.0 > 1 {
+                    count += position.0 - last_position.0 - 1;
+                }
+                last_position = position;
 
-            for i in 0..map.size() {
-                if positions_iter.peek() == Some(&Position(i)) {
-                    positions_iter.next();
-
-                    match map.get(Position(i)) {
-                        Tile::Start => match (initial_direction, direction) {
-                            (Direction::Right, Direction::Down)
-                            | (Direction::Up, Direction::Left) => last_open = Tile::NorthEast,
-                            (Direction::Right, Direction::Up)
-                            | (Direction::Down, Direction::Left) => last_open = Tile::SouthEast,
-                            (Direction::Left, Direction::Down)
-                            | (Direction::Up, Direction::Right)
-                                if last_open == Tile::SouthEast =>
-                            {
-                                do_count = !do_count
-                            }
-                            (Direction::Left, Direction::Up)
-                            | (Direction::Down, Direction::Right)
-                                if last_open == Tile::NorthEast =>
-                            {
-                                do_count = !do_count
-                            }
-                            (Direction::Up, Direction::Up) | (Direction::Down, Direction::Down) => {
-                                do_count = !do_count
-                            }
-                            _ => (),
-                        },
-                        Tile::Vertical => do_count = !do_count,
-                        Tile::NorthEast => last_open = Tile::NorthEast,
-                        Tile::NorthWest if last_open == Tile::SouthEast => do_count = !do_count,
-                        Tile::SouthEast => last_open = Tile::SouthEast,
-                        Tile::SouthWest if last_open == Tile::NorthEast => do_count = !do_count,
+                match map.get(position) {
+                    Tile::Start => match (initial_direction, direction) {
+                        (Direction::Right, Direction::Down) | (Direction::Up, Direction::Left) => {
+                            last_open = Tile::NorthEast
+                        }
+                        (Direction::Right, Direction::Up) | (Direction::Down, Direction::Left) => {
+                            last_open = Tile::SouthEast
+                        }
+                        (Direction::Left, Direction::Down) | (Direction::Up, Direction::Right)
+                            if last_open == Tile::SouthEast =>
+                        {
+                            do_count = !do_count
+                        }
+                        (Direction::Left, Direction::Up) | (Direction::Down, Direction::Right)
+                            if last_open == Tile::NorthEast =>
+                        {
+                            do_count = !do_count
+                        }
+                        (Direction::Up, Direction::Up) | (Direction::Down, Direction::Down) => {
+                            do_count = !do_count
+                        }
                         _ => (),
-                    }
-                } else if do_count {
-                    count += 1;
+                    },
+                    Tile::Vertical => do_count = !do_count,
+                    Tile::NorthEast => last_open = Tile::NorthEast,
+                    Tile::NorthWest if last_open == Tile::SouthEast => do_count = !do_count,
+                    Tile::SouthEast => last_open = Tile::SouthEast,
+                    Tile::SouthWest if last_open == Tile::NorthEast => do_count = !do_count,
+                    _ => (),
                 }
             }
 
