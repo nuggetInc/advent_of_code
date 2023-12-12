@@ -1,7 +1,7 @@
 use std::{
     collections::BTreeMap,
     fmt, fs, io,
-    panic::Location,
+    panic::{Location, RefUnwindSafe},
     path::{Path, PathBuf},
     time::Instant,
 };
@@ -59,8 +59,8 @@ impl Day {
 
     pub fn part_1<Parsed: 'static, Answer: fmt::Display + 'static>(
         &mut self,
-        parser: impl Fn(String) -> Parsed + 'static,
-        part: impl Fn(Parsed) -> AocResult<Answer> + 'static,
+        parser: impl Fn(String) -> Parsed + RefUnwindSafe + 'static,
+        part: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) {
         self.parts.insert(
             PartId::PART_1,
@@ -70,8 +70,8 @@ impl Day {
 
     pub fn part_2<Parsed: 'static, Answer: fmt::Display + 'static>(
         &mut self,
-        parser: impl Fn(String) -> Parsed + 'static,
-        part: impl Fn(Parsed) -> AocResult<Answer> + 'static,
+        parser: impl Fn(String) -> Parsed + RefUnwindSafe + 'static,
+        part: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) {
         self.parts.insert(
             PartId::PART_2,

@@ -1,7 +1,12 @@
-use std::{fmt, fs, io, path::Path, time::Instant};
+use std::{
+    fmt, fs, io,
+    panic::{catch_unwind, RefUnwindSafe},
+    path::Path,
+    time::Instant,
+};
 
 use super::result::AocPartResult;
-use crate::{AocResult, PartId, PartResult};
+use crate::{AocError, AocResult, PartId, PartResult};
 
 pub trait Part {
     fn run(&self, file: &Path, expected: Option<String>) -> io::Result<Box<dyn PartResult>>;
@@ -12,16 +17,20 @@ where
     Answer: fmt::Display + 'static,
 {
     fn run(&self, file: &Path, expected: Option<String>) -> io::Result<Box<dyn PartResult>> {
-        let input = fs::read_to_string(file)?;
-
         let instant = Instant::now();
-        let parsed = (self.parser)(input);
-        let answer = (self.solution)(parsed);
+        let result = catch_unwind(|| {
+            let input = fs::read_to_string(file)?;
+            let parsed = (self.parser)(input);
+            (self.solution)(parsed)
+        });
 
-        Ok(Box::new(AocPartResult::new(
+        Ok(Box::new(AocPartResult::<Answer>::new(
             self.part,
             file.to_owned(),
-            answer,
+            match result {
+                Ok(answer) => answer,
+                Err(_) => Err(Box::new(AocError::Paniced)),
+            },
             expected,
             instant.elapsed(),
         )))
@@ -33,8 +42,8 @@ where
     Answer: fmt::Display,
 {
     part: PartId,
-    parser: Box<dyn Fn(String) -> Parsed + 'static>,
-    solution: Box<dyn Fn(Parsed) -> AocResult<Answer> + 'static>,
+    parser: Box<dyn Fn(String) -> Parsed + RefUnwindSafe + 'static>,
+    solution: Box<dyn Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static>,
 }
 
 impl<Parsed, Answer> AocPart<Parsed, Answer>
@@ -43,8 +52,8 @@ where
 {
     pub fn new(
         part: PartId,
-        parser: impl Fn(String) -> Parsed + 'static,
-        solution: impl Fn(Parsed) -> AocResult<Answer> + 'static,
+        parser: impl Fn(String) -> Parsed + RefUnwindSafe + 'static,
+        solution: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) -> Self {
         AocPart {
             part,
