@@ -67,7 +67,7 @@ fn try_number(
     let operationals_len = record.operationals.len();
 
     // Return 0 if the number wont fit
-    if index + record.numbers[num_index] - 1 >= operationals_len {
+    if index + record.numbers[num_index] > operationals_len {
         return 0;
     }
 
@@ -77,32 +77,20 @@ fn try_number(
 
     // Return 0 if in bounds and there is another broken part before
     if index > 0 && record.operationals[index - 1] == State::Damaged {
-        return if record.operationals[index] == State::Damaged {
-            0
-        } else {
-            try_number(record, index + 1, num_index, cache)
-        };
+        return 0;
     }
 
     // Return 0 if in bounds and there is another broken part after
     if (index + record.numbers[num_index]) < operationals_len
         && record.operationals[index + record.numbers[num_index]] == State::Damaged
     {
-        return if record.operationals[index] == State::Damaged {
-            0
-        } else {
-            try_number(record, index + 1, num_index, cache)
-        };
+        return try_number(record, index + 1, num_index, cache);
     }
 
     // Return 0 if there is a working part
     for i in 0..record.numbers[num_index] {
         if record.operationals[index + i] == State::Operational {
-            return if record.operationals[index] == State::Damaged {
-                0
-            } else {
-                try_number(record, index + 1, num_index, cache)
-            };
+            return try_number(record, index + 1, num_index, cache);
         }
     }
 
@@ -110,11 +98,7 @@ fn try_number(
         // Return 0 if there are any remaining broken parts
         for i in (index + record.numbers[num_index])..operationals_len {
             if record.operationals[i] == State::Damaged {
-                return if record.operationals[index] == State::Damaged {
-                    0
-                } else {
-                    try_number(record, index + 1, num_index, cache)
-                };
+                return try_number(record, index + 1, num_index, cache);
             }
         }
 
@@ -135,9 +119,7 @@ fn try_number(
             cache,
         );
 
-        if record.operationals[index] != State::Damaged {
-            sum += try_number(record, index + 1, num_index, cache);
-        }
+        sum += try_number(record, index + 1, num_index, cache);
 
         cache[index + num_index * operationals_len] = Some(sum);
 
