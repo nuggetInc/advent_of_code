@@ -1,4 +1,4 @@
-use aoc_core::Day;
+use aoc_core::{{AocResult, Day}};
 
 pub fn day() -> Day {{
     let mut solution = Day::new({});
@@ -13,10 +13,10 @@ fn parse(input: String) -> Vec<String> {{
     todo!()
 }}
 
-fn part_one(values: Vec<String>) -> String {{
+fn part_one(values: Vec<String>) -> AocResult<u32> {{
     todo!()
 }}
 
-fn part_two(values: Vec<String>) -> String {{
+fn part_two(values: Vec<String>) -> AocResult<u32> {{
     todo!()
 }}
