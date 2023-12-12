@@ -1,8 +1,9 @@
 use std::{
     collections::BTreeMap,
-    fmt, fs, io,
+    fmt, fs,
     panic::{Location, RefUnwindSafe},
     path::{Path, PathBuf},
+    thread,
 };
 
 use super::{
@@ -38,33 +39,49 @@ impl Day {
         self.files.len()
     }
 
-    pub fn run(&self) -> io::Result<DayResult> {
-        let mut parts = Vec::new();
+    pub fn run(&self) -> AocResult<DayResult> {
+        thread::scope(|scope| -> AocResult<DayResult> {
+            let mut handles = Vec::new();
+            let mut parts = Vec::new();
 
-        for input_file in &self.files {
-            let mut output_file = input_file.clone();
-            output_file.set_extension("out");
+            for input_file in &self.files {
+                let mut output_file = input_file.clone();
+                output_file.set_extension("out");
 
-            let output = output_file
-                .exists()
-                .then(|| fs::read_to_string(output_file))
-                .unwrap_or(Ok(String::new()))?;
+                let output = match output_file
+                    .exists()
+                    .then(|| fs::read_to_string(output_file))
+                    .unwrap_or(Ok(String::new()))
+                {
+                    Ok(output) => output,
+                    Err(error) => return AocResult::Err(Box::new(error)),
+                };
 
-            let mut expected_answers = output.split_terminator('\n');
+                let mut expected_answers = output.split_terminator('\n');
 
-            for part in self.parts.values() {
-                let expected = expected_answers.next().map(str::to_owned);
-                parts.push(part.run(input_file, expected)?);
+                for part in self.parts.values() {
+                    let expected = expected_answers.next().map(str::to_owned);
+
+                    let handle = scope.spawn(|| part.run(input_file, expected));
+                    handles.push(handle);
+                }
             }
-        }
 
-        Ok(DayResult::new(self.day, parts))
+            for handle in handles {
+                parts.push(handle.join().unwrap()?);
+            }
+
+            Ok(DayResult::new(self.day, parts))
+        })
     }
 
-    pub fn part_1<Parsed: 'static, Answer: fmt::Display + 'static>(
+    pub fn part_1<
+        Parsed: Send + Sync + 'static + 'static,
+        Answer: fmt::Display + Send + Sync + 'static,
+    >(
         &mut self,
-        parser: impl Fn(String) -> Parsed + RefUnwindSafe + 'static,
-        part: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
+        parser: impl Fn(String) -> Parsed + Send + Sync + RefUnwindSafe + 'static,
+        part: impl Fn(Parsed) -> AocResult<Answer> + Send + Sync + RefUnwindSafe + 'static,
     ) {
         self.parts.insert(
             PartId::PART_1,
@@ -72,10 +89,10 @@ impl Day {
         );
     }
 
-    pub fn part_2<Parsed: 'static, Answer: fmt::Display + 'static>(
+    pub fn part_2<Parsed: Send + Sync + 'static, Answer: fmt::Display + Send + Sync + 'static>(
         &mut self,
-        parser: impl Fn(String) -> Parsed + RefUnwindSafe + 'static,
-        part: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
+        parser: impl Fn(String) -> Parsed + Send + Sync + RefUnwindSafe + 'static,
+        part: impl Fn(Parsed) -> AocResult<Answer> + Send + Sync + RefUnwindSafe + 'static,
     ) {
         self.parts.insert(
             PartId::PART_2,

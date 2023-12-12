@@ -1,7 +1,7 @@
-use std::{collections::BTreeMap, io, panic::Location};
+use std::{collections::BTreeMap, panic::Location, thread};
 
 use super::{day::Day, result::YearResult};
-use crate::{DayId, YearId};
+use crate::{AocResult, DayId, YearId};
 
 pub struct Year {
     year: YearId,
@@ -34,13 +34,21 @@ impl Year {
         self.days.get(&index)
     }
 
-    pub fn run(&mut self) -> io::Result<YearResult> {
-        let mut days = Vec::new();
+    pub fn run(&mut self) -> AocResult<YearResult> {
+        thread::scope(|scope| -> AocResult<YearResult> {
+            let mut handles = Vec::new();
+            let mut days = Vec::new();
 
-        for day in self.days.values_mut() {
-            days.push(day.run()?);
-        }
+            for day in self.days.values_mut() {
+                let handle = scope.spawn(|| day.run());
+                handles.push(handle);
+            }
 
-        Ok(YearResult::new(self.year, days))
+            for handle in handles {
+                days.push(handle.join().unwrap()?);
+            }
+
+            Ok(YearResult::new(self.year, days))
+        })
     }
 }
