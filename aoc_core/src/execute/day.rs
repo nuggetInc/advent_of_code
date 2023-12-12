@@ -3,7 +3,6 @@ use std::{
     fmt, fs, io,
     panic::{Location, RefUnwindSafe},
     path::{Path, PathBuf},
-    time::Instant,
 };
 
 use super::{
@@ -31,30 +30,35 @@ impl Day {
         self.day
     }
 
-    pub fn run(&self) -> io::Result<DayResult> {
-        let instant = Instant::now();
+    pub fn part_count(&self) -> usize {
+        self.parts.len()
+    }
 
+    pub fn file_count(&self) -> usize {
+        self.files.len()
+    }
+
+    pub fn run(&self) -> io::Result<DayResult> {
         let mut parts = Vec::new();
 
         for input_file in &self.files {
             let mut output_file = input_file.clone();
             output_file.set_extension("out");
 
-            if output_file.exists() {
-                let output = fs::read_to_string(output_file)?;
-                let mut expected = output.split_terminator('\n');
+            let output = output_file
+                .exists()
+                .then(|| fs::read_to_string(output_file))
+                .unwrap_or(Ok(String::new()))?;
 
-                for part in self.parts.values() {
-                    parts.push(part.run(input_file, expected.next().map(str::to_owned))?);
-                }
-            } else {
-                for part in self.parts.values() {
-                    parts.push(part.run(input_file, None)?);
-                }
+            let mut expected_answers = output.split_terminator('\n');
+
+            for part in self.parts.values() {
+                let expected = expected_answers.next().map(str::to_owned);
+                parts.push(part.run(input_file, expected)?);
             }
         }
 
-        Ok(DayResult::new(self.day, parts, instant.elapsed()))
+        Ok(DayResult::new(self.day, parts))
     }
 
     pub fn part_1<Parsed: 'static, Answer: fmt::Display + 'static>(

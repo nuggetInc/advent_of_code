@@ -1,49 +1,42 @@
-use core::fmt;
-use std::time::Duration;
+use std::{
+    io::{self, Write},
+    time::Duration,
+};
 
-use termion::color::{Black, Fg, Reset};
+use crossterm::{
+    style::{Print, Stylize},
+    QueueableCommand,
+};
 
 use super::DayResult;
+use crate::YearId;
 
 pub struct YearResult {
-    name: String,
+    year: YearId,
     days: Vec<DayResult>,
-    elapsed: Duration,
 }
 
 impl YearResult {
-    pub fn new(name: String, days: Vec<DayResult>, elapsed: Duration) -> Self {
-        Self {
-            name,
-            days,
-            elapsed,
-        }
+    pub fn new(year: YearId, days: Vec<DayResult>) -> Self {
+        Self { year, days }
     }
-}
 
-impl fmt::Display for YearResult {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(
-            f,
-            "{: <40}{}{: >40?}{}",
-            self.name,
-            Fg(Black),
-            self.elapsed,
-            Fg(Reset),
-        )?;
+    pub fn elapsed(&self) -> Duration {
+        self.days.iter().map(|d| d.elapsed()).sum()
+    }
 
-        let last = self.days.last();
+    pub fn print(&self) -> io::Result<()> {
+        io::stdout()
+            .queue(Print(self.year.name()))?
+            .queue(Print(format!(" - {:?}", self.elapsed()).dark_grey()))?
+            .queue(Print("\n"))?
+            .flush()?;
 
-        if let Some(last) = last {
-            for day in &self.days {
-                writeln!(f)?;
-                if std::ptr::eq(day, last) {
-                    write!(f, "{}", day)?;
-                } else {
-                    writeln!(f, "{}", day)?;
-                }
-            }
+        for day in &self.days {
+            io::stdout().queue(Print("\n"))?.flush()?;
+            day.print()?;
         }
+
         Ok(())
     }
 }

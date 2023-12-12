@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, io, panic::Location, time::Instant};
+use std::{collections::BTreeMap, io, panic::Location};
 
 use super::{day::Day, result::YearResult};
 use crate::{DayId, YearId};
@@ -35,13 +35,12 @@ impl Year {
     }
 
     pub fn run(&mut self) -> io::Result<YearResult> {
-        let instant = Instant::now();
         let mut days = Vec::new();
 
         for day in self.days.values_mut() {
             days.push(day.run()?);
         }
 
-        Ok(YearResult::new(self.year.name(), days, instant.elapsed()))
+        Ok(YearResult::new(self.year, days))
     }
 }

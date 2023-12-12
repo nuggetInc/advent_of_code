@@ -18,11 +18,14 @@ where
 {
     fn run(&self, file: &Path, expected: Option<String>) -> io::Result<Box<dyn PartResult>> {
         let instant = Instant::now();
+
         let result = catch_unwind(|| {
             let input = fs::read_to_string(file)?;
             let parsed = (self.parser)(input);
             (self.solution)(parsed)
         });
+
+        let elapsed = instant.elapsed();
 
         Ok(Box::new(AocPartResult::<Answer>::new(
             self.part,
@@ -32,7 +35,7 @@ where
                 Err(_) => Err(Box::new(AocError::Paniced)),
             },
             expected,
-            instant.elapsed(),
+            elapsed,
         )))
     }
 }

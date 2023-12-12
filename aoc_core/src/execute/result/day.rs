@@ -1,47 +1,38 @@
-use core::fmt;
-use std::time::Duration;
+use std::{
+    io::{self, Write},
+    time::Duration,
+};
 
-use termion::color::{Black, Fg, Reset};
+use crossterm::{
+    style::{Print, Stylize},
+    QueueableCommand,
+};
 
 use crate::{DayId, PartResult};
 
 pub struct DayResult {
     day: DayId,
     parts: Vec<Box<dyn PartResult>>,
-    elapsed: Duration,
 }
 
 impl DayResult {
-    pub fn new(day: DayId, parts: Vec<Box<dyn PartResult>>, elapsed: Duration) -> Self {
-        Self {
-            day,
-            parts,
-            elapsed,
-        }
+    pub fn new(day: DayId, parts: Vec<Box<dyn PartResult>>) -> Self {
+        Self { day, parts }
     }
-}
 
-impl fmt::Display for DayResult {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(
-            f,
-            "{: <40}{}{: >40?}{}",
-            self.day.name(),
-            Fg(Black),
-            self.elapsed,
-            Fg(Reset),
-        )?;
+    pub fn elapsed(&self) -> Duration {
+        self.parts.iter().map(|p| p.elapsed()).sum()
+    }
 
-        let last = self.parts.last();
+    pub fn print(&self) -> io::Result<()> {
+        io::stdout()
+            .queue(Print(self.day.name()))?
+            .queue(Print(format!(" - {:?}", self.elapsed()).dark_grey()))?
+            .queue(Print("\n\n"))?
+            .flush()?;
 
-        if let Some(last) = last {
-            for part in &self.parts {
-                if std::ptr::eq(part, last) {
-                    write!(f, "{}", part)?;
-                } else {
-                    writeln!(f, "{}", part)?;
-                }
-            }
+        for part in &self.parts {
+            part.print()?;
         }
 
         Ok(())

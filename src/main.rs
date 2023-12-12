@@ -41,14 +41,14 @@ fn run(mut args: Args) {
             };
 
             let result = day.run().expect("Couldn't run day");
-            println!("{result}");
+            result.print().unwrap();
         } else {
             let result = year.run().expect("Couldn't run year");
-            println!("{result}");
+            result.print().unwrap();
         }
     } else {
         let result = year2023::year().run().expect("Couldn't run year");
-        println!("{result}");
+        result.print().unwrap();
     }
 }
 
