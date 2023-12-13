@@ -1,6 +1,6 @@
 use std::{num::ParseIntError, ops::Deref, str::FromStr};
 
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct DayId(u8);
 
 impl DayId {

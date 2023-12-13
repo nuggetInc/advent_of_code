@@ -1,6 +1,6 @@
 use std::env;
 
-use aoc_core::{create_day, download_input, download_problem, DayId, YearId};
+use aoc_core::{create_day, download_input, download_problem, upload_answer, DayId, YearId};
 
 fn main() {
     let mut args = env::args();
@@ -16,11 +16,12 @@ fn main() {
             "run" | "r" => Command::Run,
             "create" | "c" => Command::Create,
             "download" | "d" => Command::Download,
+            "upload" | "u" => Command::Upload,
             _ => panic!("The specified command is invalid: '{}'", command_raw),
         })
         .unwrap_or(Command::Run);
 
-    let year: YearId = args
+    let year_id: YearId = args
         .next()
         .map(|year_raw| {
             year_raw
@@ -29,24 +30,24 @@ fn main() {
         })
         .unwrap_or(YearId::from(2023));
 
-    if let Some(day) = args.next().map(|day_raw| {
+    if let Some(day_id) = args.next().map(|day_raw| {
         day_raw
             .parse()
             .unwrap_or_else(|_| panic!("The specified day to run is invalid: '{}'", day_raw))
     }) {
         match command {
-            Command::Run => run(year, Some(day)),
-            Command::Create => create_day(year, day).unwrap(),
+            Command::Run => run(year_id, Some(day_id)),
+            Command::Create => create_day(year_id, day_id).unwrap(),
             Command::Download => {
-                download_input(year, day).unwrap();
-                download_problem(year, day).unwrap();
+                download_input(year_id, day_id).unwrap();
+                download_problem(year_id, day_id).unwrap();
             }
+            Command::Upload => upload(year_id, day_id),
         }
     } else {
         match command {
-            Command::Run => run(year, None),
-            Command::Create => panic!("Both year and day must be specified for this command"),
-            Command::Download => panic!("Both year and day must be specified for this command"),
+            Command::Run => run(year_id, None),
+            _ => panic!("Both year and day must be specified for this command"),
         }
     }
 }
@@ -55,6 +56,7 @@ enum Command {
     Run,
     Create,
     Download,
+    Upload,
 }
 
 fn run(year: YearId, day: Option<DayId>) {
@@ -75,4 +77,18 @@ fn run(year: YearId, day: Option<DayId>) {
         let result = year.run().expect("Couldn't run year");
         result.print().unwrap();
     }
+}
+
+fn upload(year_id: YearId, day_id: DayId) {
+    let solutions = solutions::solutions();
+
+    let Some(year) = solutions.get_year(year_id) else {
+        panic!("{} is not implemented", year_id.name());
+    };
+
+    let Some(day) = year.get_day(day_id) else {
+        panic!("{} is not implemented", day_id.name());
+    };
+
+    upload_answer(year_id, day).unwrap()
 }

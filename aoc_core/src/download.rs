@@ -9,7 +9,7 @@ use scraper::{Html, Selector};
 use crate::{AocClient, AocResult, DayId, YearId};
 
 pub fn download_input(year: YearId, day: DayId) -> AocResult<()> {
-    let client = AocClient::new();
+    let client = AocClient::default();
 
     let url = format!("https://adventofcode.com/{}/day/{}/input", *year, *day);
     let text = client.get(url)?.text()?;
@@ -33,7 +33,7 @@ pub fn download_input(year: YearId, day: DayId) -> AocResult<()> {
 }
 
 pub fn download_problem(year: YearId, day: DayId) -> Result<(), Box<dyn Error>> {
-    let client = AocClient::new();
+    let client = AocClient::default();
 
     let url = format!("https://adventofcode.com/{}/day/{}", *year, *day);
     let text = client.get(&url)?.text()?;

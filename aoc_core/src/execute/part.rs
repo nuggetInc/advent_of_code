@@ -5,18 +5,18 @@ use std::{
     time::Instant,
 };
 
-use super::result::AocPartResult;
-use crate::{AocError, AocResult, PartId, PartResult};
+use super::result::PartResult;
+use crate::{AocError, AocResult, PartId};
 
 pub trait Part {
-    fn run(&self, file: &Path, expected: Option<String>) -> AocResult<Box<dyn PartResult>>;
+    fn run(&self, file: &Path, expected: Option<String>) -> AocResult<PartResult>;
 }
 
 impl<Parsed, Answer> Part for AocPart<Parsed, Answer>
 where
     Answer: fmt::Display + 'static,
 {
-    fn run(&self, file: &Path, expected: Option<String>) -> AocResult<Box<dyn PartResult>> {
+    fn run(&self, file: &Path, expected: Option<String>) -> AocResult<PartResult> {
         let instant = Instant::now();
 
         let result = catch_unwind(|| {
@@ -27,15 +27,14 @@ where
 
         let elapsed = instant.elapsed();
 
-        Ok(Box::new(AocPartResult::<Answer>::new(
+        Ok(PartResult::new(
             self.id,
-            match result {
-                Ok(answer) => answer,
-                Err(_) => Err(Box::new(AocError::Paniced)),
-            },
+            result
+                .unwrap_or_else(|_| Err(Box::new(AocError::Paniced)))
+                .map(|a| a.to_string()),
             expected,
             elapsed,
-        )))
+        ))
     }
 }
 

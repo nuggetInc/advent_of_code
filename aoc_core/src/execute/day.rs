@@ -38,6 +38,10 @@ impl Day {
         self.files.len()
     }
 
+    pub fn get_part(&self, index: PartId) -> Option<&dyn Part> {
+        self.parts.get(&index).map(Box::as_ref)
+    }
+
     pub fn run(&self) -> AocResult<DayResult> {
         let mut file_parts = Vec::new();
 

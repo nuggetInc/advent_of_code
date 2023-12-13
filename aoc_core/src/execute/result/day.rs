@@ -14,11 +14,11 @@ use crate::{DayId, PartResult};
 
 pub struct DayResult {
     day: DayId,
-    file_parts: Vec<(PathBuf, Vec<Box<dyn PartResult>>)>,
+    file_parts: Vec<(PathBuf, Vec<PartResult>)>,
 }
 
 impl DayResult {
-    pub fn new(day: DayId, parts: Vec<(PathBuf, Vec<Box<dyn PartResult>>)>) -> Self {
+    pub fn new(day: DayId, parts: Vec<(PathBuf, Vec<PartResult>)>) -> Self {
         Self {
             day,
             file_parts: parts,
