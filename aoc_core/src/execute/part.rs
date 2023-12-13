@@ -28,7 +28,7 @@ where
         let elapsed = instant.elapsed();
 
         Ok(Box::new(AocPartResult::<Answer>::new(
-            self.part,
+            self.id,
             file.to_owned(),
             match result {
                 Ok(answer) => answer,
@@ -44,7 +44,7 @@ pub struct AocPart<Parsed, Answer>
 where
     Answer: fmt::Display,
 {
-    part: PartId,
+    id: PartId,
     parser: Box<dyn Fn(String) -> Parsed + RefUnwindSafe + 'static>,
     solution: Box<dyn Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static>,
 }
@@ -54,12 +54,12 @@ where
     Answer: fmt::Display,
 {
     pub fn new(
-        part: PartId,
+        id: PartId,
         parser: impl Fn(String) -> Parsed + RefUnwindSafe + 'static,
         solution: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) -> Self {
         AocPart {
-            part,
+            id,
             parser: Box::new(parser),
             solution: Box::new(solution),
         }

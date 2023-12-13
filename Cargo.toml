@@ -4,10 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [workspace] 
-members = [ "aoc_core", "solutions/year2022", "solutions/year2023" ] 
+members = [ "aoc_core", "solutions", "solutions/year2022", "solutions/year2023" ] 
 
 [dependencies]
 dotenvy = "0.15.7"
 aoc_core = { path = "aoc_core" }
-year2022 = { path = "solutions/year2022" }
-year2023 = { path = "solutions/year2023" }
+solutions = { path = "solutions" }

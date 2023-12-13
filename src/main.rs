@@ -1,6 +1,6 @@
-use std::env::{self, Args};
+use std::env;
 
-use aoc_core::{create_day, download_input, download_problem, YearId};
+use aoc_core::{create_day, download_input, download_problem, DayId, YearId};
 
 fn main() {
     let mut args = env::args();
@@ -10,93 +10,69 @@ fn main() {
         eprintln!("Error loading env file: '{}'", error);
     }
 
-    if let Some(command_raw) = args.next() {
-        match command_raw.as_str() {
-            "run" | "r" => run(args),
-            "download" | "d" => download(args),
-            "create" | "c" => create(args),
+    let command = args
+        .next()
+        .map(|command_raw| match command_raw.as_str() {
+            "run" | "r" => Command::Run,
+            "create" | "c" => Command::Create,
+            "download" | "d" => Command::Download,
             _ => panic!("The specified command is invalid: '{}'", command_raw),
-        }
-    }
-}
+        })
+        .unwrap_or(Command::Run);
 
-fn run(mut args: Args) {
-    if let Some(year_raw) = args.next() {
-        let mut year = match year_raw.as_str() {
-            "2022" => year2022::year(),
-            "2023" => year2023::year(),
-            _ => panic!(
-                "The specified year to run is invalid or not implemented: '{}'",
-                year_raw
-            ),
-        };
+    let year: YearId = args
+        .next()
+        .map(|year_raw| {
+            year_raw
+                .parse()
+                .unwrap_or_else(|_| panic!("The specified year to run is invalid: '{}'", year_raw))
+        })
+        .unwrap_or(YearId::from(2023));
 
-        if let Some(day_raw) = args.next() {
-            let Ok(day) = day_raw.parse() else {
-                panic!("The specified day to run is invalid: '{}'", day_raw);
-            };
-
-            let Some(day) = year.get_day(day) else {
-                panic!("The specified day to run is not implemented: '{}'", day_raw);
-            };
-
-            let result = day.run().expect("Couldn't run day");
-            result.print().unwrap();
-        } else {
-            let result = year.run().expect("Couldn't run year");
-            result.print().unwrap();
+    if let Some(day) = args.next().map(|day_raw| {
+        day_raw
+            .parse()
+            .unwrap_or_else(|_| panic!("The specified day to run is invalid: '{}'", day_raw))
+    }) {
+        match command {
+            Command::Run => run(year, Some(day)),
+            Command::Create => create_day(year, day).unwrap(),
+            Command::Download => {
+                download_input(year, day).unwrap();
+                download_problem(year, day).unwrap();
+            }
         }
     } else {
-        let result = year2023::year().run().expect("Couldn't run year");
+        match command {
+            Command::Run => run(year, None),
+            Command::Create => panic!("Both year and day must be specified for this command"),
+            Command::Download => panic!("Both year and day must be specified for this command"),
+        }
+    }
+}
+
+enum Command {
+    Run,
+    Create,
+    Download,
+}
+
+fn run(year: YearId, day: Option<DayId>) {
+    let solutions = solutions::solutions();
+
+    let Some(year) = solutions.get_year(year) else {
+        panic!("{} is not implemented", year.name());
+    };
+
+    if let Some(day) = day {
+        let Some(day) = year.get_day(day) else {
+            panic!("{} is not implemented", day.name());
+        };
+
+        let result = day.run().expect("Couldn't run day");
+        result.print().unwrap();
+    } else {
+        let result = year.run().expect("Couldn't run year");
         result.print().unwrap();
     }
-}
-
-fn download(mut args: Args) {
-    let Some(year_raw) = args.next() else {
-        panic!("No year or day specified");
-    };
-
-    let Ok(year) = year_raw.parse::<YearId>() else {
-        panic!("The specified year to download is invalid: '{}'", year_raw);
-    };
-
-    if *year < 2015 {
-        panic!("The specified year must be after 2015");
-    }
-
-    let Some(day_raw) = args.next() else {
-        panic!("No day specified");
-    };
-
-    let Ok(day) = day_raw.parse() else {
-        panic!("The specified day to download is invalid: '{}'", day_raw);
-    };
-
-    download_input(year, day).unwrap();
-    download_problem(year, day).unwrap();
-}
-
-fn create(mut args: Args) {
-    let Some(year_raw) = args.next() else {
-        panic!("No year or day specified");
-    };
-
-    let Ok(year) = year_raw.parse::<YearId>() else {
-        panic!("The specified year to download is invalid: '{}'", year_raw);
-    };
-
-    if *year < 2015 {
-        panic!("The specified year must be after 2015");
-    }
-
-    let Some(day_raw) = args.next() else {
-        panic!("No day specified");
-    };
-
-    let Ok(day) = day_raw.parse() else {
-        panic!("The specified day to download is invalid: '{}'", day_raw);
-    };
-
-    create_day(year, day).unwrap();
 }

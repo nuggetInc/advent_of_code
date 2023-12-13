@@ -12,22 +12,22 @@ use super::{
 use crate::{AocResult, DayId, PartId};
 
 pub struct Day {
-    day: DayId,
+    id: DayId,
     parts: BTreeMap<PartId, Box<dyn Part>>,
     files: Vec<PathBuf>,
 }
 
 impl Day {
-    pub fn new(day: impl Into<DayId>) -> Self {
+    pub fn new(id: impl Into<DayId>) -> Self {
         Self {
-            day: day.into(),
+            id: id.into(),
             parts: BTreeMap::new(),
             files: Vec::new(),
         }
     }
 
-    pub fn day(&self) -> DayId {
-        self.day
+    pub fn id(&self) -> DayId {
+        self.id
     }
 
     pub fn part_count(&self) -> usize {
@@ -59,7 +59,7 @@ impl Day {
             }
         }
 
-        Ok(DayResult::new(self.day, parts))
+        Ok(DayResult::new(self.id, parts))
     }
 
     pub fn part_1<Parsed: 'static, Answer: fmt::Display + 'static>(

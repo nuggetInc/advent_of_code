@@ -45,8 +45,7 @@ version = "0.1.0"
 dependencies = [
  "aoc_core",
  "dotenvy",
- "year2022",
- "year2023",
+ "solutions",
 ]
 
 [[package]]
@@ -1296,6 +1295,15 @@ checksum = "7b5fac59a5cb5dd637972e5fca70daf0523c9067fcdc4842f053dae04a18f8e9"
 dependencies = [
  "libc",
  "windows-sys 0.48.0",
+]
+
+[[package]]
+name = "solutions"
+version = "0.1.0"
+dependencies = [
+ "aoc_core",
+ "year2022",
+ "year2023",
 ]
 
 [[package]]
