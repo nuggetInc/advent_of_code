@@ -13,7 +13,7 @@ pub use download::*;
 pub use execute::*;
 pub use ids::*;
 
-pub type AocResult<T> = Result<T, Box<dyn Error + Send>>;
+pub type AocResult<T> = Result<T, Box<dyn Error>>;
 
 #[derive(Debug)]
 pub enum AocError {

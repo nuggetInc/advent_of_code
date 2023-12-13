@@ -8,26 +8,19 @@ use std::{
 use super::result::AocPartResult;
 use crate::{AocError, AocResult, PartId, PartResult};
 
-pub trait Part
-where
-    Self: Send + Sync,
-{
+pub trait Part {
     fn run(&self, file: &Path, expected: Option<String>) -> AocResult<Box<dyn PartResult>>;
 }
 
 impl<Parsed, Answer> Part for AocPart<Parsed, Answer>
 where
-    Parsed: Send + Sync,
-    Answer: fmt::Display + Send + Sync + 'static,
+    Answer: fmt::Display + 'static,
 {
     fn run(&self, file: &Path, expected: Option<String>) -> AocResult<Box<dyn PartResult>> {
         let instant = Instant::now();
 
         let result = catch_unwind(|| {
-            let input = match fs::read_to_string(file) {
-                Ok(input) => input,
-                Err(error) => return AocResult::Err(Box::new(error)),
-            };
+            let input = fs::read_to_string(file)?;
             let parsed = (self.parser)(input);
             (self.solution)(parsed)
         });
@@ -52,8 +45,8 @@ where
     Answer: fmt::Display,
 {
     part: PartId,
-    parser: Box<dyn Fn(String) -> Parsed + Send + Sync + RefUnwindSafe + 'static>,
-    solution: Box<dyn Fn(Parsed) -> AocResult<Answer> + Send + Sync + RefUnwindSafe + 'static>,
+    parser: Box<dyn Fn(String) -> Parsed + RefUnwindSafe + 'static>,
+    solution: Box<dyn Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static>,
 }
 
 impl<Parsed, Answer> AocPart<Parsed, Answer>
@@ -62,8 +55,8 @@ where
 {
     pub fn new(
         part: PartId,
-        parser: impl Fn(String) -> Parsed + Send + Sync + RefUnwindSafe + 'static,
-        solution: impl Fn(Parsed) -> AocResult<Answer> + Send + Sync + RefUnwindSafe + 'static,
+        parser: impl Fn(String) -> Parsed + RefUnwindSafe + 'static,
+        solution: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) -> Self {
         AocPart {
             part,

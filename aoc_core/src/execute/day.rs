@@ -45,14 +45,10 @@ impl Day {
             let mut output_file = input_file.clone();
             output_file.set_extension("out");
 
-            let output = match output_file
+            let output = output_file
                 .exists()
                 .then(|| fs::read_to_string(output_file))
-                .unwrap_or(Ok(String::new()))
-            {
-                Ok(output) => output,
-                Err(error) => return AocResult::Err(Box::new(error)),
-            };
+                .unwrap_or(Ok(String::new()))?;
 
             let mut expected_answers = output.split_terminator('\n');
 
@@ -66,13 +62,10 @@ impl Day {
         Ok(DayResult::new(self.day, parts))
     }
 
-    pub fn part_1<
-        Parsed: Send + Sync + 'static + 'static,
-        Answer: fmt::Display + Send + Sync + 'static,
-    >(
+    pub fn part_1<Parsed: 'static, Answer: fmt::Display + 'static>(
         &mut self,
-        parser: impl Fn(String) -> Parsed + Send + Sync + RefUnwindSafe + 'static,
-        part: impl Fn(Parsed) -> AocResult<Answer> + Send + Sync + RefUnwindSafe + 'static,
+        parser: impl Fn(String) -> Parsed + RefUnwindSafe + 'static,
+        part: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) {
         self.parts.insert(
             PartId::PART_1,
@@ -80,10 +73,10 @@ impl Day {
         );
     }
 
-    pub fn part_2<Parsed: Send + Sync + 'static, Answer: fmt::Display + Send + Sync + 'static>(
+    pub fn part_2<Parsed: 'static, Answer: fmt::Display + 'static>(
         &mut self,
-        parser: impl Fn(String) -> Parsed + Send + Sync + RefUnwindSafe + 'static,
-        part: impl Fn(Parsed) -> AocResult<Answer> + Send + Sync + RefUnwindSafe + 'static,
+        parser: impl Fn(String) -> Parsed + RefUnwindSafe + 'static,
+        part: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) {
         self.parts.insert(
             PartId::PART_2,

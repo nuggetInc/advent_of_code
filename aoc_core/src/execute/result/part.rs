@@ -13,17 +13,14 @@ use crossterm::{
 
 use crate::{AocResult, PartId};
 
-pub trait PartResult
-where
-    Self: Send,
-{
+pub trait PartResult {
     fn elapsed(&self) -> Duration;
     fn print(&self) -> io::Result<()>;
 }
 
 impl<T> PartResult for AocPartResult<T>
 where
-    T: fmt::Display + Send,
+    T: fmt::Display,
 {
     fn elapsed(&self) -> Duration {
         self.elapsed
@@ -104,7 +101,7 @@ where
 
 pub struct AocPartResult<T>
 where
-    T: fmt::Display + Send,
+    T: fmt::Display,
 {
     part: PartId,
     file: PathBuf,
@@ -115,7 +112,7 @@ where
 
 impl<T> AocPartResult<T>
 where
-    T: fmt::Display + Send,
+    T: fmt::Display,
 {
     pub fn new(
         part: PartId,
