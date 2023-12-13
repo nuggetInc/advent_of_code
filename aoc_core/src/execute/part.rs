@@ -29,7 +29,6 @@ where
 
         Ok(Box::new(AocPartResult::<Answer>::new(
             self.id,
-            file.to_owned(),
             match result {
                 Ok(answer) => answer,
                 Err(_) => Err(Box::new(AocError::Paniced)),

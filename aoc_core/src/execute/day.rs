@@ -39,7 +39,7 @@ impl Day {
     }
 
     pub fn run(&self) -> AocResult<DayResult> {
-        let mut parts = Vec::new();
+        let mut file_parts = Vec::new();
 
         for input_file in &self.files {
             let mut output_file = input_file.clone();
@@ -52,14 +52,18 @@ impl Day {
 
             let mut expected_answers = output.split_terminator('\n');
 
+            let mut parts = Vec::new();
+
             for part in self.parts.values() {
                 let expected = expected_answers.next().map(str::to_owned);
 
                 parts.push(part.run(input_file, expected)?);
             }
+
+            file_parts.push((input_file.to_owned(), parts));
         }
 
-        Ok(DayResult::new(self.id, parts))
+        Ok(DayResult::new(self.id, file_parts))
     }
 
     pub fn part_1<Parsed: 'static, Answer: fmt::Display + 'static>(
