@@ -3,7 +3,6 @@ use std::{
     fmt, fs,
     panic::{Location, RefUnwindSafe},
     path::{Path, PathBuf},
-    thread,
 };
 
 use super::{
@@ -40,39 +39,31 @@ impl Day {
     }
 
     pub fn run(&self) -> AocResult<DayResult> {
-        thread::scope(|scope| -> AocResult<DayResult> {
-            let mut handles = Vec::new();
-            let mut parts = Vec::new();
+        let mut parts = Vec::new();
 
-            for input_file in &self.files {
-                let mut output_file = input_file.clone();
-                output_file.set_extension("out");
+        for input_file in &self.files {
+            let mut output_file = input_file.clone();
+            output_file.set_extension("out");
 
-                let output = match output_file
-                    .exists()
-                    .then(|| fs::read_to_string(output_file))
-                    .unwrap_or(Ok(String::new()))
-                {
-                    Ok(output) => output,
-                    Err(error) => return AocResult::Err(Box::new(error)),
-                };
+            let output = match output_file
+                .exists()
+                .then(|| fs::read_to_string(output_file))
+                .unwrap_or(Ok(String::new()))
+            {
+                Ok(output) => output,
+                Err(error) => return AocResult::Err(Box::new(error)),
+            };
 
-                let mut expected_answers = output.split_terminator('\n');
+            let mut expected_answers = output.split_terminator('\n');
 
-                for part in self.parts.values() {
-                    let expected = expected_answers.next().map(str::to_owned);
+            for part in self.parts.values() {
+                let expected = expected_answers.next().map(str::to_owned);
 
-                    let handle = scope.spawn(|| part.run(input_file, expected));
-                    handles.push(handle);
-                }
+                parts.push(part.run(input_file, expected)?);
             }
+        }
 
-            for handle in handles {
-                parts.push(handle.join().unwrap()?);
-            }
-
-            Ok(DayResult::new(self.day, parts))
-        })
+        Ok(DayResult::new(self.day, parts))
     }
 
     pub fn part_1<
