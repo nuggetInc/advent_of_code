@@ -6,9 +6,9 @@ use std::{
 
 use scraper::{Html, Selector};
 
-use crate::{AocClient, DayId, YearId};
+use crate::{AocClient, AocResult, DayId, YearId};
 
-pub fn download_input(year: YearId, day: DayId) -> Result<(), Box<dyn Error>> {
+pub fn download_input(year: YearId, day: DayId) -> AocResult<()> {
     let client = AocClient::new();
 
     let url = format!("https://adventofcode.com/{}/day/{}/input", *year, *day);

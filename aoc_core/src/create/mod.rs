@@ -1,8 +1,8 @@
-use std::{fs, io};
+use std::fs;
 
-use crate::{DayId, YearId};
+use crate::{download_input, download_problem, AocResult, DayId, YearId};
 
-pub fn create_day(year: YearId, day: DayId) -> io::Result<()> {
+pub fn create_day(year: YearId, day: DayId) -> AocResult<()> {
     fs::create_dir(format!(
         "solutions/{}/src/{}",
         year.folder_name(),
@@ -39,6 +39,9 @@ pub fn create_day(year: YearId, day: DayId) -> io::Result<()> {
         format!("solutions/{}/src/lib.rs", year.folder_name()),
         format!(include_str!("year.txt"), mods, add_days),
     )?;
+
+    download_input(year, day)?;
+    download_problem(year, day)?;
 
     Ok(())
 }

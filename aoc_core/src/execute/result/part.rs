@@ -107,7 +107,7 @@ where
     file: PathBuf,
     result: AocResult<T>,
     expected: Option<String>,
-    pub elapsed: Duration,
+    elapsed: Duration,
 }
 
 impl<T> AocPartResult<T>
