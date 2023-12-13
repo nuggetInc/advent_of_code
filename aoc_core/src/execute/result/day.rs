@@ -10,7 +10,7 @@ use crossterm::{
     QueueableCommand,
 };
 
-use crate::{DayId, PartResult};
+use crate::{AocResult, DayId, PartResult};
 
 pub struct DayResult {
     day: DayId,
@@ -32,7 +32,7 @@ impl DayResult {
             .sum()
     }
 
-    pub fn print(&self) -> io::Result<()> {
+    pub fn print(&self) -> AocResult<()> {
         io::stdout()
             .queue(Print(self.day.name()))?
             .queue(Print(format!(" - {:?}", self.elapsed()).dark_grey()))?

@@ -10,3 +10,4 @@ members = [ "aoc_core", "solutions", "solutions/year2022", "solutions/year2023" 
 dotenvy = "0.15.7"
 aoc_core = { path = "aoc_core" }
 solutions = { path = "solutions" }
+crossterm = "0.27.0"

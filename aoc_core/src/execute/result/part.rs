@@ -40,7 +40,7 @@ impl PartResult {
         self.result
     }
 
-    pub fn print(&self) -> io::Result<()> {
+    pub fn print(&self) -> AocResult<()> {
         match &self.result {
             Ok(answer) => {
                 if let Some(expected) = &self.expected {
@@ -52,7 +52,7 @@ impl PartResult {
                             .queue(Print(self.part.name()))?
                             .queue(Print(format!(" - {:?}", self.elapsed).dark_grey()))?
                             .queue(Print("\n"))?
-                            .flush()
+                            .flush()?;
                     } else {
                         io::stdout()
                             .queue(Print(" X ".red()))?
@@ -63,7 +63,7 @@ impl PartResult {
                             .queue(Print(self.part.name()))?
                             .queue(Print(format!(" - {:?}", self.elapsed).dark_grey()))?
                             .queue(Print("\n"))?
-                            .flush()
+                            .flush()?;
                     }
                 } else {
                     io::stdout()
@@ -73,7 +73,7 @@ impl PartResult {
                         .queue(Print(self.part.name()))?
                         .queue(Print(format!(" - {:?}", self.elapsed).dark_grey()))?
                         .queue(Print("\n"))?
-                        .flush()
+                        .flush()?;
                 }
             }
             Err(error) => io::stdout()
@@ -82,7 +82,9 @@ impl PartResult {
                 .queue(Print(self.part.name()))?
                 .queue(Print(format!(" - {:?}", self.elapsed).dark_grey()))?
                 .queue(Print("\n"))?
-                .flush(),
+                .flush()?,
         }
+
+        Ok(())
     }
 }

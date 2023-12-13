@@ -9,7 +9,7 @@ use crossterm::{
 };
 
 use super::DayResult;
-use crate::YearId;
+use crate::{AocResult, YearId};
 
 pub struct YearResult {
     year: YearId,
@@ -25,7 +25,7 @@ impl YearResult {
         self.days.iter().map(|d| d.elapsed()).sum()
     }
 
-    pub fn print(&self) -> io::Result<()> {
+    pub fn print(&self) -> AocResult<()> {
         io::stdout()
             .queue(Print(self.year.name()))?
             .queue(Print(format!(" - {:?}", self.elapsed()).dark_grey()))?

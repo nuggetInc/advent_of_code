@@ -34,7 +34,7 @@ pub fn upload_answer(year_id: YearId, day: &Day) -> AocResult<()> {
 
     let part = day
         .get_part(part_id)
-        .ok_or(AocError::PartUnimplemented(part_id))?;
+        .ok_or(AocError::UnimplementedPart(part_id))?;
 
     let answer = part.run(&in_path, None)?.result()?;
 
@@ -52,7 +52,7 @@ pub fn upload_answer(year_id: YearId, day: &Day) -> AocResult<()> {
     let text = client.post(&url, params)?.text()?;
 
     let document = Html::parse_document(&text);
-    let articles_selector = Selector::parse("body > main > article").unwrap();
+    let articles_selector = Selector::parse("body > main > article")?;
 
     let article = document.select(&articles_selector).next().unwrap();
 

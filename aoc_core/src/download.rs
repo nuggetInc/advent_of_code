@@ -45,7 +45,7 @@ pub fn download_problem(year: YearId, day: DayId) -> Result<(), Box<dyn Error>> 
     ))?;
 
     let document = Html::parse_document(&text);
-    let articles_selector = Selector::parse("body > main > article").unwrap();
+    let articles_selector = Selector::parse("body > main > article")?;
 
     writeln!(
         file,

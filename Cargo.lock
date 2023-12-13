@@ -44,6 +44,7 @@ name = "aoc"
 version = "0.1.0"
 dependencies = [
  "aoc_core",
+ "crossterm",
  "dotenvy",
  "solutions",
 ]

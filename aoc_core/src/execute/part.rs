@@ -30,7 +30,7 @@ where
         Ok(PartResult::new(
             self.id,
             result
-                .unwrap_or_else(|_| Err(Box::new(AocError::Paniced)))
+                .unwrap_or_else(|_| Err(Box::new(AocError::PanicedPart)))
                 .map(|a| a.to_string()),
             expected,
             elapsed,
