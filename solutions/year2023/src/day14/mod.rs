@@ -17,20 +17,18 @@ fn parse(input: String) -> Map {
 
     let grid = input
         .split_terminator('\n')
-        .map(|line| {
+        .flat_map(|line| {
             width = line.len();
 
-            line.chars()
-                .map(|char| match char {
-                    'O' => Rock::Round,
-                    '#' => Rock::Square,
-                    _ => Rock::None,
-                })
-                .collect()
+            line.chars().map(|char| match char {
+                'O' => Rock::Round,
+                '#' => Rock::Square,
+                _ => Rock::None,
+            })
         })
         .collect_vec();
 
-    let height = grid.len();
+    let height = grid.len() / width;
 
     Map::new(grid, width, height)
 }
@@ -46,6 +44,7 @@ fn part_two(mut map: Map) -> AocResult<usize> {
     while !previous.contains(&map) {
         previous.insert(map.clone());
         history.push(map.clone());
+
         map.roll_north().roll_west().roll_south().roll_east();
     }
 
@@ -58,13 +57,13 @@ fn part_two(mut map: Map) -> AocResult<usize> {
 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
 struct Map {
-    grid: Vec<Vec<Rock>>,
+    grid: Vec<Rock>,
     width: usize,
     height: usize,
 }
 
 impl Map {
-    fn new(grid: Vec<Vec<Rock>>, width: usize, height: usize) -> Self {
+    fn new(grid: Vec<Rock>, width: usize, height: usize) -> Self {
         Self {
             grid,
             width,
@@ -72,12 +71,22 @@ impl Map {
         }
     }
 
+    #[inline]
+    fn get(&self, x: usize, y: usize) -> Rock {
+        self.grid[x + y * self.width]
+    }
+
+    #[inline]
+    fn set(&mut self, x: usize, y: usize, rock: Rock) {
+        self.grid[x + y * self.width] = rock
+    }
+
     fn load(&self) -> usize {
         let mut sum = 0;
 
         for row in 0..self.height {
             for column in 0..self.width {
-                if self.grid[row][column] == Rock::Round {
+                if self.get(column, row) == Rock::Round {
                     sum += self.height - row;
                 }
             }
@@ -87,22 +96,27 @@ impl Map {
     }
 
     fn roll_north(&mut self) -> &mut Self {
-        for row in 1..self.height {
-            for column in 0..self.width {
-                if self.grid[row][column] != Rock::Round {
-                    continue;
-                }
-
-                for y in (0..row).rev() {
-                    if self.grid[y][column] != Rock::None {
-                        self.grid[row][column] = Rock::None;
-                        self.grid[y + 1][column] = Rock::Round;
-                        break;
-                    } else if y == 0 {
-                        self.grid[row][column] = Rock::None;
-                        self.grid[y][column] = Rock::Round;
+        for column in 0..self.width {
+            let mut count = 0;
+            for row in (0..self.height).rev() {
+                match self.get(column, row) {
+                    Rock::Round => {
+                        self.set(column, row, Rock::None);
+                        count += 1
                     }
+                    Rock::Square => {
+                        for delta_y in 1..=count {
+                            self.set(column, row + delta_y, Rock::Round)
+                        }
+
+                        count = 0;
+                    }
+                    Rock::None => (),
                 }
+            }
+
+            for y in 0..count {
+                self.set(column, y, Rock::Round)
             }
         }
 
@@ -110,22 +124,27 @@ impl Map {
     }
 
     fn roll_south(&mut self) -> &mut Self {
-        for row in (0..self.height - 1).rev() {
-            for column in 0..self.width {
-                if self.grid[row][column] != Rock::Round {
-                    continue;
-                }
-
-                for y in row + 1..self.height {
-                    if self.grid[y][column] != Rock::None {
-                        self.grid[row][column] = Rock::None;
-                        self.grid[y - 1][column] = Rock::Round;
-                        break;
-                    } else if y == self.height - 1 {
-                        self.grid[row][column] = Rock::None;
-                        self.grid[y][column] = Rock::Round;
+        for column in 0..self.width {
+            let mut count = 0;
+            for row in 0..self.height {
+                match self.get(column, row) {
+                    Rock::Round => {
+                        self.set(column, row, Rock::None);
+                        count += 1
                     }
+                    Rock::Square => {
+                        for delta_y in 1..=count {
+                            self.set(column, row - delta_y, Rock::Round)
+                        }
+
+                        count = 0;
+                    }
+                    Rock::None => (),
                 }
+            }
+
+            for y in 1..=count {
+                self.set(column, self.height - y, Rock::Round)
             }
         }
 
@@ -133,22 +152,27 @@ impl Map {
     }
 
     fn roll_west(&mut self) -> &mut Self {
-        for column in 1..self.width {
-            for row in 0..self.height {
-                if self.grid[row][column] != Rock::Round {
-                    continue;
-                }
-
-                for x in (0..column).rev() {
-                    if self.grid[row][x] != Rock::None {
-                        self.grid[row][column] = Rock::None;
-                        self.grid[row][x + 1] = Rock::Round;
-                        break;
-                    } else if x == 0 {
-                        self.grid[row][column] = Rock::None;
-                        self.grid[row][x] = Rock::Round;
+        for row in 0..self.height {
+            let mut count = 0;
+            for column in (0..self.width).rev() {
+                match self.get(column, row) {
+                    Rock::Round => {
+                        self.set(column, row, Rock::None);
+                        count += 1
                     }
+                    Rock::Square => {
+                        for delta_x in 1..=count {
+                            self.set(column + delta_x, row, Rock::Round)
+                        }
+
+                        count = 0;
+                    }
+                    Rock::None => (),
                 }
+            }
+
+            for x in 0..count {
+                self.set(x, row, Rock::Round)
             }
         }
 
@@ -156,22 +180,27 @@ impl Map {
     }
 
     fn roll_east(&mut self) -> &mut Self {
-        for column in (0..self.width - 1).rev() {
-            for row in 0..self.height {
-                if self.grid[row][column] != Rock::Round {
-                    continue;
-                }
-
-                for x in column + 1..self.width {
-                    if self.grid[row][x] != Rock::None {
-                        self.grid[row][column] = Rock::None;
-                        self.grid[row][x - 1] = Rock::Round;
-                        break;
-                    } else if x == self.width - 1 {
-                        self.grid[row][column] = Rock::None;
-                        self.grid[row][x] = Rock::Round;
+        for row in 0..self.height {
+            let mut count = 0;
+            for column in 0..self.width {
+                match self.get(column, row) {
+                    Rock::Round => {
+                        self.set(column, row, Rock::None);
+                        count += 1
                     }
+                    Rock::Square => {
+                        for delta_x in 1..=count {
+                            self.set(column - delta_x, row, Rock::Round)
+                        }
+
+                        count = 0;
+                    }
+                    Rock::None => (),
                 }
+            }
+
+            for y in 1..=count {
+                self.set(self.width - y, row, Rock::Round)
             }
         }
 
@@ -179,7 +208,7 @@ impl Map {
     }
 }
 
-#[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 enum Rock {
     Round,
     Square,
