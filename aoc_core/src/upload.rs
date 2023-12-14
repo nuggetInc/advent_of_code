@@ -16,7 +16,7 @@ use crate::{AocClient, AocError, AocResult, Day, PartId, YearId};
 
 pub fn upload_answer(year_id: YearId, day: &Day) -> AocResult<()> {
     let in_path = PathBuf::from(format!(
-        "solutions/{}/src/{}/files/input.out",
+        "solutions/{}/src/{}/files/input.in",
         year_id.folder_name(),
         day.id().folder_name()
     ));
