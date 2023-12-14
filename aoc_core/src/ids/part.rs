@@ -1,4 +1,4 @@
-use std::{num::ParseIntError, ops::Deref, str::FromStr};
+use std::{error::Error, fmt, num::ParseIntError, ops::Deref, str::FromStr};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct PartId(u8);
@@ -13,15 +13,20 @@ impl PartId {
 }
 
 impl FromStr for PartId {
-    type Err = ParseIntError;
+    type Err = ParsePartIdError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if s.starts_with("Part") || s.starts_with("part") {
-            Ok(Self(s[4..].parse()?))
+        let result = if s.starts_with("Part") || s.starts_with("part") {
+            s[4..].parse()
         } else if s.starts_with('P') || s.starts_with('p') {
-            Ok(Self(s[1..].parse()?))
+            s[1..].parse()
         } else {
-            Ok(Self(s.parse()?))
+            s.parse()
+        };
+
+        match result {
+            Ok(id) => Ok(Self(id)),
+            Err(err) => Err(ParsePartIdError(err)),
         }
     }
 }
@@ -37,5 +42,20 @@ impl Deref for PartId {
 
     fn deref(&self) -> &Self::Target {
         &self.0
+    }
+}
+
+#[derive(Debug)]
+pub struct ParsePartIdError(ParseIntError);
+
+impl fmt::Display for ParsePartIdError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "cannot parse part: {}", self.0)
+    }
+}
+
+impl Error for ParsePartIdError {
+    fn source(&self) -> Option<&(dyn Error + 'static)> {
+        Some(&self.0)
     }
 }

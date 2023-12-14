@@ -1,4 +1,4 @@
-use std::{num::ParseIntError, ops::Deref, str::FromStr};
+use std::{error::Error, fmt, num::ParseIntError, ops::Deref, str::FromStr};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct YearId(u16);
@@ -14,15 +14,20 @@ impl YearId {
 }
 
 impl FromStr for YearId {
-    type Err = ParseIntError;
+    type Err = ParseYearIdError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if s.starts_with("Year") || s.starts_with("year") {
-            Ok(Self(s[4..].parse()?))
+        let result = if s.starts_with("Year") || s.starts_with("year") {
+            s[4..].parse()
         } else if s.starts_with('Y') || s.starts_with('y') {
-            Ok(Self(s[1..].parse()?))
+            s[1..].parse()
         } else {
-            Ok(Self(s.parse()?))
+            s.parse()
+        };
+
+        match result {
+            Ok(id) => Ok(Self(id)),
+            Err(err) => Err(ParseYearIdError(err)),
         }
     }
 }
@@ -38,5 +43,20 @@ impl Deref for YearId {
 
     fn deref(&self) -> &Self::Target {
         &self.0
+    }
+}
+
+#[derive(Debug)]
+pub struct ParseYearIdError(ParseIntError);
+
+impl fmt::Display for ParseYearIdError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "cannot parse year: {}", self.0)
+    }
+}
+
+impl Error for ParseYearIdError {
+    fn source(&self) -> Option<&(dyn Error + 'static)> {
+        Some(&self.0)
     }
 }

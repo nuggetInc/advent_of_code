@@ -1,7 +1,7 @@
-use std::{collections::BTreeMap, panic::Location};
+use std::{collections::BTreeMap, error::Error, fmt, panic::Location};
 
 use super::{day::Day, result::YearResult};
-use crate::{AocResult, DayId, YearId};
+use crate::{DayId, YearId};
 
 pub struct Year {
     id: YearId,
@@ -38,13 +38,28 @@ impl Year {
         self.days.get(&index)
     }
 
-    pub fn run(&self) -> AocResult<YearResult> {
-        let mut days = Vec::new();
+    pub fn run(&self) -> YearResult {
+        let mut days = BTreeMap::new();
 
         for day in self.days.values() {
-            days.push(day.run()?);
+            days.insert(day.id(), day.run());
         }
 
-        Ok(YearResult::new(self.id, days))
+        YearResult::new(self.id, days)
     }
 }
+
+#[derive(Debug)]
+pub enum YearError {
+    Unimplemented,
+}
+
+impl fmt::Display for YearError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            YearError::Unimplemented => write!(f, "day is not implemented"),
+        }
+    }
+}
+
+impl Error for YearError {}

@@ -1,4 +1,5 @@
 use std::{
+    collections::BTreeMap,
     ffi::OsStr,
     io::{self, Write},
     path::PathBuf,
@@ -10,25 +11,30 @@ use crossterm::{
     QueueableCommand,
 };
 
-use crate::{AocResult, DayId, PartResult};
+use crate::{AocResult, DayId, PartError, PartId, PartResult};
 
 pub struct DayResult {
     day: DayId,
-    file_parts: Vec<(PathBuf, Vec<PartResult>)>,
+    file_parts: Vec<(PathBuf, BTreeMap<PartId, Result<PartResult, PartError>>)>,
 }
 
 impl DayResult {
-    pub fn new(day: DayId, parts: Vec<(PathBuf, Vec<PartResult>)>) -> Self {
-        Self {
-            day,
-            file_parts: parts,
-        }
+    pub fn new(
+        day: DayId,
+        file_parts: Vec<(PathBuf, BTreeMap<PartId, Result<PartResult, PartError>>)>,
+    ) -> Self {
+        Self { day, file_parts }
     }
 
     pub fn elapsed(&self) -> Duration {
         self.file_parts
             .iter()
-            .map(|(_, parts)| parts.iter().map(|part| part.elapsed()).sum::<Duration>())
+            .map(|(_, parts)| {
+                parts
+                    .values()
+                    .filter_map(|result| result.as_ref().ok().map(|part| part.elapsed()))
+                    .sum::<Duration>()
+            })
             .sum()
     }
 
@@ -52,8 +58,16 @@ impl DayResult {
                 .queue(SetForegroundColor(Color::Reset))?
                 .flush()?;
 
-            for part in parts {
-                part.print()?;
+            for (part_id, result) in parts {
+                match result {
+                    Ok(part) => part.print()?,
+                    Err(error) => io::stdout()
+                        .queue(Print(format!(" X {}", error).red()))?
+                        .queue(Print(" - ".dark_grey()))?
+                        .queue(Print(part_id.name()))?
+                        .queue(Print("\n"))?
+                        .flush()?,
+                }
             }
         }
 

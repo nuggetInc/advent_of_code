@@ -1,8 +1,10 @@
 use std::{
     collections::BTreeMap,
-    fmt, fs,
+    error::Error,
+    ffi::OsStr,
+    fmt, fs, io,
     panic::{Location, RefUnwindSafe},
-    path::{Path, PathBuf},
+    path::PathBuf,
 };
 
 use super::{
@@ -42,26 +44,28 @@ impl Day {
         self.parts.get(&index).map(Box::as_ref)
     }
 
-    pub fn run(&self) -> AocResult<DayResult> {
+    pub fn run(&self) -> Result<DayResult, DayError> {
         let mut file_parts = Vec::new();
 
         for input_file in &self.files {
             let mut output_file = input_file.clone();
             output_file.set_extension("out");
 
-            let output = output_file
-                .exists()
-                .then(|| fs::read_to_string(output_file))
-                .unwrap_or(Ok(String::new()))?;
+            let output = if output_file.exists() {
+                fs::read_to_string(output_file).map_err(|err| DayError::OutputFileError(err))?
+            } else {
+                String::new()
+            };
 
             let mut expected_answers = output.split_terminator('\n');
 
-            let mut parts = Vec::new();
+            let mut parts = BTreeMap::new();
 
             for part in self.parts.values() {
                 let expected = expected_answers.next().map(str::to_owned);
 
-                parts.push(part.run(input_file, expected)?);
+                let result = part.run(input_file, expected);
+                parts.insert(part.id(), result);
             }
 
             file_parts.push((input_file.to_owned(), parts));
@@ -93,10 +97,9 @@ impl Day {
     }
 
     #[track_caller]
-    pub fn add_file(&mut self, path: impl AsRef<Path>) {
+    pub fn add_file(&mut self, path: impl AsRef<OsStr>) {
         let mut full_path = PathBuf::from(Location::caller().file());
-        full_path.pop();
-        full_path.push(path);
+        full_path.set_file_name(path);
 
         if !full_path.exists() {
             eprintln!("The given path '{full_path:?}' does not exist");
@@ -104,5 +107,29 @@ impl Day {
         }
 
         self.files.push(full_path);
+    }
+}
+
+#[derive(Debug)]
+pub enum DayError {
+    Unimplemented,
+    OutputFileError(io::Error),
+}
+
+impl fmt::Display for DayError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            DayError::Unimplemented => write!(f, "day is not implemented"),
+            DayError::OutputFileError(err) => write!(f, "cannot read output file: {}", err),
+        }
+    }
+}
+
+impl Error for DayError {
+    fn source(&self) -> Option<&(dyn Error + 'static)> {
+        match self {
+            DayError::Unimplemented => None,
+            DayError::OutputFileError(err) => Some(err),
+        }
     }
 }

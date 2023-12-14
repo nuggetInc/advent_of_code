@@ -1,11 +1,14 @@
 use std::{
     collections::VecDeque,
     env,
+    error::Error,
+    fmt,
     io::{self, Write},
 };
 
 use aoc_core::{
-    create_day, download_input, download_problem, upload_answer, AocError, AocResult, DayId, YearId,
+    create_day, download_input, download_problem, upload_answer, AocResult, DayError, DayId,
+    YearError, YearId,
 };
 use crossterm::{
     style::{Print, Stylize},
@@ -50,28 +53,22 @@ fn main() -> AocResult<()> {
 }
 
 fn execute_command(mut args: VecDeque<String>) -> AocResult<()> {
-    let command_raw = args
-        .pop_front()
-        .ok_or(AocError::InvalidCommand(String::new()))?;
+    let command_raw = args.pop_front().ok_or(CommandError::InvalidCommand)?;
     let command = match command_raw.as_str() {
         "run" | "r" => Command::Run,
         "create" | "c" => Command::Create,
         "download" | "d" => Command::Download,
         "upload" | "u" => Command::Upload,
-        _ => Err(AocError::InvalidCommand(command_raw))?,
+        _ => Err(CommandError::InvalidCommand)?,
     };
 
     let year_id: YearId = args
         .pop_front()
-        .map(|year_raw| {
-            year_raw
-                .parse()
-                .map_err(|_| AocError::InvalidYear(year_raw))
-        })
+        .map(|year_raw| year_raw.parse())
         .unwrap_or(Ok(YearId::from(2023)))?;
 
     if let Some(day_raw) = args.pop_front() {
-        let day_id = day_raw.parse().map_err(|_| AocError::InvalidDay(day_raw))?;
+        let day_id = day_raw.parse()?;
 
         match command {
             Command::Run => run(year_id, Some(day_id))?,
@@ -85,7 +82,7 @@ fn execute_command(mut args: VecDeque<String>) -> AocResult<()> {
     } else {
         match command {
             Command::Run => run(year_id, None)?,
-            _ => Err(AocError::InvalidDay(String::new()))?,
+            _ => Err(CommandError::DayRequired)?,
         }
     }
 
@@ -103,18 +100,18 @@ fn run(year_id: YearId, day_id: Option<DayId>) -> AocResult<()> {
     let solutions = solutions::solutions();
 
     let Some(year) = solutions.get_year(year_id) else {
-        Err(AocError::UnimplementedYear(year_id))?
+        Err(YearError::Unimplemented)?
     };
 
     if let Some(day) = day_id {
         let Some(day) = year.get_day(day) else {
-            Err(AocError::UnimplementedDay(day))?
+            Err(DayError::Unimplemented)?
         };
 
         let result = day.run()?;
         result.print()
     } else {
-        let result = year.run()?;
+        let result = year.run();
         result.print()
     }
 }
@@ -123,12 +120,29 @@ fn upload(year_id: YearId, day_id: DayId) -> AocResult<()> {
     let solutions = solutions::solutions();
 
     let Some(year) = solutions.get_year(year_id) else {
-        Err(AocError::UnimplementedYear(year_id))?
+        Err(YearError::Unimplemented)?
     };
 
     let Some(day) = year.get_day(day_id) else {
-        Err(AocError::UnimplementedDay(day_id))?
+        Err(DayError::Unimplemented)?
     };
 
     upload_answer(year_id, day)
 }
+
+#[derive(Debug)]
+enum CommandError {
+    InvalidCommand,
+    DayRequired,
+}
+
+impl fmt::Display for CommandError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            CommandError::InvalidCommand => write!(f, "not a valid command"),
+            CommandError::DayRequired => write!(f, "command requires day"),
+        }
+    }
+}
+
+impl Error for CommandError {}

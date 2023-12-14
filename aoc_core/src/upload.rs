@@ -12,7 +12,7 @@ use crossterm::{
 };
 use scraper::{Html, Selector};
 
-use crate::{AocClient, AocError, AocResult, Day, PartId, YearId};
+use crate::{AocClient, AocResult, Day, PartError, PartId, YearId};
 
 pub fn upload_answer(year_id: YearId, day: &Day) -> AocResult<()> {
     let in_path = PathBuf::from(format!(
@@ -32,11 +32,9 @@ pub fn upload_answer(year_id: YearId, day: &Day) -> AocResult<()> {
         PartId::from(1)
     };
 
-    let part = day
-        .get_part(part_id)
-        .ok_or(AocError::UnimplementedPart(part_id))?;
+    let part = day.get_part(part_id).ok_or(PartError::Unimplemented)?;
 
-    let answer = part.run(&in_path, None)?.result()?;
+    let answer = part.run(&in_path, None)?.answer();
 
     let client = AocClient::default();
 

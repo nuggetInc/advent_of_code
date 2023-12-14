@@ -1,4 +1,4 @@
-use std::{num::ParseIntError, ops::Deref, str::FromStr};
+use std::{error::Error, fmt, num::ParseIntError, ops::Deref, str::FromStr};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct DayId(u8);
@@ -14,15 +14,20 @@ impl DayId {
 }
 
 impl FromStr for DayId {
-    type Err = ParseIntError;
+    type Err = ParseDayIdError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if s.starts_with("Day") || s.starts_with("day") {
-            Ok(Self(s[3..].parse()?))
+        let result = if s.starts_with("Day") || s.starts_with("day") {
+            s[3..].parse::<u8>()
         } else if s.starts_with('D') || s.starts_with('d') {
-            Ok(Self(s[1..].parse()?))
+            s[1..].parse::<u8>()
         } else {
-            Ok(Self(s.parse()?))
+            s.parse::<u8>()
+        };
+
+        match result {
+            Ok(id) => Ok(Self(id)),
+            Err(err) => Err(ParseDayIdError(err)),
         }
     }
 }
@@ -38,5 +43,20 @@ impl Deref for DayId {
 
     fn deref(&self) -> &Self::Target {
         &self.0
+    }
+}
+
+#[derive(Debug)]
+pub struct ParseDayIdError(ParseIntError);
+
+impl fmt::Display for ParseDayIdError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "cannot parse day: {}", self.0)
+    }
+}
+
+impl Error for ParseDayIdError {
+    fn source(&self) -> Option<&(dyn Error + 'static)> {
+        Some(&self.0)
     }
 }
