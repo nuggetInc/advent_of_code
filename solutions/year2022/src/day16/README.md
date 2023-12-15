@@ -134,7 +134,6 @@ Valves BB, CC, DD, EE, HH, and JJ are open, releasing <b>81</b> pressure.
 </code></pre>
 <p>This approach lets you release the most pressure possible in 30 minutes with this valve layout, <code><b>1651</b></code>.</p>
 <p>Work out the steps to release the most pressure in 30 minutes. <b>What is the most pressure you can release?</b></p>
-
 <h2 id="part2">--- Part Two ---</h2><p>You're worried that even with an optimal approach, the pressure released won't be enough. What if you got one of the elephants to help you?</p>
 <p>It would take you 4 minutes to teach an elephant how to open the right valves in the right order, leaving you with only <b>26 minutes</b> to actually execute your plan. Would having two of you working together be better, even if it means having less time? (Assume that you teach the elephant before opening any valves yourself, giving you both the same full 26 minutes.)</p>
 <p>In the example above, you could teach the elephant to help you as follows:</p>

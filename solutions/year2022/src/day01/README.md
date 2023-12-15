@@ -30,7 +30,6 @@ view the original on <a href=https://adventofcode.com/2022/day/1>adventofcode.co
 </ul>
 <p>In case the Elves get hungry and need extra snacks, they need to know which Elf to ask: they'd like to know how many Calories are being carried by the Elf carrying the <b>most</b> Calories. In the example above, this is <b><code>24000</code></b> (carried by the fourth Elf).</p>
 <p>Find the Elf carrying the most Calories. <b>How many total Calories is that Elf carrying?</b></p>
-
 <h2 id="part2">--- Part Two ---</h2><p>By the time you calculate the answer to the Elves' question, they've already realized that the Elf carrying the most Calories of food might eventually <b>run out of snacks</b>.</p>
 <p>To avoid this unacceptable situation, the Elves would instead like to know the total Calories carried by the <b>top three</b> Elves carrying the most Calories. That way, even if one of those Elves runs out of snacks, they still have two backups.</p>
 <p>In the example above, the top three Elves are the fourth Elf (with <code>24000</code> Calories), then the third Elf (with <code>11000</code> Calories), then the fifth Elf (with <code>10000</code> Calories). The sum of the Calories carried by these three elves is <code><b>45000</b></code>.</p>

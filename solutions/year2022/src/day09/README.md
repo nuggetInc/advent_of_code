@@ -3,7 +3,7 @@ view the original on <a href=https://adventofcode.com/2022/day/9>adventofcode.co
 <p>It seems to support the Elves just fine, though. The bridge spans a gorge which was carved out by the massive river far below you.</p>
 <p>You step carefully; as you do, the ropes stretch and twist. You decide to distract yourself by modeling rope physics; maybe you can even figure out where <b>not</b> to step.</p>
 <p>Consider a rope with a knot at each end; these knots mark the <b>head</b> and the <b>tail</b> of the rope. If the head moves far enough away from the tail, the tail is pulled toward the head.</p>
-<p>Due to nebulous reasoning involving <a href="https://en.wikipedia.org/wiki/Planck_units#Planck_length" target="_blank">Planck lengths</a>, you should be able to model the positions of the knots on a two-dimensional grid. Then, by following a hypothetical <b>series of motions</b> (your puzzle input) for the head, you can determine how the tail will move.</p>
+<p>Due to nebulous reasoning involving <a href="https://en.wikipedia.org/wiki/Planck_units#Planck_length">Planck lengths</a>, you should be able to model the positions of the knots on a two-dimensional grid. Then, by following a hypothetical <b>series of motions</b> (your puzzle input) for the head, you can determine how the tail will move.</p>
 <p><span title="I'm an engineer, not a physicist!">Due to the aforementioned Planck lengths</span>, the rope must be quite short; in fact, the head (<code>H</code>) and tail (<code>T</code>) must <b>always be touching</b> (diagonally adjacent and even overlapping both count as touching):</p>
 <pre><code>....
 .TH.
@@ -231,7 +231,6 @@ s###..
 </code></pre>
 <p>So, there are <code><b>13</b></code> positions the tail visited at least once.</p>
 <p>Simulate your complete hypothetical series of motions. <b>How many positions does the tail of the rope visit at least once?</b></p>
-
 <h2 id="part2">--- Part Two ---</h2><p>A rope snaps! Suddenly, the river is getting a lot closer than you remember. The bridge is still there, but some of the ropes that broke are now whipping toward you as you fall through the air!</p>
 <p>The ropes are moving too quickly to grab; you only have a few seconds to choose how to arch your body to avoid being hit. Fortunately, your simulation can be extended to support longer ropes.</p>
 <p>Rather than two knots, you now must simulate a rope consisting of <b>ten</b> knots. One knot is still the head of the rope and moves according to the series of motions. Each knot further down the rope follows the knot in front of it using the same rules as before.</p>

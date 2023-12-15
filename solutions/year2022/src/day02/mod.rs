@@ -11,7 +11,7 @@ pub fn day() -> Day {
 fn part_one(input: String) -> AocResult<u32> {
     let mut score: u32 = 0;
 
-    for line in input.split('\n') {
+    for line in input.split_terminator('\n') {
         score += match line {
             "A X" => 1 + 3,
             "A Y" => 2 + 6,
@@ -32,7 +32,7 @@ fn part_one(input: String) -> AocResult<u32> {
 fn part_two(input: String) -> AocResult<u32> {
     let mut score: u32 = 0;
 
-    for line in input.split('\n') {
+    for line in input.split_terminator('\n') {
         score += match line {
             "A X" => 3,
             "A Y" => 1 + 3,

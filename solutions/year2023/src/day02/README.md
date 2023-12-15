@@ -15,7 +15,6 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 <p>The Elf would first like to know which games would have been possible if the bag contained <b>only 12 red cubes, 13 green cubes, and 14 blue cubes</b>?</p>
 <p>In the example above, games 1, 2, and 5 would have been <b>possible</b> if the bag had been loaded with that configuration. However, game 3 would have been <b>impossible</b> because at one point the Elf showed you 20 red cubes at once; similarly, game 4 would also have been <b>impossible</b> because the Elf showed you 15 blue cubes at once. If you add up the IDs of the games that would have been possible, you get <code><b>8</b></code>.</p>
 <p>Determine which games would have been possible if the bag had been loaded with only 12 red cubes, 13 green cubes, and 14 blue cubes. <b>What is the sum of the IDs of those games?</b></p>
-
 <h2 id="part2">--- Part Two ---</h2><p>The Elf says they've stopped producing snow because they aren't getting any <b>water</b>! He isn't sure why the water stopped; however, he can show you how to get to the water source to check it out for yourself. It's just up ahead!</p>
 <p>As you continue your walk, the Elf poses a second question: in each game you played, what is the <b>fewest number of cubes of each color</b> that could have been in the bag to make the game possible?</p>
 <p>Again consider the example games from earlier:</p>

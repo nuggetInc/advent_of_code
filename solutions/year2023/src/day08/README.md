@@ -23,7 +23,6 @@ BBB = (AAA, ZZZ)
 ZZZ = (ZZZ, ZZZ)
 </code></pre>
 <p>Starting at <code>AAA</code>, follow the left/right instructions. <b>How many steps are required to reach <code>ZZZ</code>?</b></p>
-
 <h2 id="part2">--- Part Two ---</h2><p>The <span title="Duhduhduhduhduh! Dah, duhduhduhduhduh!">sandstorm</span> is upon you and you aren't any closer to escaping the wasteland. You had the camel follow the instructions, but you've barely left your starting position. It's going to take <b>significantly more steps</b> to escape!</p>
 <p>What if the map isn't for people - what if the map is for <b>ghosts</b>? Are ghosts even bound by the laws of spacetime? Only one way to find out.</p>
 <p>After examining the maps a bit longer, your attention is drawn to a curious fact: the number of nodes with names ending in <code>A</code> is equal to the number ending in <code>Z</code>! If you were a ghost, you'd probably just <b>start at every node that ends with <code>A</code></b> and follow all of the paths at the same time until they all simultaneously end up at nodes that end with <code>Z</code>.</p>

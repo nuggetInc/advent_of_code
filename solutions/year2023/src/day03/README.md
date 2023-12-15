@@ -1,5 +1,5 @@
 view the original on <a href=https://adventofcode.com/2023/day/3>adventofcode.com</a>
-<h2>--- Day 3: Gear Ratios ---</h2><p>You and the Elf eventually reach a <a href="https://en.wikipedia.org/wiki/Gondola_lift" target="_blank">gondola lift</a> station; he says the gondola lift will take you up to the <b>water source</b>, but this is as far as he can bring you. You go inside.</p>
+<h2>--- Day 3: Gear Ratios ---</h2><p>You and the Elf eventually reach a <a href="https://en.wikipedia.org/wiki/Gondola_lift">gondola lift</a> station; he says the gondola lift will take you up to the <b>water source</b>, but this is as far as he can bring you. You go inside.</p>
 <p>It doesn't take long to find the gondolas, but there seems to be a problem: they're not moving.</p>
 <p>"Aaah!"</p>
 <p>You turn around to see a slightly-greasy Elf with a wrench and a look of surprise. "Sorry, I wasn't expecting anyone! The gondola lift isn't working right now; it'll still be a while before I can fix it." You offer to help.</p>
@@ -19,7 +19,6 @@ view the original on <a href=https://adventofcode.com/2023/day/3>adventofcode.co
 </code></pre>
 <p>In this schematic, two numbers are <b>not</b> part numbers because they are not adjacent to a symbol: <code>114</code> (top right) and <code>58</code> (middle right). Every other number is adjacent to a symbol and so <b>is</b> a part number; their sum is <code><b>4361</b></code>.</p>
 <p>Of course, the actual engine schematic is much larger. <b>What is the sum of all of the part numbers in the engine schematic?</b></p>
-
 <h2 id="part2">--- Part Two ---</h2><p>The engineer finds the missing part and installs it in the engine! As the engine springs to life, you jump in the closest gondola, finally ready to ascend to the water source.</p>
 <p>You don't seem to be going very fast, though. Maybe something is still wrong? Fortunately, the gondola has a phone labeled "help", so you pick it up and the engineer answers.</p>
 <p>Before you can explain the situation, she suggests that you look out the window. There stands the engineer, holding a phone in one hand and waving with the other. You're going so slowly that you haven't even left the station. You exit the gondola.</p>

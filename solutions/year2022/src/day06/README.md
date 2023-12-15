@@ -18,7 +18,6 @@ view the original on <a href=https://adventofcode.com/2022/day/6>adventofcode.co
 <li><code>zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw</code>: first marker after character <code><b>11</b></code></li>
 </ul>
 <p><b>How many characters need to be processed before the first start-of-packet marker is detected?</b></p>
-
 <h2 id="part2">--- Part Two ---</h2><p>Your device's communication system is correctly detecting packets, but still isn't working. It looks like it also needs to look for <b>messages</b>.</p>
 <p>A <b>start-of-message marker</b> is just like a start-of-packet marker, except it consists of <b>14 distinct characters</b> rather than 4.</p>
 <p>Here are the first positions of start-of-message markers for all of the above examples:</p>

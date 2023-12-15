@@ -103,7 +103,6 @@ view the original on <a href=https://adventofcode.com/2022/day/14>adventofcode.c
 ~..........
 </code></pre>
 <p>Using your scan, simulate the falling sand. <b>How many units of sand come to rest before sand starts flowing into the abyss below?</b></p>
-
 <h2 id="part2">--- Part Two ---</h2><p>You realize you misread the scan. There isn't an <span title="Endless Void is my C cover band.">endless void</span> at the bottom of the scan - there's floor, and you're standing on it!</p>
 <p>You don't have time to scan the floor, so assume the floor is an infinite horizontal line with a <code>y</code> coordinate equal to <b>two plus the highest <code>y</code> coordinate</b> of any point in your scan.</p>
 <p>In the example above, the highest <code>y</code> coordinate of any point is <code>9</code>, and so the floor is at <code>y=11</code>. (This is as if your scan contained one extra rock path like <code>-infinity,11 -&gt; infinity,11</code>.) With the added floor, the example above now looks like this:</p>

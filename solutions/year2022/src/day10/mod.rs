@@ -13,7 +13,7 @@ fn part_one(input: String) -> AocResult<i32> {
     let mut x = 1;
     let mut cycle = 1;
 
-    for line in input.split('\n') {
+    for line in input.split_terminator('\n') {
         let mut split = line.split(' ');
 
         if let Some("addx") = split.next() {
@@ -44,7 +44,7 @@ fn part_two(input: String) -> AocResult<String> {
     let mut x = 1;
     let mut cycle = 0;
 
-    for line in input.split('\n') {
+    for line in input.split_terminator('\n') {
         let mut split = line.split(' ');
 
         if let Some("addx") = split.next() {

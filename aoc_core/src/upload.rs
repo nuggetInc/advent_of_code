@@ -1,6 +1,6 @@
 use std::{
     collections::HashMap,
-    fs::OpenOptions,
+    fs::{self, OpenOptions},
     io::{self, Write},
     ops::Deref,
     path::PathBuf,
@@ -12,7 +12,7 @@ use crossterm::{
 };
 use scraper::{Html, Selector};
 
-use crate::{AocClient, AocResult, Day, PartError, PartId, YearId};
+use crate::{AocClient, AocResult, Day, PartError, PartId, Problem, YearId};
 
 pub fn upload_answer(year_id: YearId, day: &Day) -> AocResult<()> {
     let in_path = PathBuf::from(format!(
@@ -26,11 +26,13 @@ pub fn upload_answer(year_id: YearId, day: &Day) -> AocResult<()> {
         year_id.folder_name(),
         day.id().folder_name()
     ));
-    let part_id = if out_path.exists() {
+    let part_id = if out_path.exists() && fs::metadata(&out_path)?.len() > 0 {
         PartId::from(2)
     } else {
         PartId::from(1)
     };
+
+    println!("{:?}", part_id);
 
     let part = day.get_part(part_id).ok_or(PartError::Unimplemented)?;
 
@@ -68,6 +70,8 @@ pub fn upload_answer(year_id: YearId, day: &Day) -> AocResult<()> {
             .open(out_path)?;
 
         writeln!(out_file, "{}", answer)?;
+
+        Problem::download(year_id, day.id())?.write_readme(year_id, day.id())?;
     } else if response.starts_with("That's not the right answer") {
         io::stdout()
             .queue(Print(" X ".red()))?

@@ -20,7 +20,6 @@ abdefghi
 <p>In the above diagram, the symbols indicate whether the path exits each square moving up (<code>^</code>), down (<code>v</code>), left (<code>&lt;</code>), or right (<code>&gt;</code>). The location that should get the best signal is still <code>E</code>, and <code>.</code> marks unvisited squares.</p>
 <p>This path reaches the goal in <code><b>31</b></code> steps, the fewest possible.</p>
 <p><b>What is the fewest steps required to move from your current position to the location that should get the best signal?</b></p>
-
 <h2 id="part2">--- Part Two ---</h2><p>As you walk up the hill, you suspect that the Elves will want to turn this into a hiking trail. The beginning isn't very scenic, though; perhaps you can find a better starting point.</p>
 <p>To maximize exercise while hiking, the trail should start as low as possible: elevation <code>a</code>. The goal is still the square marked <code>E</code>. However, the trail should still be direct, taking the fewest steps to reach its goal. So, you'll need to find the shortest path from <b>any square at elevation <code>a</code></b> to the square marked <code>E</code>.</p>
 <p>Again consider the example from above:</p>

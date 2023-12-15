@@ -43,7 +43,6 @@ move 1 from 1 to 2
 </code></pre>
 <p>The Elves just need to know <b>which crate will end up on top of each stack</b>; in this example, the top crates are <code>C</code> in stack 1, <code>M</code> in stack 2, and <code>Z</code> in stack 3, so you should combine these together and give the Elves the message <code><b>CMZ</b></code>.</p>
 <p><b>After the rearrangement procedure completes, what crate ends up on top of each stack?</b></p>
-
 <h2 id="part2">--- Part Two ---</h2><p>As you watch the crane operator expertly rearrange the crates, you notice the process isn't following your prediction.</p>
 <p>Some mud was covering the writing on the side of the crane, and you quickly wipe it away. The crane isn't a CrateMover 9000 - it's a <b><span title="It's way better than the old CrateMover 1006.">CrateMover 9001</span></b>.</p>
 <p>The CrateMover 9001 is notable for many new and exciting features: air conditioning, leather seats, an extra cup holder, and <b>the ability to pick up and move multiple crates at once</b>.</p>

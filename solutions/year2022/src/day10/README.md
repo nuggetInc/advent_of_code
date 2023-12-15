@@ -2,7 +2,7 @@ view the original on <a href=https://adventofcode.com/2022/day/10>adventofcode.c
 <h2>--- Day 10: Cathode-Ray Tube ---</h2><p>You avoid the ropes, plunge into the river, and swim to shore.</p>
 <p>The Elves yell something about meeting back up with them upriver, but the river is too loud to tell exactly what they're saying. They finish crossing the bridge and disappear from view.</p>
 <p>Situations like this must be why the Elves prioritized getting the communication system on your handheld device working. You pull it out of your pack, but the amount of water slowly draining from a big crack in its screen tells you it probably won't be of much immediate use.</p>
-<p><b>Unless</b>, that is, you can design a replacement for the device's video system! It seems to be some kind of <a href="https://en.wikipedia.org/wiki/Cathode-ray_tube" target="_blank">cathode-ray tube</a> screen and simple CPU that are both driven by a precise <b>clock circuit</b>. The clock circuit ticks at a constant rate; each tick is called a <b>cycle</b>.</p>
+<p><b>Unless</b>, that is, you can design a replacement for the device's video system! It seems to be some kind of <a href="https://en.wikipedia.org/wiki/Cathode-ray_tube">cathode-ray tube</a> screen and simple CPU that are both driven by a precise <b>clock circuit</b>. The clock circuit ticks at a constant rate; each tick is called a <b>cycle</b>.</p>
 <p>Start by figuring out the signal being sent by the CPU. The CPU has a single register, <code>X</code>, which starts with the value <code>1</code>. It supports only two instructions:</p>
 <ul>
 <li><code>addx V</code> takes <b>two cycles</b> to complete. <b>After</b> two cycles, the <code>X</code> register is increased by the value <code>V</code>. (<code>V</code> can be negative.)</li>
@@ -182,8 +182,7 @@ noop
 </ul>
 <p>The sum of these signal strengths is <code><b>13140</b></code>.</p>
 <p>Find the signal strength during the 20th, 60th, 100th, 140th, 180th, and 220th cycles. <b>What is the sum of these six signal strengths?</b></p>
-
-<h2 id="part2">--- Part Two ---</h2><p>It seems like the <code>X</code> register controls the horizontal position of a <a target="_blank" href="https://en.wikipedia.org/wiki/Sprite_(computer_graphics)">sprite</a>. Specifically, the sprite is 3 pixels wide, and the <code>X</code> register sets the horizontal position of the <b>middle</b> of that sprite. (In this system, there is no such thing as "vertical position": if the sprite's horizontal position puts its pixels where the CRT is currently drawing, then those pixels will be drawn.)</p>
+<h2 id="part2">--- Part Two ---</h2><p>It seems like the <code>X</code> register controls the horizontal position of a <a href="https://en.wikipedia.org/wiki/Sprite_(computer_graphics)">sprite</a>. Specifically, the sprite is 3 pixels wide, and the <code>X</code> register sets the horizontal position of the <b>middle</b> of that sprite. (In this system, there is no such thing as "vertical position": if the sprite's horizontal position puts its pixels where the CRT is currently drawing, then those pixels will be drawn.)</p>
 <p>You count the pixels on the CRT: 40 wide and 6 high. This CRT screen draws the top row of pixels left-to-right, then the row below that, and so on. The left-most pixel in each row is in position <code>0</code>, and the right-most pixel in each row is in position <code>39</code>.</p>
 <p>Like the CPU, the CRT is tied closely to the clock circuit: the CRT draws <b>a single pixel during each cycle</b>. Representing each pixel of the screen as a <code>#</code>, here are the cycles during which the first and last pixel in each row are drawn:</p>
 <pre><code>Cycle   1 -&gt; <b>#</b>######################################<b>#</b> &lt;- Cycle  40
@@ -193,7 +192,7 @@ Cycle 121 -&gt; <b>#</b>######################################<b>#</b> &lt;- Cyc
 Cycle 161 -&gt; <b>#</b>######################################<b>#</b> &lt;- Cycle 200
 Cycle 201 -&gt; <b>#</b>######################################<b>#</b> &lt;- Cycle 240
 </code></pre>
-<p>So, by <a href="https://en.wikipedia.org/wiki/Racing_the_Beam" target="_blank">carefully</a> <a href="https://www.youtube.com/watch?v=sJFnWZH5FXc" target="_blank"><span title="While you're at it, go watch everything else by Retro Game Mechanics Explained, too.">timing</span></a> the CPU instructions and the CRT drawing operations, you should be able to determine whether the sprite is visible the instant each pixel is drawn. If the sprite is positioned such that one of its three pixels is the pixel currently being drawn, the screen produces a <b>lit</b> pixel (<code>#</code>); otherwise, the screen leaves the pixel <b>dark</b> (<code>.</code>).
+<p>So, by <a href="https://en.wikipedia.org/wiki/Racing_the_Beam">carefully</a> <a href="https://www.youtube.com/watch?v=sJFnWZH5FXc"><span title="While you're at it, go watch everything else by Retro Game Mechanics Explained, too.">timing</span></a> the CPU instructions and the CRT drawing operations, you should be able to determine whether the sprite is visible the instant each pixel is drawn. If the sprite is positioned such that one of its three pixels is the pixel currently being drawn, the screen produces a <b>lit</b> pixel (<code>#</code>); otherwise, the screen leaves the pixel <b>dark</b> (<code>.</code>).
 </p><p>The first few pixels from the larger example above are drawn as follows:</p>
 <pre><code>Sprite position: ###.....................................
 

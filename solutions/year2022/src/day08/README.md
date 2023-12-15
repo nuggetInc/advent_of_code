@@ -1,7 +1,7 @@
 view the original on <a href=https://adventofcode.com/2022/day/8>adventofcode.com</a>
-<h2>--- Day 8: Treetop Tree House ---</h2><p>The expedition comes across a peculiar patch of tall trees all planted carefully in a grid. The Elves explain that a previous expedition planted these trees as a reforestation effort. Now, they're curious if this would be a good location for a <a href="https://en.wikipedia.org/wiki/Tree_house" target="_blank">tree house</a>.</p>
+<h2>--- Day 8: Treetop Tree House ---</h2><p>The expedition comes across a peculiar patch of tall trees all planted carefully in a grid. The Elves explain that a previous expedition planted these trees as a reforestation effort. Now, they're curious if this would be a good location for a <a href="https://en.wikipedia.org/wiki/Tree_house">tree house</a>.</p>
 <p>First, determine whether there is enough tree cover here to keep a tree house <b>hidden</b>. To do this, you need to count the number of trees that are <b>visible from outside the grid</b> when looking directly along a row or column.</p>
-<p>The Elves have already launched a <a href="https://en.wikipedia.org/wiki/Quadcopter" target="_blank">quadcopter</a> to generate a map with the height of each tree (<span title="The Elves have already launched a quadcopter (your puzzle input).">your puzzle input</span>). For example:</p>
+<p>The Elves have already launched a <a href="https://en.wikipedia.org/wiki/Quadcopter">quadcopter</a> to generate a map with the height of each tree (<span title="The Elves have already launched a quadcopter (your puzzle input).">your puzzle input</span>). For example:</p>
 <pre><code>30373
 25512
 65332
@@ -22,10 +22,9 @@ view the original on <a href=https://adventofcode.com/2022/day/8>adventofcode.co
 </ul>
 <p>With 16 trees visible on the edge and another 5 visible in the interior, a total of <code><b>21</b></code> trees are visible in this arrangement.</p>
 <p>Consider your map; <b>how many trees are visible from outside the grid?</b></p>
-
 <h2 id="part2">--- Part Two ---</h2><p>Content with the amount of tree cover available, the Elves just need to know the best spot to build their tree house: they would like to be able to see a lot of <b>trees</b>.</p>
 <p>To measure the viewing distance from a given tree, look up, down, left, and right from that tree; stop if you reach an edge or at the first tree that is the same height or taller than the tree under consideration. (If a tree is right on the edge, at least one of its viewing distances will be zero.)</p>
-<p>The Elves don't care about distant trees taller than those found by the rules above; the proposed tree house has large <a href="https://en.wikipedia.org/wiki/Eaves" target="_blank">eaves</a> to keep it dry, so they wouldn't be able to see higher than the tree house anyway.</p>
+<p>The Elves don't care about distant trees taller than those found by the rules above; the proposed tree house has large <a href="https://en.wikipedia.org/wiki/Eaves">eaves</a> to keep it dry, so they wouldn't be able to see higher than the tree house anyway.</p>
 <p>In the example above, consider the middle <code>5</code> in the second row:</p>
 <pre><code>30373
 25<b>5</b>12

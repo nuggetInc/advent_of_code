@@ -73,7 +73,7 @@ fn parse_input1(input: String) -> Vec<(Value, Value)> {
 fn parse_input2(input: String) -> Vec<Value> {
     let mut values = Vec::new();
 
-    for line in input.split('\n') {
+    for line in input.split_terminator('\n') {
         if line.is_empty() {
             continue;
         }

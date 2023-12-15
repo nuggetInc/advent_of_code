@@ -36,7 +36,6 @@ view the original on <a href=https://adventofcode.com/2022/day/4>adventofcode.co
 </code></pre>
 <p>Some of the pairs have noticed that one of their assignments <b>fully contains</b> the other. For example, <code>2-8</code> fully contains <code>3-7</code>, and <code>6-6</code> is fully contained by <code>4-6</code>. In pairs where one assignment fully contains the other, one Elf in the pair would be exclusively cleaning sections their partner will already be cleaning, so these seem like the most in need of reconsideration. In this example, there are <code><b>2</b></code> such pairs.</p>
 <p><b>In how many assignment pairs does one range fully contain the other?</b></p>
-
 <h2 id="part2">--- Part Two ---</h2><p>It seems like there is still quite a bit of duplicate work planned. Instead, the Elves would <span title="If you like this, you'll *love* axis-aligned bounding box intersection testing.">like</span> to know the number of pairs that <b>overlap at all</b>.</p>
 <p>In the above example, the first two pairs (<code>2-4,6-8</code> and <code>2-3,4-5</code>) don't overlap, while the remaining four pairs (<code>5-7,7-9</code>, <code>2-8,3-7</code>, <code>6-6,4-6</code>, and <code>2-6,4-8</code>) do overlap:</p>
 <ul>

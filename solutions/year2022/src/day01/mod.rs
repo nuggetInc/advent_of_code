@@ -12,7 +12,7 @@ fn part_one(input: String) -> AocResult<u32> {
     let mut highest = 0;
     for inventory in input.split("\n\n") {
         let calories: u32 = inventory
-            .split('\n')
+            .split_terminator('\n')
             .map(|a| a.parse::<u32>().unwrap())
             .sum();
 
@@ -29,7 +29,7 @@ fn part_two(input: String) -> AocResult<u32> {
         .split("\n\n")
         .map(|inventory| {
             inventory
-                .split('\n')
+                .split_terminator('\n')
                 .map(|a| a.parse::<u32>().unwrap())
                 .sum::<u32>()
         })

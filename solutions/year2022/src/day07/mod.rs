@@ -65,7 +65,7 @@ fn parse(input: String) -> Directory {
 
     let mut path: Vec<String> = Vec::new();
 
-    let mut lines = input.split('\n').peekable();
+    let mut lines = input.split_terminator('\n').peekable();
 
     while let Some(line) = lines.next() {
         if line.starts_with("$ cd") {

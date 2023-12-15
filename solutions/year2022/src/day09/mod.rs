@@ -16,7 +16,7 @@ fn part_one(input: String) -> AocResult<usize> {
     let mut set = HashSet::new();
     set.insert(knots[1]);
 
-    for line in input.split('\n') {
+    for line in input.split_terminator('\n') {
         let mut split = line.split(' ');
 
         let direction = match split.next() {
@@ -69,7 +69,7 @@ fn part_two(input: String) -> AocResult<usize> {
     let mut set = HashSet::new();
     set.insert(knots[9]);
 
-    for line in input.split('\n') {
+    for line in input.split_terminator('\n') {
         let mut split = line.split(' ');
 
         let direction = match split.next() {

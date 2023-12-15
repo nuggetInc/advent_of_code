@@ -53,4 +53,23 @@ view the original on <a href=https://adventofcode.com/2023/day/12>adventofcode.c
 </ul>
 <p>Adding all of the possible arrangement counts together produces a total of <code><b>21</b></code> arrangements.</p>
 <p>For each row, count all of the different arrangements of operational and broken springs that meet the given criteria. <b>What is the sum of those counts?</b></p>
+<h2 id="part2">--- Part Two ---</h2><p>As you look out at the field of springs, you feel like there are way more springs than the condition records list. When you examine the records, you discover that they were actually <b>folded up</b> this whole time!</p>
+<p>To <b>unfold the records</b>, on each row, replace the list of spring conditions with five copies of itself (separated by <code>?</code>) and replace the list of contiguous groups of damaged springs with five copies of itself (separated by <code>,</code>).</p>
+<p>So, this row:</p>
+<pre><code>.# 1</code></pre>
+<p>Would become:</p>
+<pre><code>.#?.#?.#?.#?.# 1,1,1,1,1</code></pre>
+<p>The first line of the above example would become:</p>
+<pre><code>???.###????.###????.###????.###????.### 1,1,3,1,1,3,1,1,3,1,1,3,1,1,3</code></pre>
+<p>In the above example, after unfolding, the number of possible arrangements for some rows is now much larger:</p>
+<ul>
+<li><code>???.### 1,1,3</code> - <code><b>1</b></code> arrangement</li>
+<li><code>.??..??...?##. 1,1,3</code> - <code><b>16384</b></code> arrangements</li>
+<li><code>?#?#?#?#?#?#?#? 1,3,1,6</code> - <code><b>1</b></code> arrangement</li>
+<li><code>????.#...#... 4,1,1</code> - <code><b>16</b></code> arrangements</li>
+<li><code>????.######..#####. 1,6,5</code> - <code><b>2500</b></code> arrangements</li>
+<li><code>?###???????? 3,2,1</code> - <code><b>506250</b></code> arrangements</li>
+</ul>
+<p>After unfolding, adding all of the possible arrangement counts together produces <code><b>525152</b></code>.</p>
+<p>Unfold your condition records; <b>what is the new sum of possible arrangement counts?</b></p>
 

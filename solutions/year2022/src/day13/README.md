@@ -102,7 +102,6 @@ view the original on <a href=https://adventofcode.com/2022/day/13>adventofcode.c
 </code></pre>
 <p>What are the indices of the pairs that are already <b>in the right order</b>? (The first pair has index 1, the second pair has index 2, and so on.) In the above example, the pairs in the right order are 1, 2, 4, and 6; the sum of these indices is <code><b>13</b></code>.</p>
 <p>Determine which pairs of packets are already in the right order. <b>What is the sum of the indices of those pairs?</b></p>
-
 <h2 id="part2">--- Part Two ---</h2><p>Now, you just need to put <b>all</b> of the packets in the right order. Disregard the blank lines in your list of received packets.</p>
 <p>The distress signal protocol also requires that you include two additional <b>divider packets</b>:</p>
 <pre><code>[[2]]

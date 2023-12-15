@@ -53,7 +53,6 @@ view the original on <a href=https://adventofcode.com/2023/day/15>adventofcode.c
 </ul>
 <p>In this example, the sum of these results is <code><b>1320</b></code>. Unfortunately, the reindeer has stolen the page containing the expected verification number and is currently running around the facility with it excitedly.</p>
 <p>Run the HASH algorithm on each step in the initialization sequence. <b>What is the sum of the results?</b> (The initialization sequence is one long line; be careful when copy-pasting it.)</p>
-
 <h2 id="part2">--- Part Two ---</h2><p>You convince the reindeer to bring you the page; the page confirms that your HASH algorithm is working.</p>
 <p>The book goes on to describe a series of 256 <b>boxes</b> numbered <code>0</code> through <code>255</code>. The boxes are arranged in a line starting from the point where light enters the facility. The boxes have holes that allow light to pass from one box to the next all the way down the line.</p>
 <pre><code>      +-----+  +-----+         +-----+

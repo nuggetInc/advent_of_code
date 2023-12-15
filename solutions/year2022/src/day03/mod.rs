@@ -13,7 +13,7 @@ pub fn day() -> Day {
 fn part_one(input: String) -> AocResult<u32> {
     let mut total = 0;
 
-    for line in input.split('\n') {
+    for line in input.split_terminator('\n') {
         let (first, last) = line.split_at(line.len() / 2);
         let first: HashSet<char> = first.chars().collect();
         let second: HashSet<char> = last.chars().collect();
@@ -32,7 +32,7 @@ fn part_one(input: String) -> AocResult<u32> {
 fn part_two(input: String) -> AocResult<u32> {
     let mut total = 0;
 
-    let mut split = input.split('\n');
+    let mut split = input.split_terminator('\n');
 
     while let (Some(first), Some(second), Some(third)) = (split.next(), split.next(), split.next())
     {

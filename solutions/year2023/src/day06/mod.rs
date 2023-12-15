@@ -10,7 +10,7 @@ pub fn day() -> Day {
 }
 
 fn parse(input: String) -> Vec<(u64, u64)> {
-    let mut lines = input.split('\n');
+    let mut lines = input.split_terminator('\n');
     let time = lines.next().unwrap();
     let distance = lines.next().unwrap();
 

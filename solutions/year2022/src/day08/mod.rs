@@ -10,7 +10,7 @@ pub fn day() -> Day {
 
 fn parse(input: String) -> Grid {
     let grid: Vec<Vec<u8>> = input
-        .split('\n')
+        .split_terminator('\n')
         .map(|s| s.chars().map(|c| c.to_digit(10).unwrap() as u8).collect())
         .collect();
 
@@ -169,7 +169,7 @@ impl Grid {
 impl From<&str> for Grid {
     fn from(value: &str) -> Self {
         let grid: Vec<Vec<u8>> = value
-            .split('\n')
+            .split_terminator('\n')
             .map(|s| s.chars().map(|c| c.to_digit(10).unwrap() as u8).collect())
             .collect();
 

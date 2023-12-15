@@ -11,7 +11,7 @@ pub fn day() -> Day {
 fn part_one(input: String) -> AocResult<i32> {
     let mut total = 0;
 
-    for line in input.split('\n') {
+    for line in input.split_terminator('\n') {
         let (first, second) = line.split_once(',').unwrap();
         let (first_start, first_end) = first.split_once('-').unwrap();
         let (second_start, second_end) = second.split_once('-').unwrap();
@@ -37,7 +37,7 @@ fn part_one(input: String) -> AocResult<i32> {
 fn part_two(input: String) -> AocResult<i32> {
     let mut total = 0;
 
-    for line in input.split('\n') {
+    for line in input.split_terminator('\n') {
         let (first, second) = line.split_once(',').unwrap();
         let (first_start, first_end) = first.split_once('-').unwrap();
         let (second_start, second_end) = second.split_once('-').unwrap();

@@ -1,9 +1,9 @@
 view the original on <a href=https://adventofcode.com/2023/day/5>adventofcode.com</a>
 <h2>--- Day 5: If You Give A Seed A Fertilizer ---</h2><p>You take the boat and find the gardener right where you were told he would be: managing a giant "garden" that looks more to you like a farm.</p>
 <p>"A water source? Island Island <b>is</b> the water source!" You point out that Snow Island isn't receiving any water.</p>
-<p>"Oh, we had to stop the water because we <b>ran out of sand</b> to <a href="https://en.wikipedia.org/wiki/Sand_filter" target="_blank">filter</a> it with! Can't make snow with dirty water. Don't worry, I'm sure we'll get more sand soon; we only turned off the water a few days... weeks... oh no." His face sinks into a look of horrified realization.</p>
+<p>"Oh, we had to stop the water because we <b>ran out of sand</b> to <a href="https://en.wikipedia.org/wiki/Sand_filter">filter</a> it with! Can't make snow with dirty water. Don't worry, I'm sure we'll get more sand soon; we only turned off the water a few days... weeks... oh no." His face sinks into a look of horrified realization.</p>
 <p>"I've been so busy making sure everyone here has food that I completely forgot to check why we stopped getting more sand! There's a ferry leaving soon that is headed over in that direction - it's much faster than your boat. Could you please go check it out?"</p>
-<p>You barely have time to agree to this request when he brings up another. "While you wait for the ferry, maybe you can help us with our <b>food production problem</b>. The latest Island Island <a href="https://en.wikipedia.org/wiki/Almanac" target="_blank">Almanac</a> just arrived and we're having trouble making sense of it."</p>
+<p>You barely have time to agree to this request when he brings up another. "While you wait for the ferry, maybe you can help us with our <b>food production problem</b>. The latest Island Island <a href="https://en.wikipedia.org/wiki/Almanac">Almanac</a> just arrived and we're having trouble making sense of it."</p>
 <p>The almanac (your puzzle input) lists all of the seeds that need to be planted. It also lists what type of soil to use with each kind of seed, what type of fertilizer to use with each kind of soil, what type of water to use with each kind of fertilizer, and so on. Every type of seed, soil, fertilizer and so on is identified with a number, but numbers are reused by each category - that is, soil <code>123</code> and fertilizer <code>123</code> aren't necessarily related to each other.</p>
 <p>For example:</p>
 <pre><code>seeds: 79 14 55 13
@@ -81,7 +81,6 @@ humidity-to-location map:
 </ul>
 <p>So, the lowest location number in this example is <code><b>35</b></code>.</p>
 <p><b>What is the lowest location number that corresponds to any of the initial seed numbers?</b></p>
-
 <h2 id="part2">--- Part Two ---</h2><p>Everyone will starve if you only plant such a small number of seeds. Re-reading the almanac, it looks like the <code>seeds:</code> line actually describes <b>ranges of seed numbers</b>.</p>
 <p>The values on the initial <code>seeds:</code> line come in pairs. Within each pair, the first value is the <b>start</b> of the range and the second value is the <b>length</b> of the range. So, in the first line of the example above:</p>
 <pre><code>seeds: 79 14 55 13</code></pre>

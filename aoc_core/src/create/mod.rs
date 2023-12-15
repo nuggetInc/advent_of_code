@@ -1,26 +1,26 @@
 use std::fs;
 
-use crate::{download_input, download_problem, AocResult, DayId, YearId};
+use crate::{download_input, AocResult, DayId, Problem, YearId};
 
-pub fn create_day(year: YearId, day: DayId) -> AocResult<()> {
+pub fn create_day(year_id: YearId, day_id: DayId) -> AocResult<()> {
     fs::create_dir(format!(
         "solutions/{}/src/{}",
-        year.folder_name(),
-        day.folder_name()
+        year_id.folder_name(),
+        day_id.folder_name()
     ))?;
 
     fs::write(
         format!(
             "solutions/{}/src/{}/mod.rs",
-            year.folder_name(),
-            day.folder_name()
+            year_id.folder_name(),
+            day_id.folder_name()
         ),
-        format!(include_str!("day.txt"), *day),
+        format!(include_str!("day.txt"), *day_id),
     )?;
 
-    let days = fs::read_to_string(format!("solutions/{}/src/days.txt", year.folder_name()))?;
+    let days = fs::read_to_string(format!("solutions/{}/src/days.txt", year_id.folder_name()))?;
     let mut days: Vec<_> = days.split_terminator('\n').map(str::to_owned).collect();
-    days.push(day.folder_name());
+    days.push(day_id.folder_name());
     days.sort();
 
     let mut mods = String::new();
@@ -31,17 +31,17 @@ pub fn create_day(year: YearId, day: DayId) -> AocResult<()> {
     }
 
     fs::write(
-        format!("solutions/{}/src/days.txt", year.folder_name()),
+        format!("solutions/{}/src/days.txt", year_id.folder_name()),
         days.join("\n"),
     )?;
 
     fs::write(
-        format!("solutions/{}/src/lib.rs", year.folder_name()),
+        format!("solutions/{}/src/lib.rs", year_id.folder_name()),
         format!(include_str!("year.txt"), mods, add_days),
     )?;
 
-    download_input(year, day)?;
-    download_problem(year, day)?;
+    download_input(year_id, day_id)?;
+    Problem::download(year_id, day_id)?.write_readme(year_id, day_id)?;
 
     Ok(())
 }

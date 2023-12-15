@@ -1,5 +1,5 @@
 view the original on <a href=https://adventofcode.com/2022/day/11>adventofcode.com</a>
-<h2>--- Day 11: Monkey in the Middle ---</h2><p>As you finally start making your way upriver, you realize your pack is much lighter than you remember. Just then, one of the items from your pack goes flying overhead. Monkeys are playing <a href="https://en.wikipedia.org/wiki/Keep_away" target="_blank">Keep Away</a> with your missing things!</p>
+<h2>--- Day 11: Monkey in the Middle ---</h2><p>As you finally start making your way upriver, you realize your pack is much lighter than you remember. Just then, one of the items from your pack goes flying overhead. Monkeys are playing <a href="https://en.wikipedia.org/wiki/Keep_away">Keep Away</a> with your missing things!</p>
 <p>To get your stuff back, you need to be able to predict where the monkeys will throw your items. After some careful observation, you realize the monkeys operate based on <b>how worried you are about each item</b>.</p>
 <p>You take some notes (your puzzle input) on the items each monkey currently has, how worried you are about those items, and how the monkey makes decisions based on your worry level. For example:</p>
 <pre><code>Monkey 0:
@@ -206,7 +206,6 @@ Monkey 2 inspected items 7 times.
 </code></pre>
 <p>In this example, the two most active monkeys inspected items 101 and 105 times. The level of <b>monkey business</b> in this situation can be found by multiplying these together: <code><b>10605</b></code>.</p>
 <p>Figure out which monkeys to chase by counting how many items they inspect over 20 rounds. <b>What is the level of monkey business after 20 rounds of stuff-slinging simian shenanigans?</b></p>
-
 <h2 id="part2">--- Part Two ---</h2><p>You're worried you might not ever get your items back. So worried, in fact, that your relief that a monkey's inspection didn't damage an item <b>no longer causes your worry level to be divided by three</b>.</p>
 <p>Unfortunately, that relief was all that was keeping your worry levels from reaching <b>ridiculous levels</b>. You'll need to <b>find another way to keep your worry levels manageable</b>.</p>
 <p>At this rate, you might be putting up with these monkeys for a <b>very long time</b> - possibly <b><code>10000</code> rounds</b>!</p>

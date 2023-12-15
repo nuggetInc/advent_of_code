@@ -31,8 +31,7 @@ Distance:  9  40  200
 <p>In the third race, you could hold the button for at least <code>11</code> milliseconds and no more than <code>19</code> milliseconds and still beat the record, a total of <code><b>9</b></code> ways you could win.</p>
 <p>To see how much margin of error you have, determine the <b>number of ways you can beat the record</b> in each race; in this example, if you multiply these values together, you get <code><b>288</b></code> (<code>4</code> * <code>8</code> * <code>9</code>).</p>
 <p>Determine the number of ways you could beat the record in each race. <b>What do you get if you multiply these numbers together?</b></p>
-
-<h2 id="part2">--- Part Two ---</h2><p>As the race is about to start, you realize the piece of paper with race times and record distances you got earlier actually just has <span title="Keming!">very bad</span> <a target="_blank" href="https://en.wikipedia.org/wiki/Kerning">kerning</a>. There's really <b>only one race</b> - ignore the spaces between the numbers on each line.</p>
+<h2 id="part2">--- Part Two ---</h2><p>As the race is about to start, you realize the piece of paper with race times and record distances you got earlier actually just has <span title="Keming!">very bad</span> <a href="https://en.wikipedia.org/wiki/Kerning">kerning</a>. There's really <b>only one race</b> - ignore the spaces between the numbers on each line.</p>
 <p>So, the example from before:</p>
 <pre><code>Time:      7  15   30
 Distance:  9  40  200

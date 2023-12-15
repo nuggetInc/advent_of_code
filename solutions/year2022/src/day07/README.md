@@ -74,7 +74,6 @@ $ ls
 </ul>
 <p>To begin, find all of the directories with a total size of <b>at most 100000</b>, then calculate the sum of their total sizes. In the example above, these directories are <code>a</code> and <code>e</code>; the sum of their total sizes is <code><b>95437</b></code> (94853 + 584). (As in this example, this process can count files more than once!)</p>
 <p>Find all of the directories with a total size of at most 100000. <b>What is the sum of the total sizes of those directories?</b></p>
-
 <h2 id="part2">--- Part Two ---</h2><p>Now, you're ready to choose a directory to delete.</p>
 <p>The total disk space available to the filesystem is <code><b>70000000</b></code>. To run the update, you need unused space of at least <code><b>30000000</b></code>. You need to find a directory you can delete that will <b>free up enough space</b> to run the update.</p>
 <p>In the example above, the total size of the outermost directory (and thus the total amount of used space) is <code>48381165</code>; this means that the size of the <b>unused</b> space must currently be <code>21618835</code>, which isn't quite the <code>30000000</code> required by the update. Therefore, the update still requires a directory with total size of at least <code>8381165</code> to be deleted before it can run.</p>
