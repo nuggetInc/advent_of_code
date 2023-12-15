@@ -7,8 +7,7 @@ use std::{
 };
 
 use aoc_core::{
-    create_day, download_input, upload_answer, AocResult, DayError, DayId, Problem, YearError,
-    YearId,
+    create_day, upload_answer, AocResult, DayError, DayId, Problem, ProblemInput, YearError, YearId,
 };
 use crossterm::{
     style::{Print, Stylize},
@@ -74,7 +73,8 @@ fn execute_command(mut args: VecDeque<String>) -> AocResult<()> {
             Command::Run => run(year_id, Some(day_id))?,
             Command::Create => create_day(year_id, day_id)?,
             Command::Download => {
-                download_input(year_id, day_id)?;
+                ProblemInput::download(year_id, day_id)?.write(year_id, day_id)?;
+
                 let problem = Problem::download(year_id, day_id)?;
                 problem.write_readme(year_id, day_id)?;
                 problem.write_out_file(year_id, day_id)?;

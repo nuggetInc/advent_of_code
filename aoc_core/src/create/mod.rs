@@ -1,6 +1,6 @@
 use std::fs;
 
-use crate::{download_input, AocResult, DayId, Problem, YearId};
+use crate::{AocResult, DayId, Problem, ProblemInput, YearId};
 
 pub fn create_day(year_id: YearId, day_id: DayId) -> AocResult<()> {
     fs::create_dir(format!(
@@ -40,7 +40,7 @@ pub fn create_day(year_id: YearId, day_id: DayId) -> AocResult<()> {
         format!(include_str!("year.txt"), mods, add_days),
     )?;
 
-    download_input(year_id, day_id)?;
+    ProblemInput::download(year_id, day_id)?.write(year_id, day_id)?;
     Problem::download(year_id, day_id)?.write_readme(year_id, day_id)?;
 
     Ok(())

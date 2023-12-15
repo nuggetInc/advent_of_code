@@ -1,38 +1,41 @@
 use std::{
     fs::{self, File},
-    io::Write,
+    io::{self, Write},
     path::PathBuf,
 };
 
 use scraper::{Html, Selector};
 
-use crate::{AocClient, AocResult, DayId, YearId};
+use crate::{AocClient, DayId, YearId};
 
-pub fn download_input(year: YearId, day: DayId) -> AocResult<()> {
-    let client = AocClient::default();
+pub struct ProblemInput(String);
 
-    let url = format!("https://adventofcode.com/{}/day/{}/input", *year, *day);
-    let text = client.get(url)?.text()?;
+impl ProblemInput {
+    pub fn download(year_id: YearId, day_id: DayId) -> reqwest::Result<ProblemInput> {
+        let client = AocClient::default();
 
-    let files_dir = PathBuf::from(format!(
-        "solutions/{}/src/{}/files",
-        year.folder_name(),
-        day.folder_name()
-    ));
-    if !files_dir.exists() {
-        fs::create_dir(files_dir)?;
+        let url = format!(
+            "https://adventofcode.com/{}/day/{}/input",
+            *year_id, *day_id
+        );
+        let text = client.get(url)?.text()?;
+
+        Ok(Self(text))
     }
 
-    fs::write(
-        format!(
-            "solutions/{}/src/{}/files/input.in",
-            year.folder_name(),
-            day.folder_name()
-        ),
-        text,
-    )?;
+    pub fn write(&self, year_id: YearId, day_id: DayId) -> io::Result<()> {
+        let mut path = PathBuf::from(format!(
+            "solutions/{}/src/{}/files",
+            year_id.folder_name(),
+            day_id.folder_name()
+        ));
+        if !path.exists() {
+            fs::create_dir(&path)?;
+        }
 
-    Ok(())
+        path.set_file_name("input.in");
+        fs::write(path, &self.0)
+    }
 }
 
 pub struct Problem {
@@ -41,22 +44,15 @@ pub struct Problem {
 }
 
 impl Problem {
-    fn new(description: String, answers: Vec<String>) -> Self {
-        Self {
-            description,
-            answers,
-        }
-    }
-
-    pub fn download(year_id: YearId, day_id: DayId) -> AocResult<Self> {
+    pub fn download(year_id: YearId, day_id: DayId) -> reqwest::Result<Problem> {
         let client = AocClient::default();
 
         let url = format!("https://adventofcode.com/{}/day/{}", *year_id, *day_id);
         let text = client.get(&url)?.text()?;
 
         let document = Html::parse_document(&text);
-        let articles_selector = Selector::parse("body > main > article")?;
-        let p_selector = Selector::parse("body > main > p")?;
+        let articles_selector = Selector::parse("body > main > article").unwrap();
+        let p_selector = Selector::parse("body > main > p").unwrap();
 
         let mut description = format!(
             "view the original on <a href={}>adventofcode.com</a>\n",
@@ -89,30 +85,33 @@ impl Problem {
             }
         }
 
-        Ok(Problem::new(description, answers))
+        Ok(Self {
+            description,
+            answers,
+        })
     }
 
-    pub fn write_readme(&self, year_id: YearId, day_id: DayId) -> AocResult<()> {
+    pub fn write_readme(&self, year_id: YearId, day_id: DayId) -> io::Result<()> {
         let mut file = File::create(format!(
             "solutions/{}/src/{}/README.md",
             year_id.folder_name(),
             day_id.folder_name()
         ))?;
 
-        writeln!(file, "{}", self.description)?;
-
-        Ok(())
+        writeln!(file, "{}", self.description)
     }
 
-    pub fn write_out_file(&self, year_id: YearId, day_id: DayId) -> AocResult<()> {
+    pub fn write_out_file(&self, year_id: YearId, day_id: DayId) -> io::Result<()> {
+        if self.answers.is_empty() {
+            return Ok(());
+        }
+
         let mut file = File::create(format!(
             "solutions/{}/src/{}/files/input.out",
             year_id.folder_name(),
             day_id.folder_name()
         ))?;
 
-        writeln!(file, "{}", self.answers.join("\n"))?;
-
-        Ok(())
+        writeln!(file, "{}", self.answers.join("\n"))
     }
 }
