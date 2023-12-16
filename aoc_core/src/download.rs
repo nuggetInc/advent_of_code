@@ -25,7 +25,7 @@ impl ProblemInput {
 
     pub fn write(&self, year_id: YearId, day_id: DayId) -> io::Result<()> {
         let mut path = PathBuf::from(format!(
-            "solutions/{}/src/{}/files",
+            "solutions/{}/src/{}/files/",
             year_id.folder_name(),
             day_id.folder_name()
         ));
@@ -33,7 +33,7 @@ impl ProblemInput {
             fs::create_dir(&path)?;
         }
 
-        path.set_file_name("input.in");
+        path.push("input.in");
         fs::write(path, &self.0)
     }
 }

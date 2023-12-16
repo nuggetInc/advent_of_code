@@ -32,8 +32,6 @@ pub fn upload_answer(year_id: YearId, day: &Day) -> AocResult<()> {
         PartId::from(1)
     };
 
-    println!("{:?}", part_id);
-
     let part = day.get_part(part_id).ok_or(PartError::Unimplemented)?;
 
     let answer = part.run(&in_path, None)?.answer();
