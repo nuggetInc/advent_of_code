@@ -1,4 +1,7 @@
-use std::collections::VecDeque;
+use std::{
+    collections::VecDeque,
+    ops::{Index, IndexMut},
+};
 
 use aoc_core::{AocResult, Day};
 use itertools::Itertools;
@@ -17,334 +20,158 @@ fn parse(input: String) -> Map<i32> {
 
     let grid = input
         .split_terminator('\n')
-        .map(|line| {
+        .flat_map(|line| {
             width = line.len();
-            line.chars()
-                .map(|char| char.to_digit(10).unwrap() as i32)
-                .collect()
+            line.chars().map(|char| char.to_digit(10).unwrap() as i32)
         })
         .collect_vec();
 
-    let height = grid.len();
-
-    Map::new(grid, width, height)
+    Map::new(grid, width)
 }
 
 fn part_one(map: Map<i32>) -> AocResult<i32> {
-    let vert_grid = vec![vec![None::<i32>; map.width]; map.height];
-    let mut vert_map = Map::new(vert_grid, map.width, map.height);
-
-    let hori_grid = vec![vec![None::<i32>; map.width]; map.height];
-    let mut hori_map = Map::new(hori_grid, map.width, map.height);
-
-    *vert_map.get_mut(Position::new(0, 0)).unwrap() = Some(0);
-    *hori_map.get_mut(Position::new(0, 0)).unwrap() = Some(0);
-
-    let mut queue = VecDeque::new();
-    for delta in 1..=3 {
-        queue.push_back((Position::new(0, delta), Axis::Vertical));
-        queue.push_back((Position::new(delta, 0), Axis::Horizontal));
-    }
-
-    while let Some((pos, axis)) = queue.pop_front() {
-        let mut min = match axis {
-            Axis::Vertical => *vert_map.get(pos).unwrap(),
-            Axis::Horizontal => *hori_map.get(pos).unwrap(),
-        };
-
-        match axis {
-            Axis::Vertical => {
-                for dir in [Direction::Up, Direction::Down] {
-                    for delta in 1..=3 {
-                        let Some(loss) = map
-                            .position(pos, dir, delta)
-                            .and_then(|other_pos| hori_map.get(other_pos))
-                        else {
-                            break;
-                        };
-
-                        let Some(loss) = loss else {
-                            continue;
-                        };
-
-                        let mut value = loss + map.get(pos).unwrap();
-                        for delta in 1..delta {
-                            let Some(loss) = map
-                                .position(pos, dir, delta)
-                                .and_then(|other_pos| map.get(other_pos))
-                            else {
-                                continue;
-                            };
-
-                            value += loss;
-                        }
-
-                        if value < min.unwrap_or(i32::MAX) {
-                            min = Some(value);
-                        }
-                    }
-                }
-
-                let loss = vert_map.get_mut(pos).unwrap();
-
-                if min.eq(loss) {
-                    continue;
-                }
-
-                *loss = min;
-
-                for dir in [Direction::Left, Direction::Right] {
-                    for delta in 1..=3 {
-                        let Some(next_pos) = map.position(pos, dir, delta) else {
-                            continue;
-                        };
-
-                        queue.push_back((next_pos, Axis::Horizontal));
-                    }
-                }
-            }
-            Axis::Horizontal => {
-                for dir in [Direction::Left, Direction::Right] {
-                    for delta in 1..=3 {
-                        let Some(loss) = map
-                            .position(pos, dir, delta)
-                            .and_then(|other_pos| vert_map.get(other_pos))
-                        else {
-                            break;
-                        };
-
-                        let Some(loss) = loss else {
-                            continue;
-                        };
-
-                        let mut value = loss + map.get(pos).unwrap();
-                        for delta in 1..delta {
-                            let Some(loss) = map
-                                .position(pos, dir, delta)
-                                .and_then(|other_pos| map.get(other_pos))
-                            else {
-                                continue;
-                            };
-
-                            value += loss;
-                        }
-
-                        if value < min.unwrap_or(i32::MAX) {
-                            min = Some(value);
-                        }
-                    }
-                }
-
-                let loss = hori_map.get_mut(pos).unwrap();
-
-                if min.eq(loss) {
-                    continue;
-                }
-
-                *loss = min;
-
-                for dir in [Direction::Up, Direction::Down] {
-                    for delta in 1..=3 {
-                        let Some(next_pos) = map.position(pos, dir, delta) else {
-                            continue;
-                        };
-
-                        queue.push_back((next_pos, Axis::Vertical));
-                    }
-                }
-            }
-        }
-    }
-
-    let end = Position::new(map.width - 1, map.height - 1);
-    if let (Some(Some(vert)), Some(Some(hori))) = (vert_map.get(end), hori_map.get(end)) {
-        Ok(*vert.min(hori))
-    } else {
-        unreachable!();
-    }
+    Ok(calculate_heat_loss(&map, 1, 3))
 }
 
 fn part_two(map: Map<i32>) -> AocResult<i32> {
-    let vert_grid = vec![vec![None::<i32>; map.width]; map.height];
-    let mut vert_map = Map::new(vert_grid, map.width, map.height);
+    Ok(calculate_heat_loss(&map, 4, 10))
+}
 
-    let hori_grid = vec![vec![None::<i32>; map.width]; map.height];
-    let mut hori_map = Map::new(hori_grid, map.width, map.height);
+fn calculate_heat_loss(map: &Map<i32>, cart_min: usize, cart_max: usize) -> i32 {
+    let vert_grid = vec![None::<i32>; map.grid.len()];
+    let mut vert_map = Map::new(vert_grid, map.grid.len());
 
-    *vert_map.get_mut(Position::new(0, 0)).unwrap() = Some(0);
-    *hori_map.get_mut(Position::new(0, 0)).unwrap() = Some(0);
+    let hori_grid = vec![None::<i32>; map.grid.len()];
+    let mut hori_map = Map::new(hori_grid, map.grid.len());
+
+    let start = map.start();
+    vert_map[start] = Some(0);
+    hori_map[start] = Some(0);
 
     let mut queue = VecDeque::new();
-    for delta in 4..=10 {
-        queue.push_back((Position::new(0, delta), Axis::Vertical));
-        queue.push_back((Position::new(delta, 0), Axis::Horizontal));
-    }
+    queue.push_back((start, Axis::Vertical));
+    queue.push_back((start, Axis::Horizontal));
 
     while let Some((pos, axis)) = queue.pop_front() {
-        let mut min = match axis {
-            Axis::Vertical => *vert_map.get(pos).unwrap(),
-            Axis::Horizontal => *hori_map.get(pos).unwrap(),
-        };
-
         match axis {
             Axis::Vertical => {
-                for dir in [Direction::Up, Direction::Down] {
-                    for delta in 4..=10 {
-                        let Some(loss) = map
-                            .position(pos, dir, delta)
-                            .and_then(|other_pos| hori_map.get(other_pos))
-                        else {
+                let loss = vert_map[pos];
+
+                for dir in [Direction::Left, Direction::Right] {
+                    let mut heat_loss = 0;
+
+                    for delta in 1..cart_min {
+                        let Some(next_pos) = map.position(pos, dir, delta) else {
                             break;
                         };
 
-                        let Some(loss) = loss else {
-                            continue;
-                        };
-
-                        let mut value = loss + map.get(pos).unwrap();
-                        for delta in 1..delta {
-                            let Some(loss) = map
-                                .position(pos, dir, delta)
-                                .and_then(|other_pos| map.get(other_pos))
-                            else {
-                                continue;
-                            };
-
-                            value += loss;
-                        }
-
-                        if value < min.unwrap_or(i32::MAX) {
-                            min = Some(value);
-                        }
+                        heat_loss += map[next_pos];
                     }
-                }
 
-                let loss = vert_map.get_mut(pos).unwrap();
-
-                if min.eq(loss) {
-                    continue;
-                }
-
-                *loss = min;
-
-                for dir in [Direction::Left, Direction::Right] {
-                    for delta in 4..=10 {
+                    for delta in cart_min..=cart_max {
                         let Some(next_pos) = map.position(pos, dir, delta) else {
-                            continue;
+                            break;
                         };
 
-                        queue.push_back((next_pos, Axis::Horizontal));
+                        heat_loss += map[next_pos];
+
+                        if loss.unwrap() + heat_loss < hori_map[next_pos].unwrap_or(i32::MAX) {
+                            hori_map[next_pos] = Some(loss.unwrap() + heat_loss);
+                            queue.push_back((next_pos, Axis::Horizontal));
+                        }
                     }
                 }
             }
             Axis::Horizontal => {
-                for dir in [Direction::Left, Direction::Right] {
-                    for delta in 4..=10 {
-                        let Some(loss) = map
-                            .position(pos, dir, delta)
-                            .and_then(|other_pos| vert_map.get(other_pos))
-                        else {
+                let loss = hori_map[pos];
+
+                for dir in [Direction::Up, Direction::Down] {
+                    let mut heat_loss = 0;
+
+                    for delta in 1..cart_min {
+                        let Some(next_pos) = map.position(pos, dir, delta) else {
                             break;
                         };
 
-                        let Some(loss) = loss else {
-                            continue;
-                        };
-
-                        let mut value = loss + map.get(pos).unwrap();
-                        for delta in 1..delta {
-                            let Some(loss) = map
-                                .position(pos, dir, delta)
-                                .and_then(|other_pos| map.get(other_pos))
-                            else {
-                                continue;
-                            };
-
-                            value += loss;
-                        }
-
-                        if value < min.unwrap_or(i32::MAX) {
-                            min = Some(value);
-                        }
+                        heat_loss += map[next_pos];
                     }
-                }
 
-                let loss = hori_map.get_mut(pos).unwrap();
-
-                if min.eq(loss) {
-                    continue;
-                }
-
-                *loss = min;
-
-                for dir in [Direction::Up, Direction::Down] {
-                    for delta in 4..=10 {
+                    for delta in cart_min..=cart_max {
                         let Some(next_pos) = map.position(pos, dir, delta) else {
-                            continue;
+                            break;
                         };
 
-                        queue.push_back((next_pos, Axis::Vertical));
+                        heat_loss += map[next_pos];
+
+                        if loss.unwrap() + heat_loss < vert_map[next_pos].unwrap_or(i32::MAX) {
+                            vert_map[next_pos] = Some(loss.unwrap() + heat_loss);
+                            queue.push_back((next_pos, Axis::Vertical));
+                        }
                     }
                 }
             }
-        }
+        };
     }
 
-    let end = Position::new(map.width - 1, map.height - 1);
-    if let (Some(Some(vert)), Some(Some(hori))) = (vert_map.get(end), hori_map.get(end)) {
-        Ok(*vert.min(hori))
-    } else {
-        unreachable!();
-    }
+    let end = map.end();
+    vert_map[end].unwrap().min(hori_map[end].unwrap())
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 struct Position {
-    x: usize,
-    y: usize,
-}
-
-impl Position {
-    fn new(x: usize, y: usize) -> Self {
-        Self { x, y }
-    }
+    index: usize,
 }
 
 struct Map<T> {
-    grid: Vec<Vec<T>>,
+    grid: Vec<T>,
     width: usize,
-    height: usize,
 }
 
 impl<T> Map<T> {
-    fn new(grid: Vec<Vec<T>>, width: usize, height: usize) -> Self {
-        Self {
-            grid,
-            width,
-            height,
+    fn new(grid: Vec<T>, width: usize) -> Self {
+        Self { grid, width }
+    }
+
+    fn start(&self) -> Position {
+        Position { index: 0 }
+    }
+
+    fn end(&self) -> Position {
+        Position {
+            index: self.grid.len() - 1,
         }
-    }
-
-    fn get(&self, pos: Position) -> Option<&T> {
-        self.grid.get(pos.y)?.get(pos.x)
-    }
-
-    fn get_mut(&mut self, pos: Position) -> Option<&mut T> {
-        self.grid.get_mut(pos.y)?.get_mut(pos.x)
     }
 
     fn position(&self, pos: Position, dir: Direction, delta: usize) -> Option<Position> {
         match dir {
-            Direction::Up if pos.y >= delta => Some(Position::new(pos.x, pos.y - delta)),
-            Direction::Down if pos.y < self.height - delta => {
-                Some(Position::new(pos.x, pos.y + delta))
-            }
-            Direction::Left if pos.x >= delta => Some(Position::new(pos.x - delta, pos.y)),
-            Direction::Right if pos.x < self.width - delta => {
-                Some(Position::new(pos.x + delta, pos.y))
-            }
+            Direction::Up if pos.index >= delta * self.width => Some(Position {
+                index: pos.index - delta * self.width,
+            }),
+            Direction::Down if pos.index < self.grid.len() - delta * self.width => Some(Position {
+                index: pos.index + delta * self.width,
+            }),
+            Direction::Left if pos.index % self.width >= delta => Some(Position {
+                index: pos.index - delta,
+            }),
+            Direction::Right if pos.index % self.width < self.width - delta => Some(Position {
+                index: pos.index + delta,
+            }),
             _ => None,
         }
+    }
+}
+
+impl<T> Index<Position> for Map<T> {
+    type Output = T;
+
+    fn index(&self, index: Position) -> &Self::Output {
+        &self.grid[index.index]
+    }
+}
+
+impl<T> IndexMut<Position> for Map<T> {
+    fn index_mut(&mut self, index: Position) -> &mut Self::Output {
+        &mut self.grid[index.index]
     }
 }
 
