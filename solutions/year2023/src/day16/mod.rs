@@ -17,37 +17,39 @@ fn parse(input: String) -> Map {
 
     let grid = input
         .split_terminator('\n')
-        .map(|line| {
+        .flat_map(|line| {
             width = line.len();
-            line.chars().map(|char| Tile::from(char)).collect()
+            line.chars().map(|char| Tile::from(char))
         })
         .collect_vec();
 
-    let height = grid.len();
+    let height = grid.len() / width;
 
     Map::new(grid, width, height)
 }
 
 fn part_one(map: Map) -> AocResult<usize> {
-    Ok(map.energized(Position::new(0, 0), Direction::Right))
+    Ok(map.energized(map.new_position(0, 0), Direction::Right))
 }
 
 fn part_two(map: Map) -> AocResult<usize> {
     let mut max = 0;
 
     for x in 0..map.width {
-        max = map.energized(Position::new(x, 0), Direction::Down).max(max);
         max = map
-            .energized(Position::new(x, map.height - 1), Direction::Up)
+            .energized(map.new_position(x, 0), Direction::Down)
+            .max(max);
+        max = map
+            .energized(map.new_position(x, map.height - 1), Direction::Up)
             .max(max);
     }
 
     for y in 0..map.height {
         max = map
-            .energized(Position::new(0, y), Direction::Right)
+            .energized(map.new_position(0, y), Direction::Right)
             .max(max);
         max = map
-            .energized(Position::new(map.width - 1, y), Direction::Left)
+            .energized(map.new_position(map.width - 1, y), Direction::Left)
             .max(max);
     }
 
@@ -56,14 +58,7 @@ fn part_two(map: Map) -> AocResult<usize> {
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 struct Position {
-    x: usize,
-    y: usize,
-}
-
-impl Position {
-    fn new(x: usize, y: usize) -> Self {
-        Self { x, y }
-    }
+    index: usize,
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
@@ -75,13 +70,13 @@ enum Direction {
 }
 
 struct Map {
-    grid: Vec<Vec<Tile>>,
+    grid: Vec<Tile>,
     width: usize,
     height: usize,
 }
 
 impl Map {
-    fn new(grid: Vec<Vec<Tile>>, width: usize, height: usize) -> Self {
+    fn new(grid: Vec<Tile>, width: usize, height: usize) -> Self {
         Self {
             grid,
             width,
@@ -89,16 +84,30 @@ impl Map {
         }
     }
 
+    fn new_position(&self, x: usize, y: usize) -> Position {
+        Position {
+            index: x + y * self.width,
+        }
+    }
+
     fn get(&self, position: Position) -> Tile {
-        self.grid[position.y][position.x]
+        self.grid[position.index]
     }
 
     fn try_move(&self, pos: Position, dir: Direction) -> Option<Position> {
         match dir {
-            Direction::Up if pos.y > 0 => Some(Position::new(pos.x, pos.y - 1)),
-            Direction::Down if pos.y < self.height - 1 => Some(Position::new(pos.x, pos.y + 1)),
-            Direction::Left if pos.x > 0 => Some(Position::new(pos.x - 1, pos.y)),
-            Direction::Right if pos.x < self.width - 1 => Some(Position::new(pos.x + 1, pos.y)),
+            Direction::Up if pos.index / self.width > 0 => Some(Position {
+                index: pos.index - self.width,
+            }),
+            Direction::Down if pos.index / self.width < self.height - 1 => Some(Position {
+                index: pos.index + self.width,
+            }),
+            Direction::Left if pos.index % self.width > 0 => Some(Position {
+                index: pos.index - 1,
+            }),
+            Direction::Right if pos.index % self.width < self.width - 1 => Some(Position {
+                index: pos.index + 1,
+            }),
             _ => None,
         }
     }
