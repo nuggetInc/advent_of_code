@@ -17,6 +17,7 @@ mod day14;
 mod day15;
 mod day16;
 mod day17;
+mod day18;
 
 pub fn year() -> Year {
     let mut year = Year::new(2023);
@@ -38,6 +39,7 @@ pub fn year() -> Year {
     year.add_day(day15::day());
     year.add_day(day16::day());
     year.add_day(day17::day());
+    year.add_day(day18::day());
 
     year
 }
