@@ -58,11 +58,41 @@ fn part_one(commands: Vec<(Direction, i32, Direction, i32)>) -> AocResult<usize>
             start = Some(dir);
         }
 
-        match dir {
-            Direction::Up => map.insert(x..=x, y - meters..=y, Some((dir, dir))),
-            Direction::Down => map.insert(x..=x, y..=y + meters, Some((dir, dir))),
-            Direction::Left => map.insert(x - meters..=x, y..=y, Some((dir, dir))),
-            Direction::Right => map.insert(x..=x + meters, y..=y, Some((dir, dir))),
+        let (columns, rows) = match dir {
+            Direction::Up => {
+                let column = map.get_column_index(x);
+                let start_row = map.split_row_around(y - meters);
+                let end_row = map.get_row_index(y);
+
+                (column..=column, start_row..=end_row)
+            }
+            Direction::Down => {
+                let column = map.get_column_index(x);
+                let start_row = map.get_row_index(y);
+                let end_row = map.split_row_around(y + meters);
+
+                (column..=column, start_row..=end_row)
+            }
+            Direction::Left => {
+                let start_column = map.split_column_around(x - meters);
+                let end_column = map.get_column_index(x);
+                let row = map.get_row_index(y);
+
+                (start_column..=end_column, row..=row)
+            }
+            Direction::Right => {
+                let start_column = map.get_column_index(x);
+                let end_column = map.split_column_around(x + meters);
+                let row = map.get_row_index(y);
+
+                (start_column..=end_column, row..=row)
+            }
+        };
+
+        for row_index in rows {
+            for column_index in columns.clone() {
+                map.grid[row_index][column_index] = Some((dir, dir));
+            }
         }
 
         if let Some(last) = last {
@@ -142,11 +172,45 @@ fn part_two(commands: Vec<(Direction, i32, Direction, i32)>) -> AocResult<usize>
             start = Some(dir);
         }
 
-        match dir {
-            Direction::Up => map.insert(x..=x, y - meters..=y, Some((dir, dir))),
-            Direction::Down => map.insert(x..=x, y..=y + meters, Some((dir, dir))),
-            Direction::Left => map.insert(x - meters..=x, y..=y, Some((dir, dir))),
-            Direction::Right => map.insert(x..=x + meters, y..=y, Some((dir, dir))),
+        let (columns, rows) = match dir {
+            Direction::Up => {
+                let column = map.get_column_index(x);
+
+                let start_row = map.split_row_around(y - meters);
+                let end_row = map.get_row_index(y);
+
+                (column..=column, start_row..=end_row)
+            }
+            Direction::Down => {
+                let column = map.get_column_index(x);
+
+                let start_row = map.get_row_index(y);
+                let end_row = map.split_row_around(y + meters);
+
+                (column..=column, start_row..=end_row)
+            }
+            Direction::Left => {
+                let start_column = map.split_column_around(x - meters);
+                let end_column = map.get_column_index(x);
+
+                let row = map.get_row_index(y);
+
+                (start_column..=end_column, row..=row)
+            }
+            Direction::Right => {
+                let start_column = map.get_column_index(x);
+                let end_column = map.split_column_around(x + meters);
+
+                let row = map.get_row_index(y);
+
+                (start_column..=end_column, row..=row)
+            }
+        };
+
+        for row_index in rows {
+            for column_index in columns.clone() {
+                map.grid[row_index][column_index] = Some((dir, dir));
+            }
         }
 
         if let Some(last) = last {
@@ -229,6 +293,26 @@ impl Map {
             width: 1,
             height: 1,
         }
+    }
+
+    fn get_column_index(&self, x: i32) -> usize {
+        for (index, range) in self.column_ranges.iter().enumerate() {
+            if range.contains(&x) {
+                return index;
+            }
+        }
+
+        unimplemented!()
+    }
+
+    fn get_row_index(&self, y: i32) -> usize {
+        for (index, range) in self.row_ranges.iter().enumerate() {
+            if range.contains(&y) {
+                return index;
+            }
+        }
+
+        unimplemented!()
     }
 
     fn insert(
