@@ -105,36 +105,25 @@ fn part_one((workflows, parts): (BTreeMap<String, Workflow>, Vec<Part>)) -> AocR
 
 fn part_two((workflows, _): (BTreeMap<String, Workflow>, Vec<Part>)) -> AocResult<u64> {
     let part_range = PartRange::new(1..4001, 1..4001, 1..4001, 1..4001);
-    let accepted = get_accepted(&workflows, &workflows["in"], part_range);
-
-    let mut total = 0;
-
-    for a in &accepted {
-        total += a.x.start.abs_diff(a.x.end)
-            * a.m.start.abs_diff(a.m.end)
-            * a.a.start.abs_diff(a.a.end)
-            * a.s.start.abs_diff(a.s.end);
-    }
-
-    Ok(total)
+    Ok(get_accepted(&workflows, &workflows["in"], part_range))
 }
 
 fn get_accepted(
     workflows: &BTreeMap<String, Workflow>,
     workflow: &Workflow,
     mut parts: PartRange,
-) -> Vec<PartRange> {
-    let mut accepted = Vec::new();
+) -> u64 {
+    let mut accepted = 0;
 
     for (rule, workflow_name) in &workflow.rules {
         let (matches, other) = rule.split(&parts);
 
         if let Some(matches) = matches {
             match workflow_name.as_str() {
-                "A" => accepted.push(matches),
+                "A" => accepted += matches.size(),
                 "R" => (),
                 _ => {
-                    accepted.extend(get_accepted(workflows, &workflows[workflow_name], matches));
+                    accepted += get_accepted(workflows, &workflows[workflow_name], matches);
                 }
             }
         }
@@ -147,13 +136,9 @@ fn get_accepted(
     }
 
     match workflow.last_rule.as_str() {
-        "A" => accepted.push(parts),
+        "A" => accepted += parts.size(),
         "R" => (),
-        _ => accepted.extend(get_accepted(
-            workflows,
-            &workflows[&workflow.last_rule],
-            parts,
-        )),
+        _ => accepted += get_accepted(workflows, &workflows[&workflow.last_rule], parts),
     }
 
     accepted
@@ -300,6 +285,13 @@ struct PartRange {
 impl PartRange {
     fn new(x: Range<u64>, m: Range<u64>, a: Range<u64>, s: Range<u64>) -> Self {
         Self { x, m, a, s }
+    }
+
+    fn size(&self) -> u64 {
+        self.x.start.abs_diff(self.x.end)
+            * self.m.start.abs_diff(self.m.end)
+            * self.a.start.abs_diff(self.a.end)
+            * self.s.start.abs_diff(self.s.end)
     }
 
     fn with_x(&self, x: Range<u64>) -> Self {
