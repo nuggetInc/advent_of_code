@@ -6,7 +6,7 @@ use itertools::Itertools;
 pub fn day() -> Day {
     let mut solution = Day::new(20);
     solution.part_1(parse, part_one);
-    solution.part_2(parse, part_two);
+    // solution.part_2(parse, part_two);
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution
@@ -109,60 +109,60 @@ fn part_one(
     Ok(high_signals * low_signals)
 }
 
-fn part_two(
-    (mut modules, broadcaster_output): (BTreeMap<String, Module>, Vec<String>),
-) -> AocResult<u32> {
-    let mut presses = 0;
-    let mut queue = VecDeque::new();
+// fn part_two(
+//     (mut modules, broadcaster_output): (BTreeMap<String, Module>, Vec<String>),
+// ) -> AocResult<u32> {
+//     let mut presses = 0;
+//     let mut queue = VecDeque::new();
 
-    loop {
-        presses += 1;
+//     loop {
+//         presses += 1;
 
-        for out in &broadcaster_output {
-            queue.push_back(("broadcaster".to_owned(), out.to_owned(), Signal::Low));
-        }
+//         for out in &broadcaster_output {
+//             queue.push_back(("broadcaster".to_owned(), out.to_owned(), Signal::Low));
+//         }
 
-        while let Some((from, to, signal)) = queue.pop_front() {
-            if to.eq("rx") && signal == Signal::Low {
-                return Ok(presses);
-            }
+//         while let Some((from, to, signal)) = queue.pop_front() {
+//             if to.eq("rx") && signal == Signal::Low {
+//                 return Ok(presses);
+//             }
 
-            let Some(module) = modules.get_mut(&to) else {
-                continue;
-            };
+//             let Some(module) = modules.get_mut(&to) else {
+//                 continue;
+//             };
 
-            match &mut module.kind {
-                ModuleKind::FlipFlop(current) => {
-                    if let Signal::High = signal {
-                        continue;
-                    }
+//             match &mut module.kind {
+//                 ModuleKind::FlipFlop(current) => {
+//                     if let Signal::High = signal {
+//                         continue;
+//                     }
 
-                    match current {
-                        Signal::High => *current = Signal::Low,
-                        Signal::Low => *current = Signal::High,
-                    }
+//                     match current {
+//                         Signal::High => *current = Signal::Low,
+//                         Signal::Low => *current = Signal::High,
+//                     }
 
-                    for out in &module.output {
-                        queue.push_back((to.clone(), out.to_owned(), *current));
-                    }
-                }
-                ModuleKind::Conjunction(history) => {
-                    *history.get_mut(&from).unwrap() = signal;
+//                     for out in &module.output {
+//                         queue.push_back((to.clone(), out.to_owned(), *current));
+//                     }
+//                 }
+//                 ModuleKind::Conjunction(history) => {
+//                     *history.get_mut(&from).unwrap() = signal;
 
-                    let send = if history.values().all(|signal| *signal == Signal::High) {
-                        Signal::Low
-                    } else {
-                        Signal::High
-                    };
+//                     let send = if history.values().all(|signal| *signal == Signal::High) {
+//                         Signal::Low
+//                     } else {
+//                         Signal::High
+//                     };
 
-                    for out in &module.output {
-                        queue.push_back((to.clone(), out.to_owned(), send));
-                    }
-                }
-            }
-        }
-    }
-}
+//                     for out in &module.output {
+//                         queue.push_back((to.clone(), out.to_owned(), send));
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
 
 #[derive(Clone)]
 struct Module {

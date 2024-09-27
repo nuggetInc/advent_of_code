@@ -5,5 +5,5 @@ edition = "2021"
 
 [dependencies]
 reqwest = { version = "0.11.22", features = ["blocking"] }
-scraper = "0.18.1"
+scraper = "0.20.0"
 crossterm = "0.27.0"
