@@ -11,23 +11,17 @@ use crossterm::{
     QueueableCommand,
 };
 
-use crate::{AocPart, AocResult, Day, Id, PartError, PartResult};
+use crate::{AocResult, Day, Id, Part, PartError, PartResult};
 
 pub struct DayResult {
     day: Id<Day>,
-    file_parts: Vec<(
-        PathBuf,
-        BTreeMap<Id<AocPart>, Result<PartResult, PartError>>,
-    )>,
+    file_parts: Vec<(PathBuf, BTreeMap<Id<Part>, Result<PartResult, PartError>>)>,
 }
 
 impl DayResult {
     pub fn new(
         day: Id<Day>,
-        file_parts: Vec<(
-            PathBuf,
-            BTreeMap<Id<AocPart>, Result<PartResult, PartError>>,
-        )>,
+        file_parts: Vec<(PathBuf, BTreeMap<Id<Part>, Result<PartResult, PartError>>)>,
     ) -> Self {
         Self { day, file_parts }
     }

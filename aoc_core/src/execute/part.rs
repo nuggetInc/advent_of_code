@@ -9,27 +9,35 @@ use std::{
 use super::result::PartResult;
 use crate::{AocResult, Id};
 
-pub trait Part {
-    fn id(&self) -> Id<AocPart>;
-    fn run(&self, file: &Path, expected: Option<String>) -> Result<PartResult, PartError>;
+pub struct Part {
+    id: Id<Part>,
+    solver: Box<dyn Fn(String) -> AocResult<String> + RefUnwindSafe + 'static>,
 }
 
-impl<Parsed, Answer> Part for AocPart<Parsed, Answer>
-where
-    Answer: fmt::Display + 'static,
-{
-    fn id(&self) -> Id<AocPart> {
+impl Part {
+    pub fn new<Parsed, Answer>(
+        id: Id<Part>,
+        parser: impl Fn(String) -> Parsed + RefUnwindSafe + 'static,
+        solution: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
+    ) -> Self
+    where
+        Answer: fmt::Display,
+    {
+        Part {
+            id,
+            solver: Box::new(move |s: String| solution(parser(s)).map(|a| a.to_string())),
+        }
+    }
+
+    pub fn id(&self) -> Id<Part> {
         self.id
     }
 
-    fn run(&self, file: &Path, expected: Option<String>) -> Result<PartResult, PartError> {
+    pub fn run(&self, file: &Path, expected: Option<String>) -> Result<PartResult, PartError> {
         let instant = Instant::now();
 
         let input = fs::read_to_string(file).map_err(|err| PartError::InputFileError(err))?;
-        let result = catch_unwind(|| {
-            let parsed = (self.parser)(input);
-            (self.solution)(parsed)
-        });
+        let result = catch_unwind(|| (self.solver)(input));
 
         let elapsed = instant.elapsed();
 
@@ -42,32 +50,6 @@ where
             )),
             Ok(Err(err)) => Err(PartError::Error(err)),
             Err(_) => Err(PartError::Paniced),
-        }
-    }
-}
-
-pub struct AocPart<Parsed = String, Answer = String>
-where
-    Answer: fmt::Display,
-{
-    id: Id<AocPart>,
-    parser: Box<dyn Fn(String) -> Parsed + RefUnwindSafe + 'static>,
-    solution: Box<dyn Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static>,
-}
-
-impl<Parsed, Answer> AocPart<Parsed, Answer>
-where
-    Answer: fmt::Display,
-{
-    pub fn new(
-        id: Id<AocPart>,
-        parser: impl Fn(String) -> Parsed + RefUnwindSafe + 'static,
-        solution: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
-    ) -> Self {
-        AocPart {
-            id,
-            parser: Box::new(parser),
-            solution: Box::new(solution),
         }
     }
 }

@@ -7,15 +7,12 @@ use std::{
     path::PathBuf,
 };
 
-use super::{
-    part::{AocPart, Part},
-    result::DayResult,
-};
+use super::{part::Part, result::DayResult};
 use crate::{AocResult, Id};
 
 pub struct Day {
     id: Id<Day>,
-    parts: BTreeMap<Id<AocPart>, Box<dyn Part>>,
+    parts: BTreeMap<Id<Part>, Part>,
     files: Vec<PathBuf>,
 }
 
@@ -40,8 +37,8 @@ impl Day {
         self.files.len()
     }
 
-    pub fn get_part(&self, index: Id<AocPart>) -> Option<&dyn Part> {
-        self.parts.get(&index).map(Box::as_ref)
+    pub fn get_part(&self, index: Id<Part>) -> Option<&Part> {
+        self.parts.get(&index)
     }
 
     pub fn run(&self) -> Result<DayResult, DayError> {
@@ -79,10 +76,8 @@ impl Day {
         parser: impl Fn(String) -> Parsed + RefUnwindSafe + 'static,
         part: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) {
-        self.parts.insert(
-            Id::from(1),
-            Box::new(AocPart::new(Id::from(1), parser, part)),
-        );
+        self.parts
+            .insert(Id::from(1), Part::new(Id::from(1), parser, part));
     }
 
     pub fn part_2<Parsed: 'static, Answer: fmt::Display + 'static>(
@@ -90,10 +85,8 @@ impl Day {
         parser: impl Fn(String) -> Parsed + RefUnwindSafe + 'static,
         part: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) {
-        self.parts.insert(
-            Id::from(2),
-            Box::new(AocPart::new(Id::from(2), parser, part)),
-        );
+        self.parts
+            .insert(Id::from(2), Part::new(Id::from(2), parser, part));
     }
 
     #[track_caller]

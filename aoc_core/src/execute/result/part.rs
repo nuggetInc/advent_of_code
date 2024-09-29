@@ -8,22 +8,17 @@ use crossterm::{
     QueueableCommand,
 };
 
-use crate::{AocPart, AocResult, Id};
+use crate::{AocResult, Id, Part};
 
 pub struct PartResult {
-    id: Id<AocPart>,
+    id: Id<Part>,
     answer: String,
     expected: Option<String>,
     elapsed: Duration,
 }
 
 impl PartResult {
-    pub fn new(
-        id: Id<AocPart>,
-        answer: String,
-        expected: Option<String>,
-        elapsed: Duration,
-    ) -> Self {
+    pub fn new(id: Id<Part>, answer: String, expected: Option<String>, elapsed: Duration) -> Self {
         Self {
             id,
             answer,
