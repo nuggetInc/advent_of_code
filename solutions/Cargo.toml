@@ -1,9 +1,0 @@
-[package]
-name = "solutions"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-aoc_core = { path = "../aoc_core" }
-year2022 = { path = "year2022" }
-year2023 = { path = "year2023" }

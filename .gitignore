@@ -1,6 +1,6 @@
 /target
-/solutions/**/input.in
-/solutions/**/input.out
+/year*/src/day*/files/input.in
+/year*/src/day*/files/input.out
 
 .vscode
 .env

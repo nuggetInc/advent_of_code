@@ -25,7 +25,7 @@ impl ProblemInput {
 
     pub fn write(&self, year_id: YearId, day_id: DayId) -> io::Result<()> {
         let mut path = PathBuf::from(format!(
-            "solutions/{}/src/{}/files/",
+            "{}/src/{}/files/",
             year_id.folder_name(),
             day_id.folder_name()
         ));
@@ -93,7 +93,7 @@ impl Problem {
 
     pub fn write_readme(&self, year_id: YearId, day_id: DayId) -> io::Result<()> {
         let mut file = File::create(format!(
-            "solutions/{}/src/{}/README.md",
+            "{}/src/{}/README.md",
             year_id.folder_name(),
             day_id.folder_name()
         ))?;
@@ -107,7 +107,7 @@ impl Problem {
         }
 
         let mut file = File::create(format!(
-            "solutions/{}/src/{}/files/input.out",
+            "{}/src/{}/files/input.out",
             year_id.folder_name(),
             day_id.folder_name()
         ))?;

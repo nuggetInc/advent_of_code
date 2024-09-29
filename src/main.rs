@@ -1,3 +1,5 @@
+mod solutions;
+
 use std::{
     collections::VecDeque,
     env,
@@ -13,6 +15,7 @@ use crossterm::{
     style::{Print, Stylize},
     ExecutableCommand, QueueableCommand,
 };
+use solutions::get_solutions;
 
 fn main() -> AocResult<()> {
     if let Err(error) = dotenvy::dotenv() {
@@ -99,7 +102,7 @@ enum Command {
 }
 
 fn run(year_id: YearId, day_id: Option<DayId>) -> AocResult<()> {
-    let solutions = solutions::solutions();
+    let solutions = get_solutions();
 
     let Some(year) = solutions.get_year(year_id) else {
         Err(YearError::Unimplemented)?
@@ -119,7 +122,7 @@ fn run(year_id: YearId, day_id: Option<DayId>) -> AocResult<()> {
 }
 
 fn upload(year_id: YearId, day_id: DayId) -> AocResult<()> {
-    let solutions = solutions::solutions();
+    let solutions = get_solutions();
 
     let Some(year) = solutions.get_year(year_id) else {
         Err(YearError::Unimplemented)?

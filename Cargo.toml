@@ -3,11 +3,12 @@ name = "aoc"
 version = "0.1.0"
 edition = "2021"
 
-[workspace] 
-members = [ "aoc_core", "solutions", "solutions/year2022", "solutions/year2023" ] 
+[workspace]
+members = ["aoc_core", "year2022", "year2023"]
 
 [dependencies]
 dotenvy = "0.15.7"
 aoc_core = { path = "aoc_core" }
-solutions = { path = "solutions" }
 crossterm = "0.27.0"
+year2022 = { path = "year2022" }
+year2023 = { path = "year2023" }

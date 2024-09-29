@@ -1,6 +1,6 @@
 use aoc_core::Solutions;
 
-pub fn solutions() -> Solutions {
+pub fn get_solutions() -> Solutions {
     let mut solutions = Solutions::default();
 
     solutions.add_year(year2022::year());
