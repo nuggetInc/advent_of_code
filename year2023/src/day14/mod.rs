@@ -5,8 +5,8 @@ use itertools::Itertools;
 
 pub fn day() -> Day {
     let mut solution = Day::new(14);
-    solution.part_1(parse, part_one);
-    solution.part_2(parse, part_two);
+    solution.part_1(|s: String| part_one(parse(s)));
+    solution.part_2(|s: String| part_two(parse(s)));
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution

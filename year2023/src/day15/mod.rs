@@ -2,8 +2,8 @@ use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(15);
-    solution.part_1(parse_one, part_one);
-    solution.part_2(parse_two, part_two);
+    solution.part_1(|s: String| part_one(parse_one(s)));
+    solution.part_2(|s: String| part_two(parse_two(s)));
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution

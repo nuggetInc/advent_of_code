@@ -71,22 +71,20 @@ impl Day {
         Ok(DayResult::new(self.id, file_parts))
     }
 
-    pub fn part_1<Parsed: 'static, Answer: fmt::Display + 'static>(
+    pub fn part_1<Answer: fmt::Display + 'static>(
         &mut self,
-        parser: impl Fn(String) -> Parsed + RefUnwindSafe + 'static,
-        part: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
+        solver: impl Fn(String) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) {
         self.parts
-            .insert(Id::from(1), Part::new(Id::from(1), parser, part));
+            .insert(Id::from(1), Part::new(Id::from(1), solver));
     }
 
-    pub fn part_2<Parsed: 'static, Answer: fmt::Display + 'static>(
+    pub fn part_2<Answer: fmt::Display + 'static>(
         &mut self,
-        parser: impl Fn(String) -> Parsed + RefUnwindSafe + 'static,
-        part: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
+        solver: impl Fn(String) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) {
         self.parts
-            .insert(Id::from(2), Part::new(Id::from(2), parser, part));
+            .insert(Id::from(2), Part::new(Id::from(2), solver));
     }
 
     #[track_caller]

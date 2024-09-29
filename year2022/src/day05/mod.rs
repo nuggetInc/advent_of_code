@@ -3,8 +3,8 @@ use regex::Regex;
 
 pub fn day() -> Day {
     let mut solution = Day::new(5);
-    solution.part_1(|x| x, part_one);
-    solution.part_2(|x| x, part_two);
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/input.in");
     solution
 }

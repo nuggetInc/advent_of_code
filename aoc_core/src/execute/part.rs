@@ -15,17 +15,16 @@ pub struct Part {
 }
 
 impl Part {
-    pub fn new<Parsed, Answer>(
+    pub fn new<Answer>(
         id: Id<Part>,
-        parser: impl Fn(String) -> Parsed + RefUnwindSafe + 'static,
-        solution: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
+        solver: impl Fn(String) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) -> Self
     where
         Answer: fmt::Display,
     {
         Part {
             id,
-            solver: Box::new(move |s: String| solution(parser(s)).map(|a| a.to_string())),
+            solver: Box::new(move |s: String| solver(s).map(|a| a.to_string())),
         }
     }
 
