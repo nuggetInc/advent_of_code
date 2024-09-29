@@ -10,15 +10,15 @@ use crossterm::{
 };
 
 use super::DayResult;
-use crate::{AocResult, DayError, DayId, YearId};
+use crate::{AocResult, Day, DayError, Id, Year};
 
 pub struct YearResult {
-    year: YearId,
-    days: BTreeMap<DayId, Result<DayResult, DayError>>,
+    year: Id<Year>,
+    days: BTreeMap<Id<Day>, Result<DayResult, DayError>>,
 }
 
 impl YearResult {
-    pub fn new(year: YearId, days: BTreeMap<DayId, Result<DayResult, DayError>>) -> Self {
+    pub fn new(year: Id<Year>, days: BTreeMap<Id<Day>, Result<DayResult, DayError>>) -> Self {
         Self { year, days }
     }
 
@@ -31,7 +31,7 @@ impl YearResult {
 
     pub fn print(&self) -> AocResult<()> {
         io::stdout()
-            .queue(Print(self.year.name()))?
+            .queue(Print(format!("Year {}", self.year)))?
             .queue(Print(format!(" - {:?}", self.elapsed()).dark_grey()))?
             .queue(Print("\n"))?
             .flush()?;
@@ -41,7 +41,7 @@ impl YearResult {
             match result {
                 Ok(day) => day.print()?,
                 Err(error) => io::stdout()
-                    .queue(Print(day_id.name()))?
+                    .queue(Print(format!("Day {day_id}")))?
                     .queue(Print(format!(" X {}", error).red()))?
                     .queue(Print("\n"))?
                     .flush()?,

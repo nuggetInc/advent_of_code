@@ -11,16 +11,16 @@ use super::{
     part::{AocPart, Part},
     result::DayResult,
 };
-use crate::{AocResult, DayId, PartId};
+use crate::{AocResult, Id};
 
 pub struct Day {
-    id: DayId,
-    parts: BTreeMap<PartId, Box<dyn Part>>,
+    id: Id<Day>,
+    parts: BTreeMap<Id<AocPart>, Box<dyn Part>>,
     files: Vec<PathBuf>,
 }
 
 impl Day {
-    pub fn new(id: impl Into<DayId>) -> Self {
+    pub fn new(id: impl Into<Id<Day>>) -> Self {
         Self {
             id: id.into(),
             parts: BTreeMap::new(),
@@ -28,7 +28,7 @@ impl Day {
         }
     }
 
-    pub fn id(&self) -> DayId {
+    pub fn id(&self) -> Id<Day> {
         self.id
     }
 
@@ -40,7 +40,7 @@ impl Day {
         self.files.len()
     }
 
-    pub fn get_part(&self, index: PartId) -> Option<&dyn Part> {
+    pub fn get_part(&self, index: Id<AocPart>) -> Option<&dyn Part> {
         self.parts.get(&index).map(Box::as_ref)
     }
 
@@ -80,8 +80,8 @@ impl Day {
         part: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) {
         self.parts.insert(
-            PartId::PART_1,
-            Box::new(AocPart::new(PartId::PART_1, parser, part)),
+            Id::from(1),
+            Box::new(AocPart::new(Id::from(1), parser, part)),
         );
     }
 
@@ -91,8 +91,8 @@ impl Day {
         part: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) {
         self.parts.insert(
-            PartId::PART_2,
-            Box::new(AocPart::new(PartId::PART_2, parser, part)),
+            Id::from(2),
+            Box::new(AocPart::new(Id::from(2), parser, part)),
         );
     }
 

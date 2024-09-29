@@ -7,10 +7,10 @@ use std::{
 };
 
 use super::result::PartResult;
-use crate::{AocResult, PartId};
+use crate::{AocResult, Id};
 
 pub trait Part {
-    fn id(&self) -> PartId;
+    fn id(&self) -> Id<AocPart>;
     fn run(&self, file: &Path, expected: Option<String>) -> Result<PartResult, PartError>;
 }
 
@@ -18,7 +18,7 @@ impl<Parsed, Answer> Part for AocPart<Parsed, Answer>
 where
     Answer: fmt::Display + 'static,
 {
-    fn id(&self) -> PartId {
+    fn id(&self) -> Id<AocPart> {
         self.id
     }
 
@@ -46,11 +46,11 @@ where
     }
 }
 
-pub struct AocPart<Parsed, Answer>
+pub struct AocPart<Parsed = String, Answer = String>
 where
     Answer: fmt::Display,
 {
-    id: PartId,
+    id: Id<AocPart>,
     parser: Box<dyn Fn(String) -> Parsed + RefUnwindSafe + 'static>,
     solution: Box<dyn Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static>,
 }
@@ -60,7 +60,7 @@ where
     Answer: fmt::Display,
 {
     pub fn new(
-        id: PartId,
+        id: Id<AocPart>,
         parser: impl Fn(String) -> Parsed + RefUnwindSafe + 'static,
         solution: impl Fn(Parsed) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) -> Self {

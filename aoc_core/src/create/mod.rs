@@ -1,42 +1,31 @@
 use std::fs;
 
-use crate::{AocResult, DayId, Problem, ProblemInput, YearId};
+use crate::{AocResult, Day, Id, Problem, ProblemInput, Year};
 
-pub fn create_day(year_id: YearId, day_id: DayId) -> AocResult<()> {
-    fs::create_dir(format!(
-        "solutions/{}/src/{}",
-        year_id.folder_name(),
-        day_id.folder_name()
-    ))?;
+pub fn create_day(year_id: Id<Year>, day_id: Id<Day>) -> AocResult<()> {
+    fs::create_dir(format!("year{year_id}/src/day{day_id}"))?;
 
     fs::write(
-        format!(
-            "solutions/{}/src/{}/mod.rs",
-            year_id.folder_name(),
-            day_id.folder_name()
-        ),
-        format!(include_str!("day.txt"), *day_id),
+        format!("year{year_id}/src/day{day_id}/mod.rs"),
+        format!(include_str!("day.txt"), day_id),
     )?;
 
-    let days = fs::read_to_string(format!("solutions/{}/src/days.txt", year_id.folder_name()))?;
+    let days = fs::read_to_string(format!("year{year_id}/src/days.txt"))?;
     let mut days: Vec<_> = days.split_terminator('\n').map(str::to_owned).collect();
-    days.push(day_id.folder_name());
+    days.push(day_id.to_string());
     days.sort();
 
     let mut mods = String::new();
     let mut add_days = String::new();
     for day in &days {
-        mods += &format!("mod {day};\n");
-        add_days += &format!("    year.add_day({day}::day());\n");
+        mods += &format!("mod day{day};\n");
+        add_days += &format!("    year.add_day(day{day}::day());\n");
     }
 
-    fs::write(
-        format!("solutions/{}/src/days.txt", year_id.folder_name()),
-        days.join("\n"),
-    )?;
+    fs::write(format!("year{year_id}/src/days.txt"), days.join("\n"))?;
 
     fs::write(
-        format!("solutions/{}/src/lib.rs", year_id.folder_name()),
+        format!("year{year_id}/src/lib.rs"),
         format!(include_str!("year.txt"), mods, add_days),
     )?;
 

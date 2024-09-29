@@ -9,7 +9,7 @@ use std::{
 };
 
 use aoc_core::{
-    create_day, upload_answer, AocResult, DayError, DayId, Problem, ProblemInput, YearError, YearId,
+    create_day, upload_answer, AocResult, Day, DayError, Id, Problem, ProblemInput, Year, YearError,
 };
 use crossterm::{
     style::{Print, Stylize},
@@ -64,10 +64,10 @@ fn execute_command(mut args: VecDeque<String>) -> AocResult<()> {
         _ => Err(CommandError::InvalidCommand)?,
     };
 
-    let year_id: YearId = args
+    let year_id = args
         .pop_front()
         .map(|year_raw| year_raw.parse())
-        .unwrap_or(Ok(YearId::from(2023)))?;
+        .unwrap_or(Ok(Id::from(2023)))?;
 
     if let Some(day_raw) = args.pop_front() {
         let day_id = day_raw.parse()?;
@@ -101,7 +101,7 @@ enum Command {
     Upload,
 }
 
-fn run(year_id: YearId, day_id: Option<DayId>) -> AocResult<()> {
+fn run(year_id: Id<Year>, day_id: Option<Id<Day>>) -> AocResult<()> {
     let solutions = get_solutions();
 
     let Some(year) = solutions.get_year(year_id) else {
@@ -121,7 +121,7 @@ fn run(year_id: YearId, day_id: Option<DayId>) -> AocResult<()> {
     }
 }
 
-fn upload(year_id: YearId, day_id: DayId) -> AocResult<()> {
+fn upload(year_id: Id<Year>, day_id: Id<Day>) -> AocResult<()> {
     let solutions = get_solutions();
 
     let Some(year) = solutions.get_year(year_id) else {

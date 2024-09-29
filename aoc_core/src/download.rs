@@ -6,29 +6,22 @@ use std::{
 
 use scraper::{Html, Selector};
 
-use crate::{AocClient, DayId, YearId};
+use crate::{AocClient, Day, Id, Year};
 
 pub struct ProblemInput(String);
 
 impl ProblemInput {
-    pub fn download(year_id: YearId, day_id: DayId) -> reqwest::Result<ProblemInput> {
+    pub fn download(year_id: Id<Year>, day_id: Id<Day>) -> reqwest::Result<ProblemInput> {
         let client = AocClient::default();
 
-        let url = format!(
-            "https://adventofcode.com/{}/day/{}/input",
-            *year_id, *day_id
-        );
+        let url = format!("https://adventofcode.com/{year_id}/day/{day_id}/input");
         let text = client.get(url)?.text()?;
 
         Ok(Self(text))
     }
 
-    pub fn write(&self, year_id: YearId, day_id: DayId) -> io::Result<()> {
-        let mut path = PathBuf::from(format!(
-            "{}/src/{}/files/",
-            year_id.folder_name(),
-            day_id.folder_name()
-        ));
+    pub fn write(&self, year_id: Id<Year>, day_id: Id<Day>) -> io::Result<()> {
+        let mut path = PathBuf::from(format!("year{year_id}/src/day{day_id}/files/"));
         if !path.exists() {
             fs::create_dir(&path)?;
         }
@@ -44,10 +37,10 @@ pub struct Problem {
 }
 
 impl Problem {
-    pub fn download(year_id: YearId, day_id: DayId) -> reqwest::Result<Problem> {
+    pub fn download(year_id: Id<Year>, day_id: Id<Day>) -> reqwest::Result<Problem> {
         let client = AocClient::default();
 
-        let url = format!("https://adventofcode.com/{}/day/{}", *year_id, *day_id);
+        let url = format!("https://adventofcode.com/{year_id}/day/{day_id}");
         let text = client.get(&url)?.text()?;
 
         let document = Html::parse_document(&text);
@@ -91,26 +84,18 @@ impl Problem {
         })
     }
 
-    pub fn write_readme(&self, year_id: YearId, day_id: DayId) -> io::Result<()> {
-        let mut file = File::create(format!(
-            "{}/src/{}/README.md",
-            year_id.folder_name(),
-            day_id.folder_name()
-        ))?;
+    pub fn write_readme(&self, year_id: Id<Year>, day_id: Id<Day>) -> io::Result<()> {
+        let mut file = File::create(format!("year{year_id}/src/day{day_id}/README.md",))?;
 
         writeln!(file, "{}", self.description)
     }
 
-    pub fn write_out_file(&self, year_id: YearId, day_id: DayId) -> io::Result<()> {
+    pub fn write_out_file(&self, year_id: Id<Year>, day_id: Id<Day>) -> io::Result<()> {
         if self.answers.is_empty() {
             return Ok(());
         }
 
-        let mut file = File::create(format!(
-            "{}/src/{}/files/input.out",
-            year_id.folder_name(),
-            day_id.folder_name()
-        ))?;
+        let mut file = File::create(format!("year{year_id}/src/day{day_id}/files/input.out",))?;
 
         writeln!(file, "{}", self.answers.join("\n"))
     }

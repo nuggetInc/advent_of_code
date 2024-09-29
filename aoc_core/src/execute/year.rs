@@ -1,22 +1,22 @@
 use std::{collections::BTreeMap, error::Error, fmt, panic::Location};
 
 use super::{day::Day, result::YearResult};
-use crate::{DayId, YearId};
+use crate::Id;
 
 pub struct Year {
-    id: YearId,
-    days: BTreeMap<DayId, Day>,
+    id: Id<Year>,
+    days: BTreeMap<Id<Day>, Day>,
 }
 
 impl Year {
-    pub fn new(id: impl Into<YearId>) -> Self {
+    pub fn new(id: impl Into<Id<Year>>) -> Self {
         Self {
             id: id.into(),
             days: BTreeMap::new(),
         }
     }
 
-    pub fn id(&self) -> YearId {
+    pub fn id(&self) -> Id<Year> {
         self.id
     }
 
@@ -24,9 +24,9 @@ impl Year {
     pub fn add_day(&mut self, day: Day) {
         if self.days.contains_key(&day.id()) {
             eprintln!(
-                "{}: {} overwritten at {}",
-                self.id.name(),
-                day.id().name(),
+                "Year {}: Day {} overwritten at {}",
+                self.id,
+                day.id(),
                 Location::caller()
             )
         }
@@ -34,7 +34,7 @@ impl Year {
         self.days.insert(day.id(), day);
     }
 
-    pub fn get_day(&self, index: DayId) -> Option<&Day> {
+    pub fn get_day(&self, index: Id<Day>) -> Option<&Day> {
         self.days.get(&index)
     }
 

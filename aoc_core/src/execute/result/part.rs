@@ -8,17 +8,22 @@ use crossterm::{
     QueueableCommand,
 };
 
-use crate::{AocResult, PartId};
+use crate::{AocPart, AocResult, Id};
 
 pub struct PartResult {
-    id: PartId,
+    id: Id<AocPart>,
     answer: String,
     expected: Option<String>,
     elapsed: Duration,
 }
 
 impl PartResult {
-    pub fn new(id: PartId, answer: String, expected: Option<String>, elapsed: Duration) -> Self {
+    pub fn new(
+        id: Id<AocPart>,
+        answer: String,
+        expected: Option<String>,
+        elapsed: Duration,
+    ) -> Self {
         Self {
             id,
             answer,
@@ -42,7 +47,7 @@ impl PartResult {
                     .queue(Print(" V ".green()))?
                     .queue(Print(&self.answer))?
                     .queue(Print(" - ".dark_grey()))?
-                    .queue(Print(self.id.name()))?
+                    .queue(Print(format!("Part {}", self.id)))?
                     .queue(Print(format!(" - {:?}", self.elapsed).dark_grey()))?
                     .queue(Print("\n"))?
                     .flush()?;
@@ -53,7 +58,7 @@ impl PartResult {
                     .queue(Print(" - ".dark_grey()))?
                     .queue(Print(expected))?
                     .queue(Print(" - ".dark_grey()))?
-                    .queue(Print(self.id.name()))?
+                    .queue(Print(format!("Part {}", self.id)))?
                     .queue(Print(format!(" - {:?}", self.elapsed).dark_grey()))?
                     .queue(Print("\n"))?
                     .flush()?;
@@ -63,7 +68,7 @@ impl PartResult {
                 .queue(Print(" - ".dark_grey()))?
                 .queue(Print(&self.answer))?
                 .queue(Print(" - ".dark_grey()))?
-                .queue(Print(self.id.name()))?
+                .queue(Print(format!("Part {}", self.id)))?
                 .queue(Print(format!(" - {:?}", self.elapsed).dark_grey()))?
                 .queue(Print("\n"))?
                 .flush()?;

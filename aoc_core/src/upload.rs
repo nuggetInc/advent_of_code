@@ -12,24 +12,16 @@ use crossterm::{
 };
 use scraper::{Html, Selector};
 
-use crate::{AocClient, AocResult, Day, PartError, PartId, Problem, YearId};
+use crate::{AocClient, AocResult, Day, Id, PartError, Problem, Year};
 
-pub fn upload_answer(year_id: YearId, day: &Day) -> AocResult<()> {
-    let in_path = PathBuf::from(format!(
-        "solutions/{}/src/{}/files/input.in",
-        year_id.folder_name(),
-        day.id().folder_name()
-    ));
+pub fn upload_answer(year_id: Id<Year>, day: &Day) -> AocResult<()> {
+    let in_path = PathBuf::from(format!("year{year_id}/src/day{}/files/input.in", day.id()));
 
-    let out_path = PathBuf::from(format!(
-        "solutions/{}/src/{}/files/input.out",
-        year_id.folder_name(),
-        day.id().folder_name()
-    ));
+    let out_path = PathBuf::from(format!("{year_id}/src/day{}/files/input.out", day.id()));
     let part_id = if out_path.exists() && fs::metadata(&out_path)?.len() > 0 {
-        PartId::from(2)
+        Id::from(2)
     } else {
-        PartId::from(1)
+        Id::from(1)
     };
 
     let part = day.get_part(part_id).ok_or(PartError::Unimplemented)?;
