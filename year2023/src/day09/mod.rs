@@ -3,14 +3,14 @@ use itertools::Itertools;
 
 pub fn day() -> Day {
     let mut solution = Day::new(9);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution
 }
 
-fn parse(input: String) -> Vec<Sequence> {
+fn parse(input: &String) -> Vec<Sequence> {
     input
         .split_terminator('\n')
         .map(|line| {
@@ -22,14 +22,18 @@ fn parse(input: String) -> Vec<Sequence> {
         .collect()
 }
 
-fn part_one(histories: Vec<Sequence>) -> AocResult<i32> {
+fn part_one(input: &String) -> AocResult<i32> {
+    let histories = parse(input);
+
     Ok(histories
         .into_iter()
         .map(|history| history.next())
         .sum::<i32>())
 }
 
-fn part_two(histories: Vec<Sequence>) -> AocResult<i32> {
+fn part_two(input: &String) -> AocResult<i32> {
+    let histories = parse(input);
+
     Ok(histories
         .into_iter()
         .map(|history| history.previous())

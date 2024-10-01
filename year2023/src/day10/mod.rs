@@ -5,14 +5,14 @@ use itertools::Itertools;
 
 pub fn day() -> Day {
     let mut solution = Day::new(10);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution
 }
 
-fn parse(input: String) -> Map {
+fn parse(input: &String) -> Map {
     let mut start = Position(0);
     let mut width = 0;
 
@@ -38,7 +38,9 @@ fn parse(input: String) -> Map {
     Map::new(grid, width, start)
 }
 
-fn part_one(map: Map) -> AocResult<i32> {
+fn part_one(input: &String) -> AocResult<i32> {
+    let map = parse(input);
+
     for mut direction in [
         Direction::Up,
         Direction::Down,
@@ -62,7 +64,9 @@ fn part_one(map: Map) -> AocResult<i32> {
     unreachable!()
 }
 
-fn part_two(map: Map) -> AocResult<usize> {
+fn part_two(input: &String) -> AocResult<usize> {
+    let map = parse(input);
+
     for mut direction in [
         Direction::Up,
         Direction::Down,

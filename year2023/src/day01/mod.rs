@@ -2,18 +2,20 @@ use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(1);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution
 }
 
-fn parse(input: String) -> Vec<String> {
+fn parse(input: &String) -> Vec<String> {
     input.split_terminator('\n').map(str::to_owned).collect()
 }
 
-fn part_one(lines: Vec<String>) -> AocResult<i32> {
+fn part_one(input: &String) -> AocResult<i32> {
+    let lines = parse(input);
+
     let mut total = 0;
 
     for line in lines {
@@ -28,7 +30,9 @@ fn part_one(lines: Vec<String>) -> AocResult<i32> {
     Ok(total)
 }
 
-fn part_two(lines: Vec<String>) -> AocResult<u32> {
+fn part_two(input: &String) -> AocResult<u32> {
+    let lines = parse(input);
+
     let mut total = 0;
 
     const REPLACE: [(&str, char); 10] = [

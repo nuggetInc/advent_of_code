@@ -4,13 +4,15 @@ use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(7);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/input.in");
     solution
 }
 
-fn part_one(root: Directory) -> AocResult<usize> {
+fn part_one(input: &String) -> AocResult<usize> {
+    let root = parse(input);
+
     let mut sum = 0;
 
     let mut directories = Vec::new();
@@ -32,7 +34,9 @@ fn part_one(root: Directory) -> AocResult<usize> {
     Ok(sum)
 }
 
-fn part_two(root: Directory) -> AocResult<usize> {
+fn part_two(input: &String) -> AocResult<usize> {
+    let root = parse(input);
+
     let mut sizes = Vec::new();
 
     let mut directories = Vec::new();
@@ -60,7 +64,7 @@ fn part_two(root: Directory) -> AocResult<usize> {
     Ok(smallest_size)
 }
 
-fn parse(input: String) -> Directory {
+fn parse(input: &String) -> Directory {
     let mut root = Directory::default();
 
     let mut path: Vec<String> = Vec::new();

@@ -5,12 +5,14 @@ use regex::Regex;
 
 pub fn day() -> Day {
     let mut solution = Day::new(16);
-    solution.part_1(|s: String| part_one(parse(s)));
+    solution.part_1(part_one);
     solution.add_file("files/input.in");
     solution
 }
 
-fn part_one(valves: HashMap<String, Valve>) -> AocResult<u32> {
+fn part_one(input: &String) -> AocResult<u32> {
+    let valves = parse(input);
+
     let mut valves = valves.clone();
 
     let keys = valves.keys().map(String::clone).collect::<Vec<_>>();
@@ -49,7 +51,7 @@ fn part_one(valves: HashMap<String, Valve>) -> AocResult<u32> {
     Ok(highest)
 }
 
-fn parse(input: String) -> HashMap<String, Valve> {
+fn parse(input: &String) -> HashMap<String, Valve> {
     let regex = Regex::new(r"^Valve (?P<name>[A-Z]{2}) has flow rate=(?P<rate>\d+); tunnels? leads? to valves? (?P<distances>[A-Z]{2}(, [A-Z]{2})*)$").unwrap();
 
     let mut valves = HashMap::new();

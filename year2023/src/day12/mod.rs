@@ -2,14 +2,14 @@ use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(12);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution
 }
 
-fn parse(input: String) -> Vec<Record> {
+fn parse(input: &String) -> Vec<Record> {
     input
         .split_terminator('\n')
         .map(|line| {
@@ -23,7 +23,9 @@ fn parse(input: String) -> Vec<Record> {
         .collect()
 }
 
-fn part_one(records: Vec<Record>) -> AocResult<u64> {
+fn part_one(input: &String) -> AocResult<u64> {
+    let records = parse(input);
+
     let mut sum = 0;
 
     for mut record in records {
@@ -36,7 +38,9 @@ fn part_one(records: Vec<Record>) -> AocResult<u64> {
     Ok(sum)
 }
 
-fn part_two(records: Vec<Record>) -> AocResult<u64> {
+fn part_two(input: &String) -> AocResult<u64> {
+    let records = parse(input);
+
     let mut sum = 0;
 
     for mut record in records {

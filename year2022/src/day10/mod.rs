@@ -8,7 +8,7 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(input: String) -> AocResult<i32> {
+fn part_one(input: &String) -> AocResult<i32> {
     let mut sum = 0;
     let mut x = 1;
     let mut cycle = 1;
@@ -39,7 +39,7 @@ fn part_one(input: String) -> AocResult<i32> {
     Ok(sum)
 }
 
-fn part_two(input: String) -> AocResult<String> {
+fn part_two(input: &String) -> AocResult<String> {
     let mut crt = String::new();
     let mut x = 1;
     let mut cycle = 0;

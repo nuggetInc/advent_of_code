@@ -8,14 +8,14 @@ use itertools::Itertools;
 
 pub fn day() -> Day {
     let mut solution = Day::new(17);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution
 }
 
-fn parse(input: String) -> Map<i32> {
+fn parse(input: &String) -> Map<i32> {
     let mut width = 0;
 
     let grid = input
@@ -29,11 +29,15 @@ fn parse(input: String) -> Map<i32> {
     Map::new(grid, width)
 }
 
-fn part_one(map: Map<i32>) -> AocResult<i32> {
+fn part_one(input: &String) -> AocResult<i32> {
+    let map = parse(input);
+
     Ok(calculate_heat_loss(&map, 1, 3))
 }
 
-fn part_two(map: Map<i32>) -> AocResult<i32> {
+fn part_two(input: &String) -> AocResult<i32> {
+    let map = parse(input);
+
     Ok(calculate_heat_loss(&map, 4, 10))
 }
 

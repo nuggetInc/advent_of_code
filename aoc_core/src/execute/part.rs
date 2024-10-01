@@ -1,8 +1,7 @@
 use std::{
     error::Error,
-    fmt, fs, io,
+    fmt,
     panic::{catch_unwind, RefUnwindSafe},
-    path::Path,
     time::Instant,
 };
 
@@ -11,20 +10,20 @@ use crate::{AocResult, Id};
 
 pub struct Part {
     id: Id<Part>,
-    solver: Box<dyn Fn(String) -> AocResult<String> + RefUnwindSafe + 'static>,
+    solver: Box<dyn Fn(&String) -> AocResult<String> + RefUnwindSafe + 'static>,
 }
 
 impl Part {
     pub fn new<Answer>(
         id: Id<Part>,
-        solver: impl Fn(String) -> AocResult<Answer> + RefUnwindSafe + 'static,
+        solver: impl Fn(&String) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) -> Self
     where
         Answer: fmt::Display,
     {
         Part {
             id,
-            solver: Box::new(move |s: String| solver(s).map(|a| a.to_string())),
+            solver: Box::new(move |s: &String| solver(s).map(|a| a.to_string())),
         }
     }
 
@@ -32,10 +31,9 @@ impl Part {
         self.id
     }
 
-    pub fn run(&self, file: &Path, expected: Option<String>) -> Result<PartResult, PartError> {
+    pub fn run(&self, input: &String, expected: Option<String>) -> Result<PartResult, PartError> {
         let instant = Instant::now();
 
-        let input = fs::read_to_string(file).map_err(|err| PartError::InputFileError(err))?;
         let result = catch_unwind(|| (self.solver)(input));
 
         let elapsed = instant.elapsed();
@@ -58,7 +56,6 @@ pub enum PartError {
     Unimplemented,
     Paniced,
     Error(Box<dyn Error>),
-    InputFileError(io::Error),
 }
 
 impl fmt::Display for PartError {
@@ -67,7 +64,6 @@ impl fmt::Display for PartError {
             PartError::Unimplemented => write!(f, "part is not implemented"),
             PartError::Paniced => write!(f, "panic occurred during part"),
             PartError::Error(err) => write!(f, "{}", err),
-            PartError::InputFileError(err) => write!(f, "cannot read input file: {}", err),
         }
     }
 }
@@ -78,7 +74,6 @@ impl Error for PartError {
             PartError::Unimplemented => None,
             PartError::Paniced => None,
             PartError::Error(err) => Some(err.as_ref()),
-            PartError::InputFileError(err) => Some(err),
         }
     }
 }

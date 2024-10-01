@@ -10,7 +10,7 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(input: String) -> AocResult<u32> {
+fn part_one(input: &String) -> AocResult<u32> {
     let mut total = 0;
 
     for line in input.split_terminator('\n') {
@@ -29,7 +29,7 @@ fn part_one(input: String) -> AocResult<u32> {
     Ok(total)
 }
 
-fn part_two(input: String) -> AocResult<u32> {
+fn part_two(input: &String) -> AocResult<u32> {
     let mut total = 0;
 
     let mut split = input.split_terminator('\n');

@@ -8,7 +8,7 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(input: String) -> AocResult<u32> {
+fn part_one(input: &String) -> AocResult<u32> {
     let mut highest = 0;
     for inventory in input.split("\n\n") {
         let calories: u32 = inventory
@@ -24,7 +24,7 @@ fn part_one(input: String) -> AocResult<u32> {
     Ok(highest)
 }
 
-fn part_two(input: String) -> AocResult<u32> {
+fn part_two(input: &String) -> AocResult<u32> {
     let mut calories: Vec<u32> = input
         .split("\n\n")
         .map(|inventory| {

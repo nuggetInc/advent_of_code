@@ -4,14 +4,14 @@ use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(2);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution
 }
 
-fn parse(input: String) -> Vec<Game> {
+fn parse(input: &String) -> Vec<Game> {
     let mut games = Vec::new();
     for line in input.split_terminator('\n') {
         let mut split = line.split(": ");
@@ -44,7 +44,9 @@ fn parse(input: String) -> Vec<Game> {
     games
 }
 
-fn part_one(games: Vec<Game>) -> AocResult<u32> {
+fn part_one(input: &String) -> AocResult<u32> {
+    let games = parse(input);
+
     let mut sum = 0;
 
     for game in games {
@@ -68,7 +70,9 @@ fn part_one(games: Vec<Game>) -> AocResult<u32> {
     Ok(sum)
 }
 
-fn part_two(games: Vec<Game>) -> AocResult<u32> {
+fn part_two(input: &String) -> AocResult<u32> {
+    let games = parse(input);
+
     let mut sum = 0;
 
     for game in games {

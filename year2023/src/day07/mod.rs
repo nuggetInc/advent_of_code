@@ -5,14 +5,14 @@ use itertools::Itertools;
 
 pub fn day() -> Day {
     let mut solution = Day::new(7);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution
 }
 
-fn parse(input: String) -> Vec<Play> {
+fn parse(input: &String) -> Vec<Play> {
     input
         .split_terminator('\n')
         .map(|line| {
@@ -45,7 +45,9 @@ fn parse(input: String) -> Vec<Play> {
         .collect()
 }
 
-fn part_one(plays: Vec<Play>) -> AocResult<u32> {
+fn part_one(input: &String) -> AocResult<u32> {
+    let plays = parse(input);
+
     Ok(plays
         .into_iter()
         .map(|play| {
@@ -63,7 +65,9 @@ fn part_one(plays: Vec<Play>) -> AocResult<u32> {
         .sum::<u32>())
 }
 
-fn part_two(mut plays: Vec<Play>) -> AocResult<u32> {
+fn part_two(input: &String) -> AocResult<u32> {
+    let mut plays = parse(input);
+
     for play in &mut plays {
         for card in &mut play.cards {
             if *card == Card::Jack {

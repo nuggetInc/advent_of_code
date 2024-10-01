@@ -5,14 +5,14 @@ use itertools::Itertools;
 
 pub fn day() -> Day {
     let mut solution = Day::new(21);
-    solution.part_1(|s: String| part_one(parse(s)));
-    // solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    // solution.part_2(part_two);
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution
 }
 
-fn parse(input: String) -> (Map, usize, usize) {
+fn parse(input: &String) -> (Map, usize, usize) {
     let mut width = 0;
     let mut start_x = 0;
     let mut start_y = 0;
@@ -42,11 +42,15 @@ fn parse(input: String) -> (Map, usize, usize) {
     (Map::new(grid, width, height), start_x, start_y)
 }
 
-fn part_one((map, start_x, start_y): (Map, usize, usize)) -> AocResult<u32> {
+fn part_one(input: &String) -> AocResult<u32> {
+    let (map, start_x, start_y) = parse(input);
+
     Ok(find_step_count(&map, start_x, start_y, 0, 64))
 }
 
-// fn part_two((map, start_x, start_y): (Map, usize, usize)) -> AocResult<u32> {
+// fn part_two(input: &String) -> AocResult<u32> {
+//     let (map, start_x, start_y) = parse(input);
+
 //     // const MAX_STEPS: u32 = 26501365;
 //     const MAX_STEPS: u32 = 5 + 11 * 3;
 //     let map_steps = map.width as u32;

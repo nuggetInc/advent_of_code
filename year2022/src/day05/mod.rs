@@ -9,7 +9,7 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(input: String) -> AocResult<String> {
+fn part_one(input: &String) -> AocResult<String> {
     let (crates, procedures) = input.split_once("\n\n").unwrap();
 
     let mut lines: Vec<&str> = crates.split_terminator('\n').collect();
@@ -58,7 +58,7 @@ fn part_one(input: String) -> AocResult<String> {
     Ok(output)
 }
 
-fn part_two(input: String) -> AocResult<String> {
+fn part_two(input: &String) -> AocResult<String> {
     let (crates, procedures) = input.split_once("\n\n").unwrap();
 
     let mut lines: Vec<&str> = crates.split_terminator('\n').collect();

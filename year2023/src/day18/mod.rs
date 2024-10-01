@@ -4,14 +4,14 @@ use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(18);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution
 }
 
-fn parse(input: String) -> Vec<(Direction, i32, Direction, i32)> {
+fn parse(input: &String) -> Vec<(Direction, i32, Direction, i32)> {
     input
         .split_terminator('\n')
         .map(|line| {
@@ -44,7 +44,9 @@ fn parse(input: String) -> Vec<(Direction, i32, Direction, i32)> {
         .collect()
 }
 
-fn part_one(commands: Vec<(Direction, i32, Direction, i32)>) -> AocResult<usize> {
+fn part_one(input: &String) -> AocResult<usize> {
+    let commands = parse(input);
+
     let mut map = Map::new();
 
     let mut start = None;
@@ -158,7 +160,9 @@ fn part_one(commands: Vec<(Direction, i32, Direction, i32)>) -> AocResult<usize>
     Ok(count)
 }
 
-fn part_two(commands: Vec<(Direction, i32, Direction, i32)>) -> AocResult<usize> {
+fn part_two(input: &String) -> AocResult<usize> {
+    let commands = parse(input);
+
     let mut map = Map::new();
 
     let mut start = None;

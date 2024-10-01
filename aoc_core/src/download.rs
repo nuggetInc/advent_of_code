@@ -85,7 +85,7 @@ impl Problem {
     }
 
     pub fn write_readme(&self, year_id: Id<Year>, day_id: Id<Day>) -> io::Result<()> {
-        let mut file = File::create(format!("year{year_id}/src/day{day_id}/README.md",))?;
+        let mut file = File::create(format!("year{year_id}/src/day{day_id}/README.md"))?;
 
         writeln!(file, "{}", self.description)
     }
@@ -95,7 +95,7 @@ impl Problem {
             return Ok(());
         }
 
-        let mut file = File::create(format!("year{year_id}/src/day{day_id}/files/input.out",))?;
+        let mut file = File::create(format!("year{year_id}/src/day{day_id}/files/input.out"))?;
 
         writeln!(file, "{}", self.answers.join("\n"))
     }

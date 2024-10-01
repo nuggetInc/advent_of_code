@@ -15,7 +15,7 @@ use scraper::{Html, Selector};
 use crate::{AocClient, AocResult, Day, Id, PartError, Problem, Year};
 
 pub fn upload_answer(year_id: Id<Year>, day: &Day) -> AocResult<()> {
-    let in_path = PathBuf::from(format!("year{year_id}/src/day{}/files/input.in", day.id()));
+    let input_file = PathBuf::from(format!("year{year_id}/src/day{}/files/input.in", day.id()));
 
     let out_path = PathBuf::from(format!("{year_id}/src/day{}/files/input.out", day.id()));
     let part_id = if out_path.exists() && fs::metadata(&out_path)?.len() > 0 {
@@ -26,7 +26,8 @@ pub fn upload_answer(year_id: Id<Year>, day: &Day) -> AocResult<()> {
 
     let part = day.get_part(part_id).ok_or(PartError::Unimplemented)?;
 
-    let answer = part.run(&in_path, None)?.answer();
+    let input = fs::read_to_string(input_file)?;
+    let answer = part.run(&input, None)?.answer();
 
     let client = AocClient::default();
 

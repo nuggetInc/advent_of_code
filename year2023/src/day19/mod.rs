@@ -4,14 +4,14 @@ use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(19);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution
 }
 
-fn parse(input: String) -> (BTreeMap<String, Workflow>, Vec<Part>) {
+fn parse(input: &String) -> (BTreeMap<String, Workflow>, Vec<Part>) {
     let (workflow_lines, part_lines) = input.split_once("\n\n").unwrap();
 
     let workflows = workflow_lines
@@ -66,7 +66,9 @@ fn parse(input: String) -> (BTreeMap<String, Workflow>, Vec<Part>) {
     (workflows, parts)
 }
 
-fn part_one((workflows, parts): (BTreeMap<String, Workflow>, Vec<Part>)) -> AocResult<u64> {
+fn part_one(input: &String) -> AocResult<u64> {
+    let (workflows, parts) = parse(input);
+
     let mut accepted = Vec::new();
 
     'parts: for part in parts.into_iter() {
@@ -103,7 +105,9 @@ fn part_one((workflows, parts): (BTreeMap<String, Workflow>, Vec<Part>)) -> AocR
     Ok(accepted.into_iter().map(|p| p.x + p.m + p.a + p.s).sum())
 }
 
-fn part_two((workflows, _): (BTreeMap<String, Workflow>, Vec<Part>)) -> AocResult<u64> {
+fn part_two(input: &String) -> AocResult<u64> {
+    let (workflows, _) = parse(input);
+
     let part_range = PartRange::new(1..4001, 1..4001, 1..4001, 1..4001);
     Ok(get_accepted(&workflows, &workflows["in"], part_range))
 }

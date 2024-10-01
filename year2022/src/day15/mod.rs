@@ -3,13 +3,15 @@ use regex::Regex;
 
 pub fn day() -> Day {
     let mut solution = Day::new(15);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/input.in");
     solution
 }
 
-fn part_one(sensors: Vec<Sensor>) -> AocResult<i32> {
+fn part_one(input: &String) -> AocResult<i32> {
+    let sensors = parse(input);
+
     const Y: i64 = 2000000;
 
     let mut min_x = 0;
@@ -42,7 +44,9 @@ fn part_one(sensors: Vec<Sensor>) -> AocResult<i32> {
     Ok(count)
 }
 
-fn part_two(sensors: Vec<Sensor>) -> AocResult<i64> {
+fn part_two(input: &String) -> AocResult<i64> {
+    let sensors = parse(input);
+
     const SIZE: i64 = 4000000;
 
     for y in 0..=SIZE {
@@ -67,7 +71,7 @@ fn part_two(sensors: Vec<Sensor>) -> AocResult<i64> {
     todo!()
 }
 
-fn parse(input: String) -> Vec<Sensor> {
+fn parse(input: &String) -> Vec<Sensor> {
     let regex =
         Regex::new(r"Sensor at x=(?P<sx>-?\d+), y=(?P<sy>-?\d+): closest beacon is at x=(?P<bx>-?\d+), y=(?P<by>-?\d+)")
             .unwrap();

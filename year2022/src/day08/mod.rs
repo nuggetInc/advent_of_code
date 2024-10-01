@@ -2,13 +2,13 @@ use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(8);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/input.in");
     solution
 }
 
-fn parse(input: String) -> Grid {
+fn parse(input: &String) -> Grid {
     let grid: Vec<Vec<u8>> = input
         .split_terminator('\n')
         .map(|s| s.chars().map(|c| c.to_digit(10).unwrap() as u8).collect())
@@ -20,7 +20,9 @@ fn parse(input: String) -> Grid {
     Grid::new(grid, width, height)
 }
 
-fn part_one(grid: Grid) -> AocResult<i32> {
+fn part_one(input: &String) -> AocResult<i32> {
+    let grid = parse(input);
+
     let mut visible = 0;
 
     for y in 0..grid.height {
@@ -34,7 +36,9 @@ fn part_one(grid: Grid) -> AocResult<i32> {
     Ok(visible)
 }
 
-fn part_two(grid: Grid) -> AocResult<u32> {
+fn part_two(input: &String) -> AocResult<u32> {
+    let grid = parse(input);
+
     let mut highest_score = 0;
 
     for y in 0..grid.height {

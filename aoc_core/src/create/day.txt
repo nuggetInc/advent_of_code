@@ -9,14 +9,18 @@ pub fn day() -> Day {{
     solution
 }}
 
-fn parse(input: String) -> Vec<String> {{
+fn parse(input: &String) -> Vec<String> {{
     todo!()
 }}
 
 fn part_one(values: Vec<String>) -> AocResult<u32> {{
+    let _ = parse(input);
+
     todo!()
 }}
 
 fn part_two(values: Vec<String>) -> AocResult<u32> {{
+    let _ = parse(input);
+    
     todo!()
 }}

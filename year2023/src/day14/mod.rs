@@ -5,14 +5,14 @@ use itertools::Itertools;
 
 pub fn day() -> Day {
     let mut solution = Day::new(14);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution
 }
 
-fn parse(input: String) -> Map {
+fn parse(input: &String) -> Map {
     let mut width = 0;
 
     let grid = input
@@ -33,11 +33,15 @@ fn parse(input: String) -> Map {
     Map::new(grid, width, height)
 }
 
-fn part_one(mut map: Map) -> AocResult<usize> {
+fn part_one(input: &String) -> AocResult<usize> {
+    let mut map = parse(input);
+
     Ok(map.roll_north().load())
 }
 
-fn part_two(mut map: Map) -> AocResult<usize> {
+fn part_two(input: &String) -> AocResult<usize> {
+    let mut map = parse(input);
+
     let mut previous = BTreeSet::new();
     let mut history = Vec::new();
 

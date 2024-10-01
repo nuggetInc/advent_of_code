@@ -5,14 +5,14 @@ use itertools::Itertools;
 
 pub fn day() -> Day {
     let mut solution = Day::new(5);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution
 }
 
-fn parse(input: String) -> Almanac {
+fn parse(input: &String) -> Almanac {
     let mut lines = input.split_terminator("\n\n");
 
     let seeds: Vec<_> = lines
@@ -42,7 +42,9 @@ fn parse(input: String) -> Almanac {
     Almanac::new(seeds, maps)
 }
 
-fn part_one(almanac: Almanac) -> AocResult<i64> {
+fn part_one(input: &String) -> AocResult<i64> {
+    let almanac = parse(input);
+
     let mut values = almanac.seeds.clone();
 
     for map in &almanac.maps {
@@ -64,7 +66,9 @@ fn part_one(almanac: Almanac) -> AocResult<i64> {
     Ok(values.into_iter().min().unwrap())
 }
 
-fn part_two(almanac: Almanac) -> AocResult<i64> {
+fn part_two(input: &String) -> AocResult<i64> {
+    let almanac = parse(input);
+
     let mut values: Vec<_> = almanac
         .seeds
         .iter()

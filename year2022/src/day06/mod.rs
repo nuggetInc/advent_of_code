@@ -10,15 +10,15 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(input: String) -> AocResult<usize> {
+fn part_one(input: &String) -> AocResult<usize> {
     Ok(find_marker(input, 4))
 }
 
-fn part_two(input: String) -> AocResult<usize> {
+fn part_two(input: &String) -> AocResult<usize> {
     Ok(find_marker(input, 14))
 }
 
-fn find_marker(input: String, size: usize) -> usize {
+fn find_marker(input: &String, size: usize) -> usize {
     let mut iter = input.chars();
 
     let mut queue = VecDeque::with_capacity(4);

@@ -4,13 +4,15 @@ use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(13);
-    solution.part_1(|s: String| part_one(parse_one(s)));
-    solution.part_2(|s: String| part_two(parse_two(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/input.in");
     solution
 }
 
-fn part_one(pairs: Vec<(Value, Value)>) -> AocResult<i32> {
+fn part_one(input: &String) -> AocResult<i32> {
+    let pairs = parse_one(input);
+
     let mut sum = 0;
     let mut index = 0;
 
@@ -29,7 +31,9 @@ fn part_one(pairs: Vec<(Value, Value)>) -> AocResult<i32> {
     Ok(sum)
 }
 
-fn part_two(mut values: Vec<Value>) -> AocResult<i32> {
+fn part_two(input: &String) -> AocResult<i32> {
+    let mut values = parse_two(input);
+
     let value2 = Value::List(vec![Value::List(vec![Value::Integer(2)])]);
     let value6 = Value::List(vec![Value::List(vec![Value::Integer(6)])]);
 
@@ -52,7 +56,7 @@ fn part_two(mut values: Vec<Value>) -> AocResult<i32> {
     Ok(product)
 }
 
-fn parse_one(input: String) -> Vec<(Value, Value)> {
+fn parse_one(input: &String) -> Vec<(Value, Value)> {
     let mut pairs = Vec::new();
 
     for pair in input.split("\n\n") {
@@ -70,7 +74,7 @@ fn parse_one(input: String) -> Vec<(Value, Value)> {
     pairs
 }
 
-fn parse_two(input: String) -> Vec<Value> {
+fn parse_two(input: &String) -> Vec<Value> {
     let mut values = Vec::new();
 
     for line in input.split_terminator('\n') {
@@ -100,6 +104,7 @@ fn parse_value(input: &str) -> (Value, &str) {
                 input = result.1;
             } else {
                 let result = parse_value(input);
+
                 values.push(result.0);
                 input = result.1;
             }

@@ -4,21 +4,25 @@ use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(12);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/input.in");
     solution
 }
 
-fn part_one(map: Map) -> AocResult<usize> {
+fn part_one(input: &String) -> AocResult<usize> {
+    let map = parse(input);
+
     Ok(map.get_steps())
 }
 
-fn part_two(map: Map) -> AocResult<usize> {
+fn part_two(input: &String) -> AocResult<usize> {
+    let map = parse(input);
+
     Ok(map.get_fewest_steps())
 }
 
-fn parse(input: String) -> Map {
+fn parse(input: &String) -> Map {
     let lines = input.split_terminator('\n').collect::<Vec<_>>();
 
     let mut start = 0;

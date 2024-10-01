@@ -45,6 +45,9 @@ impl Day {
         let mut file_parts = Vec::new();
 
         for input_file in &self.files {
+            let input =
+                fs::read_to_string(input_file).map_err(|err| DayError::InputFileError(err))?;
+
             let mut output_file = input_file.clone();
             output_file.set_extension("out");
 
@@ -61,7 +64,7 @@ impl Day {
             for part in self.parts.values() {
                 let expected = expected_answers.next().map(str::to_owned);
 
-                let result = part.run(input_file, expected);
+                let result = part.run(&input, expected);
                 parts.insert(part.id(), result);
             }
 
@@ -73,7 +76,7 @@ impl Day {
 
     pub fn part_1<Answer: fmt::Display + 'static>(
         &mut self,
-        solver: impl Fn(String) -> AocResult<Answer> + RefUnwindSafe + 'static,
+        solver: impl Fn(&String) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) {
         self.parts
             .insert(Id::from(1), Part::new(Id::from(1), solver));
@@ -81,7 +84,7 @@ impl Day {
 
     pub fn part_2<Answer: fmt::Display + 'static>(
         &mut self,
-        solver: impl Fn(String) -> AocResult<Answer> + RefUnwindSafe + 'static,
+        solver: impl Fn(&String) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) {
         self.parts
             .insert(Id::from(2), Part::new(Id::from(2), solver));
@@ -104,6 +107,7 @@ impl Day {
 #[derive(Debug)]
 pub enum DayError {
     Unimplemented,
+    InputFileError(io::Error),
     OutputFileError(io::Error),
 }
 
@@ -111,6 +115,7 @@ impl fmt::Display for DayError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             DayError::Unimplemented => write!(f, "day is not implemented"),
+            DayError::InputFileError(err) => write!(f, "cannot read input file: {}", err),
             DayError::OutputFileError(err) => write!(f, "cannot read output file: {}", err),
         }
     }
@@ -120,7 +125,7 @@ impl Error for DayError {
     fn source(&self) -> Option<&(dyn Error + 'static)> {
         match self {
             DayError::Unimplemented => None,
-            DayError::OutputFileError(err) => Some(err),
+            DayError::InputFileError(err) | DayError::OutputFileError(err) => Some(err),
         }
     }
 }

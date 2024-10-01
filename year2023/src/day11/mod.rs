@@ -3,14 +3,14 @@ use itertools::Itertools;
 
 pub fn day() -> Day {
     let mut solution = Day::new(11);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution
 }
 
-fn parse(input: String) -> (Vec<Galaxy>, Vec<bool>, Vec<bool>) {
+fn parse(input: &String) -> (Vec<Galaxy>, Vec<bool>, Vec<bool>) {
     let mut galaxies = Vec::new();
     let mut galaxies_x = Vec::new();
     let mut galaxies_y = Vec::new();
@@ -36,15 +36,15 @@ fn parse(input: String) -> (Vec<Galaxy>, Vec<bool>, Vec<bool>) {
     (galaxies, galaxies_x, galaxies_y)
 }
 
-fn part_one(
-    (galaxies, galaxies_x, galaxies_y): (Vec<Galaxy>, Vec<bool>, Vec<bool>),
-) -> AocResult<u64> {
+fn part_one(input: &String) -> AocResult<u64> {
+    let (galaxies, galaxies_x, galaxies_y) = parse(input);
+
     Ok(calculate_distances(galaxies, galaxies_x, galaxies_y, 1))
 }
 
-fn part_two(
-    (galaxies, galaxies_x, galaxies_y): (Vec<Galaxy>, Vec<bool>, Vec<bool>),
-) -> AocResult<u64> {
+fn part_two(input: &String) -> AocResult<u64> {
+    let (galaxies, galaxies_x, galaxies_y) = parse(input);
+
     Ok(calculate_distances(
         galaxies, galaxies_x, galaxies_y, 999999,
     ))

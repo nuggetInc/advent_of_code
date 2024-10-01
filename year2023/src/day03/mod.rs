@@ -4,14 +4,14 @@ use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(3);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution
 }
 
-fn parse(input: String) -> (Vec<u32>, Vec<Vec<Cell>>) {
+fn parse(input: &String) -> (Vec<u32>, Vec<Vec<Cell>>) {
     let mut numbers = Vec::new();
     let mut map = Vec::new();
 
@@ -46,7 +46,9 @@ fn parse(input: String) -> (Vec<u32>, Vec<Vec<Cell>>) {
     (numbers, map)
 }
 
-fn part_one((numbers, map): (Vec<u32>, Vec<Vec<Cell>>)) -> AocResult<u32> {
+fn part_one(input: &String) -> AocResult<u32> {
+    let (numbers, map) = parse(input);
+
     let mut marked = HashSet::new();
 
     for (row_index, row) in map.iter().enumerate() {
@@ -72,7 +74,9 @@ fn part_one((numbers, map): (Vec<u32>, Vec<Vec<Cell>>)) -> AocResult<u32> {
     Ok(marked.into_iter().map(|index| numbers[index]).sum::<u32>())
 }
 
-fn part_two((numbers, map): (Vec<u32>, Vec<Vec<Cell>>)) -> AocResult<u32> {
+fn part_two(input: &String) -> AocResult<u32> {
+    let (numbers, map) = parse(input);
+
     let mut sum = 0;
     for (row_index, row) in map.iter().enumerate() {
         for (cell_index, cell) in row.iter().enumerate() {

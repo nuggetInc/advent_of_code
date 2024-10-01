@@ -2,14 +2,14 @@ use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
     let mut solution = Day::new(6);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution
 }
 
-fn parse(input: String) -> Vec<(u64, u64)> {
+fn parse(input: &String) -> Vec<(u64, u64)> {
     let mut lines = input.split_terminator('\n');
     let time = lines.next().unwrap();
     let distance = lines.next().unwrap();
@@ -21,7 +21,9 @@ fn parse(input: String) -> Vec<(u64, u64)> {
         .collect()
 }
 
-fn part_one(values: Vec<(u64, u64)>) -> AocResult<u64> {
+fn part_one(input: &String) -> AocResult<u64> {
+    let values = parse(input);
+
     Ok(values
         .into_iter()
         .map(|(time, distance)| {
@@ -37,7 +39,9 @@ fn part_one(values: Vec<(u64, u64)>) -> AocResult<u64> {
         .product::<u64>())
 }
 
-fn part_two(values: Vec<(u64, u64)>) -> AocResult<u64> {
+fn part_two(input: &String) -> AocResult<u64> {
+    let values = parse(input);
+
     let (time, distance) = values.into_iter().fold((0_u64, 0_u64), |acc, num| {
         (
             (acc.0 * 10_u64.pow(num.0.ilog10() + 1)) + num.0,

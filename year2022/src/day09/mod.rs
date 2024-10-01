@@ -10,7 +10,7 @@ pub fn day() -> Day {
     solution
 }
 
-fn part_one(input: String) -> AocResult<usize> {
+fn part_one(input: &String) -> AocResult<usize> {
     let mut knots = [(0, 0); 2];
 
     let mut set = HashSet::new();
@@ -63,7 +63,7 @@ fn part_one(input: String) -> AocResult<usize> {
     Ok(set.len())
 }
 
-fn part_two(input: String) -> AocResult<usize> {
+fn part_two(input: &String) -> AocResult<usize> {
     let mut knots = [(0, 0); 10];
 
     let mut set = HashSet::new();

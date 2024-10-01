@@ -5,13 +5,15 @@ use regex::Regex;
 
 pub fn day() -> Day {
     let mut solution = Day::new(11);
-    solution.part_1(|s: String| part_one(parse(s)));
-    solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    solution.part_2(part_two);
     solution.add_file("files/input.in");
     solution
 }
 
-fn part_one(monkeys: Vec<Monkey>) -> AocResult<i32> {
+fn part_one(input: &String) -> AocResult<i32> {
+    let monkeys = parse(input);
+
     let mut monkeys = monkeys.clone();
 
     let mut inspects = vec![0; monkeys.len()];
@@ -45,7 +47,9 @@ fn part_one(monkeys: Vec<Monkey>) -> AocResult<i32> {
     Ok(inspects[0] * inspects[1])
 }
 
-fn part_two(monkeys: Vec<Monkey>) -> AocResult<i64> {
+fn part_two(input: &String) -> AocResult<i64> {
+    let monkeys = parse(input);
+
     let mut monkeys = monkeys.clone();
 
     let mut inspects = vec![0_i64; monkeys.len()];
@@ -81,7 +85,7 @@ fn part_two(monkeys: Vec<Monkey>) -> AocResult<i64> {
     Ok(inspects[0] * inspects[1])
 }
 
-fn parse(input: String) -> Vec<Monkey> {
+fn parse(input: &String) -> Vec<Monkey> {
     let mut monkeys = Vec::new();
 
     // let monkey_regex = Regex::new(r"^Monkey (?P<ident>\d+):$").unwrap();

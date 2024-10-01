@@ -5,14 +5,14 @@ use itertools::Itertools;
 
 pub fn day() -> Day {
     let mut solution = Day::new(20);
-    solution.part_1(|s: String| part_one(parse(s)));
-    // solution.part_2(|s: String| part_two(parse(s)));
+    solution.part_1(part_one);
+    // solution.part_2(part_two);
     solution.add_file("files/test.in");
     solution.add_file("files/input.in");
     solution
 }
 
-fn parse(input: String) -> (BTreeMap<String, Module>, Vec<String>) {
+fn parse(input: &String) -> (BTreeMap<String, Module>, Vec<String>) {
     let mut modules = BTreeMap::new();
     let mut broadcaster_output = None;
 
@@ -49,9 +49,9 @@ fn parse(input: String) -> (BTreeMap<String, Module>, Vec<String>) {
     (modules, broadcaster_output.unwrap())
 }
 
-fn part_one(
-    (mut modules, broadcaster_output): (BTreeMap<String, Module>, Vec<String>),
-) -> AocResult<u32> {
+fn part_one(input: &String) -> AocResult<u32> {
+    let (mut modules, broadcaster_output) = parse(input);
+
     let mut high_signals = 0;
     let mut low_signals = 0;
 
