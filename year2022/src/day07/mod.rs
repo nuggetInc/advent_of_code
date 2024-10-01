@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use aoc_core::{AocResult, Day};
 
 pub fn day() -> Day {
-    let mut solution = Day::new(7);
+    let mut solution = Day::new();
     solution.part_1(part_one);
     solution.part_2(part_two);
     solution.add_file("files/input.in");

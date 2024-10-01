@@ -18,24 +18,24 @@ mod day15;
 mod day16;
 
 pub fn year() -> Year {
-    let mut year = Year::new(2022);
+    let mut year = Year::new();
 
-    year.add_day(day01::day());
-    year.add_day(day02::day());
-    year.add_day(day03::day());
-    year.add_day(day04::day());
-    year.add_day(day05::day());
-    year.add_day(day06::day());
-    year.add_day(day07::day());
-    year.add_day(day08::day());
-    year.add_day(day09::day());
-    year.add_day(day10::day());
-    year.add_day(day11::day());
-    year.add_day(day12::day());
-    year.add_day(day13::day());
-    year.add_day(day14::day());
-    year.add_day(day15::day());
-    year.add_day(day16::day());
+    year.add_day(1, day01::day());
+    year.add_day(2, day02::day());
+    year.add_day(3, day03::day());
+    year.add_day(4, day04::day());
+    year.add_day(5, day05::day());
+    year.add_day(6, day06::day());
+    year.add_day(7, day07::day());
+    year.add_day(8, day08::day());
+    year.add_day(9, day09::day());
+    year.add_day(10, day10::day());
+    year.add_day(11, day11::day());
+    year.add_day(12, day12::day());
+    year.add_day(13, day13::day());
+    year.add_day(14, day14::day());
+    year.add_day(15, day15::day());
+    year.add_day(16, day16::day());
 
     year
 }

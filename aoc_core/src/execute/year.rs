@@ -1,37 +1,21 @@
-use std::{collections::BTreeMap, error::Error, fmt, panic::Location};
+use std::{collections::BTreeMap, error::Error, fmt};
 
 use super::{day::Day, result::YearResult};
 use crate::Id;
 
 pub struct Year {
-    id: Id<Year>,
     days: BTreeMap<Id<Day>, Day>,
 }
 
 impl Year {
-    pub fn new(id: impl Into<Id<Year>>) -> Self {
+    pub fn new() -> Self {
         Self {
-            id: id.into(),
             days: BTreeMap::new(),
         }
     }
 
-    pub fn id(&self) -> Id<Year> {
-        self.id
-    }
-
-    #[track_caller]
-    pub fn add_day(&mut self, day: Day) {
-        if self.days.contains_key(&day.id()) {
-            eprintln!(
-                "Year {}: Day {} overwritten at {}",
-                self.id,
-                day.id(),
-                Location::caller()
-            )
-        }
-
-        self.days.insert(day.id(), day);
+    pub fn add_day(&mut self, day_id: impl Into<Id<Day>>, day: Day) {
+        self.days.insert(day_id.into(), day);
     }
 
     pub fn get_day(&self, index: Id<Day>) -> Option<&Day> {
@@ -41,11 +25,11 @@ impl Year {
     pub fn run(&self) -> YearResult {
         let mut days = BTreeMap::new();
 
-        for day in self.days.values() {
-            days.insert(day.id(), day.run());
+        for (day_id, day) in &self.days {
+            days.insert(*day_id, day.run());
         }
 
-        YearResult::new(self.id, days)
+        YearResult::new(days)
     }
 }
 

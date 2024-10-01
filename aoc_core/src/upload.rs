@@ -14,10 +14,10 @@ use scraper::{Html, Selector};
 
 use crate::{AocClient, AocResult, Day, Id, PartError, Problem, Year};
 
-pub fn upload_answer(year_id: Id<Year>, day: &Day) -> AocResult<()> {
-    let input_file = PathBuf::from(format!("year{year_id}/src/day{}/files/input.in", day.id()));
+pub fn upload_answer(year_id: Id<Year>, day_id: Id<Day>, day: &Day) -> AocResult<()> {
+    let input_file = PathBuf::from(format!("year{year_id}/src/day{day_id}/files/input.in"));
 
-    let out_path = PathBuf::from(format!("{year_id}/src/day{}/files/input.out", day.id()));
+    let out_path = PathBuf::from(format!("{year_id}/src/day{day_id}/files/input.out"));
     let part_id = if out_path.exists() && fs::metadata(&out_path)?.len() > 0 {
         Id::from(2)
     } else {
@@ -35,11 +35,7 @@ pub fn upload_answer(year_id: Id<Year>, day: &Day) -> AocResult<()> {
     params.insert("level".into(), part_id.deref().to_string());
     params.insert("answer".into(), answer.clone());
 
-    let url = format!(
-        "https://adventofcode.com/{}/day/{}/answer",
-        *year_id,
-        *day.id()
-    );
+    let url = format!("https://adventofcode.com/{year_id}/day/{day_id}/answer");
     let text = client.post(&url, params)?.text()?;
 
     let document = Html::parse_document(&text);
@@ -62,7 +58,7 @@ pub fn upload_answer(year_id: Id<Year>, day: &Day) -> AocResult<()> {
 
         writeln!(out_file, "{}", answer)?;
 
-        Problem::download(year_id, day.id())?.write_readme(year_id, day.id())?;
+        Problem::download(year_id, day_id)?.write_readme(year_id, day_id)?;
     } else if response.starts_with("That's not the right answer") {
         io::stdout()
             .queue(Print(" X ".red()))?

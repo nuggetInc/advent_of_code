@@ -1,12 +1,6 @@
 mod solutions;
 
-use std::{
-    collections::VecDeque,
-    env,
-    error::Error,
-    fmt,
-    io::{self, Write},
-};
+use std::{collections::VecDeque, env, error::Error, fmt, io};
 
 use aoc_core::{
     create_day, upload_answer, AocResult, Day, DayError, Id, Problem, ProblemInput, Year, YearError,
@@ -26,9 +20,7 @@ fn main() -> AocResult<()> {
 
     if !args.is_empty() {
         if let Err(error) = execute_command(args) {
-            io::stderr()
-                .queue(Print(format!("{}\n", error).red()))?
-                .flush()?;
+            io::stderr().execute(Print(format!("{}\n", error).red()))?;
         }
         return Ok(());
     }
@@ -43,9 +35,7 @@ fn main() -> AocResult<()> {
             .collect();
 
         if let Err(error) = execute_command(args) {
-            io::stderr()
-                .queue(Print(format!("{}\n", error).red()))?
-                .flush()?;
+            io::stderr().execute(Print(format!("{}\n", error).red()))?;
         }
 
         io::stdout().execute(Print(">>> "))?;
@@ -117,6 +107,8 @@ fn run(year_id: Id<Year>, day_id: Option<Id<Day>>) -> AocResult<()> {
         result.print()
     } else {
         let result = year.run();
+
+        io::stdout().queue(Print(format!("Year {year_id}")))?;
         result.print()
     }
 }
@@ -132,7 +124,7 @@ fn upload(year_id: Id<Year>, day_id: Id<Day>) -> AocResult<()> {
         Err(DayError::Unimplemented)?
     };
 
-    upload_answer(year_id, day)
+    upload_answer(year_id, day_id, day)
 }
 
 #[derive(Debug)]

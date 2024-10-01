@@ -4,7 +4,7 @@ use aoc_core::{AocResult, Day};
 use regex::Regex;
 
 pub fn day() -> Day {
-    let mut solution = Day::new(16);
+    let mut solution = Day::new();
     solution.part_1(part_one);
     solution.add_file("files/input.in");
     solution

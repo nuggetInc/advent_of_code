@@ -10,16 +10,15 @@ use crossterm::{
 };
 
 use super::DayResult;
-use crate::{AocResult, Day, DayError, Id, Year};
+use crate::{AocResult, Day, DayError, Id};
 
 pub struct YearResult {
-    year: Id<Year>,
     days: BTreeMap<Id<Day>, Result<DayResult, DayError>>,
 }
 
 impl YearResult {
-    pub fn new(year: Id<Year>, days: BTreeMap<Id<Day>, Result<DayResult, DayError>>) -> Self {
-        Self { year, days }
+    pub fn new(days: BTreeMap<Id<Day>, Result<DayResult, DayError>>) -> Self {
+        Self { days }
     }
 
     pub fn elapsed(&self) -> Duration {
@@ -31,19 +30,20 @@ impl YearResult {
 
     pub fn print(&self) -> AocResult<()> {
         io::stdout()
-            .queue(Print(format!("Year {}", self.year)))?
             .queue(Print(format!(" - {:?}", self.elapsed()).dark_grey()))?
             .queue(Print("\n"))?
             .flush()?;
 
         for (day_id, result) in &self.days {
-            io::stdout().queue(Print("\n"))?.flush()?;
+            io::stdout()
+                .queue(Print("\n"))?
+                .queue(Print(format!("Day {day_id}")))?
+                .flush()?;
+
             match result {
                 Ok(day) => day.print()?,
                 Err(error) => io::stdout()
-                    .queue(Print(format!("Day {day_id}")))?
-                    .queue(Print(format!(" X {}", error).red()))?
-                    .queue(Print("\n"))?
+                    .queue(Print(format!(" X {}\n", error).red()))?
                     .flush()?,
             }
         }

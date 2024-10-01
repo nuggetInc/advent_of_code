@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, panic::Location};
+use std::collections::BTreeMap;
 
 use crate::{Id, Year};
 
@@ -8,13 +8,8 @@ pub struct Solutions {
 }
 
 impl Solutions {
-    #[track_caller]
-    pub fn add_year(&mut self, year: Year) {
-        if self.years.contains_key(&year.id()) {
-            eprintln!("Year {} overwritten at {}", year.id(), Location::caller())
-        }
-
-        self.years.insert(year.id(), year);
+    pub fn add_year(&mut self, year_id: impl Into<Id<Year>>, year: Year) {
+        self.years.insert(year_id.into(), year);
     }
 
     pub fn get_year(&self, index: Id<Year>) -> Option<&Year> {

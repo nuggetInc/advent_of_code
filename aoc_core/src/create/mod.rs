@@ -19,7 +19,7 @@ pub fn create_day(year_id: Id<Year>, day_id: Id<Day>) -> AocResult<()> {
     let mut add_days = String::new();
     for day in &days {
         mods += &format!("mod day{day};\n");
-        add_days += &format!("    year.add_day(day{day}::day());\n");
+        add_days += &format!("    year.add_day({day}, day{day}::day());\n");
     }
 
     fs::write(format!("year{year_id}/src/days.txt"), days.join("\n"))?;

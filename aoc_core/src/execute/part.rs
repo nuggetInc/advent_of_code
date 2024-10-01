@@ -6,29 +6,22 @@ use std::{
 };
 
 use super::result::PartResult;
-use crate::{AocResult, Id};
+use crate::AocResult;
 
 pub struct Part {
-    id: Id<Part>,
     solver: Box<dyn Fn(&String) -> AocResult<String> + RefUnwindSafe + 'static>,
 }
 
 impl Part {
     pub fn new<Answer>(
-        id: Id<Part>,
         solver: impl Fn(&String) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) -> Self
     where
         Answer: fmt::Display,
     {
         Part {
-            id,
             solver: Box::new(move |s: &String| solver(s).map(|a| a.to_string())),
         }
-    }
-
-    pub fn id(&self) -> Id<Part> {
-        self.id
     }
 
     pub fn run(&self, input: &String, expected: Option<String>) -> Result<PartResult, PartError> {
@@ -39,12 +32,7 @@ impl Part {
         let elapsed = instant.elapsed();
 
         match result {
-            Ok(Ok(answer)) => Ok(PartResult::new(
-                self.id,
-                answer.to_string(),
-                expected,
-                elapsed,
-            )),
+            Ok(Ok(answer)) => Ok(PartResult::new(answer.to_string(), expected, elapsed)),
             Ok(Err(err)) => Err(PartError::Error(err)),
             Err(_) => Err(PartError::Paniced),
         }

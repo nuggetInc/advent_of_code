@@ -11,19 +11,17 @@ use crossterm::{
     QueueableCommand,
 };
 
-use crate::{AocResult, Day, Id, Part, PartError, PartResult};
+use crate::{AocResult, Id, Part, PartError, PartResult};
 
 pub struct DayResult {
-    day: Id<Day>,
     file_parts: Vec<(PathBuf, BTreeMap<Id<Part>, Result<PartResult, PartError>>)>,
 }
 
 impl DayResult {
     pub fn new(
-        day: Id<Day>,
         file_parts: Vec<(PathBuf, BTreeMap<Id<Part>, Result<PartResult, PartError>>)>,
     ) -> Self {
-        Self { day, file_parts }
+        Self { file_parts }
     }
 
     pub fn elapsed(&self) -> Duration {
@@ -40,7 +38,6 @@ impl DayResult {
 
     pub fn print(&self) -> AocResult<()> {
         io::stdout()
-            .queue(Print(format!("Day {}", self.day)))?
             .queue(Print(format!(" - {:?}", self.elapsed()).dark_grey()))?
             .queue(Print("\n\n"))?
             .flush()?;
@@ -59,12 +56,13 @@ impl DayResult {
                 .flush()?;
 
             for (part_id, result) in parts {
+                io::stdout().queue(Print(format!("Part {part_id}")))?;
+
                 match result {
                     Ok(part) => part.print()?,
                     Err(error) => io::stdout()
                         .queue(Print(format!(" X {}", error).red()))?
                         .queue(Print(" - ".dark_grey()))?
-                        .queue(Print(format!("Part {part_id}")))?
                         .queue(Print("\n"))?
                         .flush()?,
                 }

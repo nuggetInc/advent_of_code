@@ -11,22 +11,16 @@ use super::{part::Part, result::DayResult};
 use crate::{AocResult, Id};
 
 pub struct Day {
-    id: Id<Day>,
     parts: BTreeMap<Id<Part>, Part>,
     files: Vec<PathBuf>,
 }
 
 impl Day {
-    pub fn new(id: impl Into<Id<Day>>) -> Self {
+    pub fn new() -> Self {
         Self {
-            id: id.into(),
             parts: BTreeMap::new(),
             files: Vec::new(),
         }
-    }
-
-    pub fn id(&self) -> Id<Day> {
-        self.id
     }
 
     pub fn part_count(&self) -> usize {
@@ -61,33 +55,31 @@ impl Day {
 
             let mut parts = BTreeMap::new();
 
-            for part in self.parts.values() {
+            for (part_id, part) in &self.parts {
                 let expected = expected_answers.next().map(str::to_owned);
 
                 let result = part.run(&input, expected);
-                parts.insert(part.id(), result);
+                parts.insert(*part_id, result);
             }
 
             file_parts.push((input_file.to_owned(), parts));
         }
 
-        Ok(DayResult::new(self.id, file_parts))
+        Ok(DayResult::new(file_parts))
     }
 
     pub fn part_1<Answer: fmt::Display + 'static>(
         &mut self,
         solver: impl Fn(&String) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) {
-        self.parts
-            .insert(Id::from(1), Part::new(Id::from(1), solver));
+        self.parts.insert(Id::from(1), Part::new(solver));
     }
 
     pub fn part_2<Answer: fmt::Display + 'static>(
         &mut self,
         solver: impl Fn(&String) -> AocResult<Answer> + RefUnwindSafe + 'static,
     ) {
-        self.parts
-            .insert(Id::from(2), Part::new(Id::from(2), solver));
+        self.parts.insert(Id::from(2), Part::new(solver));
     }
 
     #[track_caller]
