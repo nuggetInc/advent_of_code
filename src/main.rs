@@ -57,7 +57,7 @@ fn execute_command(mut args: VecDeque<String>) -> AocResult<()> {
     let year_id = args
         .pop_front()
         .map(|year_raw| year_raw.parse())
-        .unwrap_or(Ok(Id::from(2023)))?;
+        .unwrap_or(Ok(Id::from(2024)))?;
 
     if let Some(day_raw) = args.pop_front() {
         let day_id = day_raw.parse()?;

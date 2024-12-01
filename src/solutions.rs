@@ -5,6 +5,7 @@ pub fn get_solutions() -> Solutions {
 
     solutions.add_year(Id::from(2022), year2022::year());
     solutions.add_year(Id::from(2023), year2023::year());
+    solutions.add_year(Id::from(2024), year2024::year());
 
     solutions
 }

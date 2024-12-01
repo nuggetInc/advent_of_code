@@ -48,6 +48,7 @@ dependencies = [
  "dotenvy",
  "year2022",
  "year2023",
+ "year2024",
 ]
 
 [[package]]
@@ -1828,6 +1829,16 @@ dependencies = [
 
 [[package]]
 name = "year2023"
+version = "0.1.0"
+dependencies = [
+ "aoc_core",
+ "itertools",
+ "num",
+ "regex",
+]
+
+[[package]]
+name = "year2024"
 version = "0.1.0"
 dependencies = [
  "aoc_core",
