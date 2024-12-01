@@ -17,7 +17,7 @@ use crate::{AocClient, AocResult, Day, Id, PartError, Problem, Year};
 pub fn upload_answer(year_id: Id<Year>, day_id: Id<Day>, day: &Day) -> AocResult<()> {
     let input_file = PathBuf::from(format!("year{year_id}/src/day{day_id}/files/input.in"));
 
-    let out_path = PathBuf::from(format!("{year_id}/src/day{day_id}/files/input.out"));
+    let out_path = PathBuf::from(format!("year{year_id}/src/day{day_id}/files/input.out"));
     let part_id = if out_path.exists() && fs::metadata(&out_path)?.len() > 0 {
         Id::from(2)
     } else {
