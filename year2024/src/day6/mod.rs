@@ -1,7 +1,6 @@
 use std::{
-    collections::{BTreeMap, BTreeSet},
+    collections::BTreeSet,
     ops::{Add, AddAssign, Sub, SubAssign},
-    time::Instant,
 };
 
 use aoc_core::{AocResult, Day};
@@ -15,13 +14,13 @@ pub fn day() -> Day {
     solution
 }
 
-fn parse(input: &String) -> (Grid, Vector, Vector) {
+fn parse(input: &String) -> (Grid, Position, Position) {
     let mut data = Vec::new();
     let mut width = 0;
     let mut height = 0;
 
-    let mut position = Vector::new(0, 0);
-    let mut direction = Vector::new(0, 0);
+    let mut position = Position::new(0, 0);
+    let mut direction = Position::new(0, 0);
 
     for (row, line) in input.split_terminator('\n').enumerate() {
         height = row + 1;
@@ -29,13 +28,13 @@ fn parse(input: &String) -> (Grid, Vector, Vector) {
             width = col + 1;
 
             if matches!(c, '^' | 'v' | '<' | '>') {
-                position = Vector::new(col as i32, row as i32);
+                position = Position::new(col as i32, row as i32);
             }
             match c {
-                '^' => direction = Vector::new(0, -1),
-                'v' => direction = Vector::new(0, 1),
-                '<' => direction = Vector::new(-1, 0),
-                '>' => direction = Vector::new(1, 0),
+                '^' => direction = Position::new(0, -1),
+                'v' => direction = Position::new(0, 1),
+                '<' => direction = Position::new(-1, 0),
+                '>' => direction = Position::new(1, 0),
                 _ => (),
             }
 
@@ -44,11 +43,7 @@ fn parse(input: &String) -> (Grid, Vector, Vector) {
     }
 
     (
-        Grid {
-            data,
-            width,
-            height,
-        },
+        Grid::new(data, Bounds::new(width as i32, height as i32)),
         position,
         direction,
     )
@@ -59,8 +54,8 @@ fn part_one(input: &String) -> AocResult<usize> {
 
     let mut positions = BTreeSet::new();
 
-    while let Some(walkable) = grid.get(position.x, position.y) {
-        if walkable {
+    while let Some(walkable) = grid.get(position) {
+        if *walkable {
             positions.insert(position);
             position += direction;
         } else {
@@ -73,18 +68,40 @@ fn part_one(input: &String) -> AocResult<usize> {
 }
 
 fn part_two(input: &String) -> AocResult<u32> {
-    let (mut grid, start_position, start_direction) = parse(input);
+    let (mut grid, mut position, mut direction) = parse(input);
 
-    let mut position = start_position;
-    let mut direction = start_direction;
+    let mut count = 0;
+    let mut obstacles = BTreeSet::from([position]);
 
-    let mut positions = BTreeMap::new();
+    while let Some(walkable) = grid.get(position) {
+        if *walkable {
+            let obstacle_position = position + direction;
+            if grid.get(obstacle_position) == Some(&true) && obstacles.insert(obstacle_position) {
+                *grid.get_mut(obstacle_position).unwrap() = false;
 
-    while let Some(walkable) = grid.get(position.x, position.y) {
-        if walkable {
-            if !positions.contains_key(&position) {
-                positions.insert(position, direction);
+                let mut position = position;
+                let mut direction = direction;
+
+                let mut walked = BTreeSet::new();
+
+                while let Some(walkable) = grid.get(position) {
+                    if *walkable {
+                        position += direction;
+                    } else {
+                        position -= direction;
+
+                        if !walked.insert((position, direction)) {
+                            count += 1;
+                            break;
+                        }
+
+                        direction = direction.rotated();
+                    }
+                }
+
+                *grid.get_mut(obstacle_position).unwrap() = true;
             }
+
             position += direction;
         } else {
             position -= direction;
@@ -92,49 +109,16 @@ fn part_two(input: &String) -> AocResult<u32> {
         }
     }
 
-    let mut count = 0;
-
-    for (obstacle_position, start_direction) in positions {
-        if obstacle_position == start_position {
-            continue;
-        }
-
-        let mut position = obstacle_position - start_direction;
-        let mut direction = start_direction;
-
-        let mut walked = BTreeSet::new();
-        grid.set(obstacle_position.x, obstacle_position.y, false);
-
-        let instant = Instant::now();
-
-        while let Some(walkable) = grid.get(position.x, position.y) {
-            if walkable {
-                if !walked.insert((position, direction)) {
-                    count += 1;
-                    break;
-                }
-                position += direction;
-            } else {
-                position -= direction;
-                direction = direction.rotated();
-            }
-        }
-
-        eprintln!("{:?}", instant.elapsed());
-
-        grid.set(obstacle_position.x, obstacle_position.y, true);
-    }
-
     Ok(count)
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
-struct Vector {
+struct Position {
     x: i32,
     y: i32,
 }
 
-impl Vector {
+impl Position {
     fn new(x: i32, y: i32) -> Self {
         Self { x, y }
     }
@@ -147,10 +131,10 @@ impl Vector {
     }
 }
 
-impl Add<Vector> for Vector {
+impl Add<Position> for Position {
     type Output = Self;
 
-    fn add(self, rhs: Vector) -> Self::Output {
+    fn add(self, rhs: Position) -> Self::Output {
         Self {
             x: self.x + rhs.x,
             y: self.y + rhs.y,
@@ -158,8 +142,8 @@ impl Add<Vector> for Vector {
     }
 }
 
-impl AddAssign<Vector> for Vector {
-    fn add_assign(&mut self, rhs: Vector) {
+impl AddAssign<Position> for Position {
+    fn add_assign(&mut self, rhs: Position) {
         *self = Self {
             x: self.x + rhs.x,
             y: self.y + rhs.y,
@@ -167,10 +151,10 @@ impl AddAssign<Vector> for Vector {
     }
 }
 
-impl Sub<Vector> for Vector {
+impl Sub<Position> for Position {
     type Output = Self;
 
-    fn sub(self, rhs: Vector) -> Self::Output {
+    fn sub(self, rhs: Position) -> Self::Output {
         Self {
             x: self.x - rhs.x,
             y: self.y - rhs.y,
@@ -178,8 +162,8 @@ impl Sub<Vector> for Vector {
     }
 }
 
-impl SubAssign<Vector> for Vector {
-    fn sub_assign(&mut self, rhs: Vector) {
+impl SubAssign<Position> for Position {
+    fn sub_assign(&mut self, rhs: Position) {
         *self = Self {
             x: self.x - rhs.x,
             y: self.y - rhs.y,
@@ -189,29 +173,47 @@ impl SubAssign<Vector> for Vector {
 
 struct Grid {
     data: Vec<bool>,
-    width: usize,
-    height: usize,
+    bounds: Bounds,
 }
 
 impl Grid {
-    fn get(&self, col: i32, row: i32) -> Option<bool> {
-        if col < 0 || col >= self.width as i32 || row < 0 {
+    fn new(data: Vec<bool>, bounds: Bounds) -> Self {
+        Self { data, bounds }
+    }
+
+    fn get(&self, position: Position) -> Option<&bool> {
+        if !self.bounds.contains(position) {
             return None;
         }
 
         self.data
-            .get((col + row * self.width as i32) as usize)
-            .cloned()
+            .get((position.x + position.y * self.bounds.width) as usize)
     }
 
-    fn set(&mut self, col: i32, row: i32, value: bool) {
-        if col < 0 || col >= self.width as i32 || row < 0 {
-            return;
+    fn get_mut(&mut self, position: Position) -> Option<&mut bool> {
+        if !self.bounds.contains(position) {
+            return None;
         }
 
-        *self
-            .data
-            .get_mut((col + row * self.width as i32) as usize)
-            .unwrap() = value;
+        self.data
+            .get_mut((position.x + position.y * self.bounds.width) as usize)
+    }
+}
+
+struct Bounds {
+    width: i32,
+    height: i32,
+}
+
+impl Bounds {
+    fn new(width: i32, height: i32) -> Self {
+        Self { width, height }
+    }
+
+    fn contains(&self, position: Position) -> bool {
+        return position.x >= 0
+            && position.y >= 0
+            && position.x < self.width
+            && position.y < self.height;
     }
 }
