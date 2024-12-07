@@ -31,9 +31,7 @@ fn part(input: &String, part_two: bool) -> AocResult<u64> {
 
     let mut sum = 0;
     for (target, numbers) in lines {
-        if solve(target, 0, numbers.clone().into_iter(), false) {
-            sum += target;
-        } else if part_two && solve(target, 0, numbers.into_iter(), part_two) {
+        if solve(target, 0, &numbers, part_two) {
             sum += target;
         }
     }
@@ -41,25 +39,26 @@ fn part(input: &String, part_two: bool) -> AocResult<u64> {
     Ok(sum)
 }
 
-fn solve(
-    target: u64,
-    current: u64,
-    mut remaining: impl Iterator<Item = u64> + Clone,
-    part_two: bool,
-) -> bool {
+fn solve(target: u64, current: u64, remaining: &[u64], part_two: bool) -> bool {
     if current > target {
-        false
-    } else if let Some(next) = remaining.next() {
-        solve(target, current + next, remaining.clone(), part_two)
-            || solve(target, current * next, remaining.clone(), part_two)
-            || (part_two
-                && solve(
+        return false;
+    }
+
+    match remaining {
+        [] => current == target,
+        [next, remaining @ ..] if part_two => {
+            solve(target, current + next, remaining, part_two)
+                || solve(target, current * next, remaining, part_two)
+                || solve(
                     target,
                     current * 10_u64.pow(next.ilog10() + 1) + next,
-                    remaining.clone(),
+                    remaining,
                     part_two,
-                ))
-    } else {
-        current == target
+                )
+        }
+        [next, remaining @ ..] => {
+            solve(target, current + next, remaining, part_two)
+                || solve(target, current * next, remaining, part_two)
+        }
     }
 }
