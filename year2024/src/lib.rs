@@ -8,6 +8,7 @@ mod day5;
 mod day6;
 mod day7;
 mod day8;
+mod day9;
 
 pub fn year() -> Year {
     let mut year = Year::new();
@@ -20,6 +21,7 @@ pub fn year() -> Year {
     year.add_day(6, day6::day());
     year.add_day(7, day7::day());
     year.add_day(8, day8::day());
+    year.add_day(9, day9::day());
 
     year
 }
