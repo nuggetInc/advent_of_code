@@ -22,26 +22,18 @@ fn parse(input: &String) -> FxHashMap<u64, u64> {
 fn part(input: &String, blinks: u32) -> AocResult<u64> {
     let mut stones = parse(input);
 
-    let mut cache = FxHashMap::default();
-    cache.insert(0, (1, None));
-
     for _ in 0..blinks {
         let mut new_stones = FxHashMap::default();
 
         for (stone, amount) in &stones {
-            if let Some((stone_1, stone_2)) = cache.get(stone) {
-                insert_or_increment(&mut new_stones, *stone_1, *amount);
-                if let Some(stone_2) = stone_2 {
-                    insert_or_increment(&mut new_stones, *stone_2, *amount);
-                }
+            if *stone == 0 {
+                insert_or_increment(&mut new_stones, 1, *amount);
             } else if stone.ilog10() % 2 == 1 {
                 let power = 10_u64.pow((stone.ilog10() + 1) / 2);
 
-                cache.insert(*stone, (stone / power, Some(stone % power)));
                 insert_or_increment(&mut new_stones, stone / power, *amount);
                 insert_or_increment(&mut new_stones, stone % power, *amount);
             } else {
-                cache.insert(*stone, (stone * 2024, None));
                 insert_or_increment(&mut new_stones, stone * 2024, *amount);
             }
         }
