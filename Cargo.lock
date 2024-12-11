@@ -1842,6 +1842,7 @@ name = "year2024"
 version = "0.1.0"
 dependencies = [
  "aoc_core",
+ "fxhash",
  "itertools",
  "num",
  "regex",
