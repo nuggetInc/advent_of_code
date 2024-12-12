@@ -21,10 +21,9 @@ fn parse(input: &String) -> FxHashMap<u64, u64> {
 
 fn part(input: &String, blinks: u32) -> AocResult<u64> {
     let mut stones = parse(input);
+    let mut new_stones = FxHashMap::default();
 
     for _ in 0..blinks {
-        let mut new_stones = FxHashMap::default();
-
         for (stone, amount) in &stones {
             if *stone == 0 {
                 insert_or_increment(&mut new_stones, 1, *amount);
@@ -38,7 +37,8 @@ fn part(input: &String, blinks: u32) -> AocResult<u64> {
             }
         }
 
-        stones = new_stones;
+        (stones, new_stones) = (new_stones, stones);
+        new_stones.clear();
     }
 
     Ok(stones.values().sum::<u64>())
