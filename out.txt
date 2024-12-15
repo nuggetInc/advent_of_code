@@ -1,21 +1,49 @@
-   Compiling year2024 v0.1.0 (/home/cas/src/rust/aoc/year2024)
-   Compiling aoc v0.1.0 (/home/cas/src/rust/aoc)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.87s
-     Running `target/debug/aoc r 2024 9`
-The given path '"year2022/src/day01/files/input.in"' does not exist
-The given path '"year2022/src/day02/files/input.in"' does not exist
-The given path '"year2022/src/day03/files/input.in"' does not exist
-The given path '"year2022/src/day04/files/input.in"' does not exist
-The given path '"year2022/src/day05/files/input.in"' does not exist
-The given path '"year2022/src/day06/files/input.in"' does not exist
-The given path '"year2022/src/day07/files/input.in"' does not exist
-The given path '"year2022/src/day08/files/input.in"' does not exist
-The given path '"year2022/src/day09/files/input.in"' does not exist
-The given path '"year2023/src/day02/files/input.in"' does not exist
-The given path '"year2023/src/day03/files/input.in"' does not exist
-The given path '"year2023/src/day04/files/input.in"' does not exist
-The given path '"year2023/src/day05/files/input.in"' does not exist
-The given path '"year2023/src/day06/files/input.in"' does not exist
-The given path '"year2023/src/day07/files/input.in"' does not exist
-The given path '"year2023/src/day08/files/input.in"' does not exist
-The given path '"year2023/src/day09/files/input.in"' does not exist
+#.##.......
+...........
+...........
+......##.##
+#.#........
+.........#.
+.......#...
+
+......#..#.
+...........
+#..........
+.##........
+.....#.....
+...##......
+.#....#....
+
+[1, 4, 3, 1]
+.....#..... 0
+...##...... 0
+......#.... 0
+.#....#.... 0
+........... 0
+.##...#..#. 0
+#...#...... 0
+
+.....#..#.. 1
+........... 1
+..#........ 1
+.#........# 1
+....#...... 1
+......#.... 1
+..##....... 1
+
+........... 2
+#..#....#.. 2
+...##..###. 2
+#.......... 2
+....#...#.. 2
+....#...... 2
+........... 2
+
+...#...#..# 5
+.####...... 5
+.##.....#.. 5
+........... 5
+......#.... 5
+........... 5
+#.......... 5
+

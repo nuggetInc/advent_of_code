@@ -2,7 +2,6 @@ use std::ops::{Add, AddAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
 use aoc_core::{AocResult, Day};
 use itertools::Itertools;
-use num::integer::{gcd, lcm};
 use regex::Regex;
 
 pub fn day() -> Day {
