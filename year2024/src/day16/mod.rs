@@ -17,7 +17,7 @@ pub fn day() -> Day {
     solution
 }
 
-fn parse(input: &String) -> (Grid, Position, Position) {
+fn parse(input: &String) -> (Vec<Node>, usize, usize) {
     let mut start_position = Position::new(0, 0);
     let mut end_position = Position::new(0, 0);
 
@@ -40,105 +40,194 @@ fn parse(input: &String) -> (Grid, Position, Position) {
         }
     }
 
-    (
-        Grid::new(data, Bounds::new(width as i32, height as i32)),
-        start_position,
-        end_position,
-    )
-}
+    let grid = Grid::new(data, Bounds::new(width as i32, height as i32));
 
-fn part_one(input: &String) -> AocResult<u32> {
-    let (grid, start_position, end_position) = parse(input);
+    let mut nodes = Vec::default();
+    let mut node_indices = FxHashMap::default();
 
-    let mut queue = VecDeque::from([(start_position, Direction::East, 0, 0)]);
-    let mut queued = FxHashMap::default();
-    queued.insert((start_position, Direction::East), 0);
-
-    while let Some((position, direction, moves, turns)) = queue.pop_front() {
-        if position == end_position {
-            continue;
-        }
-
-        for (neighbor, neighbor_direction) in position.neighbors() {
-            if neighbor_direction == -direction || !matches!(grid.get(neighbor), Some('.' | 'E')) {
+    for row in 1..grid.bounds.height - 1 {
+        for col in 1..grid.bounds.width - 1 {
+            let position = Position::new(col, row);
+            if matches!(grid.get(Position::new(col, row)), Some('#')) {
                 continue;
             }
 
+            let north = matches!(grid.get(Position::new(col, row - 1)), Some('.' | 'S' | 'E'));
+            let south = matches!(grid.get(Position::new(col, row + 1)), Some('.' | 'S' | 'E'));
+            let east = matches!(grid.get(Position::new(col + 1, row)), Some('.' | 'S' | 'E'));
+            let west = matches!(grid.get(Position::new(col - 1, row)), Some('.' | 'S' | 'E'));
+
+            if (north ^ south) || (east ^ west) || (north & south & east & west) {
+                node_indices.insert(position, nodes.len());
+                nodes.push(Node {
+                    neighbors: [None; 4],
+                });
+            }
+        }
+    }
+
+    for row in 1..grid.bounds.height - 1 {
+        let mut previous = None;
+        for col in 1..grid.bounds.width - 1 {
+            let position = Position::new(col, row);
+            if !node_indices.contains_key(&position) {
+                continue;
+            }
+
+            if let Some(previous_position) = previous {
+                let index = *node_indices.get(&position).unwrap();
+                let previous_index = *node_indices.get(&previous_position).unwrap();
+
+                let distance = position.distance(previous_position) as u32;
+
+                nodes.get_mut(index).unwrap().neighbors[Direction::West as usize] =
+                    Some((previous_index, distance));
+                nodes.get_mut(previous_index).unwrap().neighbors[Direction::East as usize] =
+                    Some((index, distance));
+            }
+
+            if matches!(grid.get(Position::new(col + 1, row)), Some('.' | 'S' | 'E')) {
+                previous = Some(position);
+            } else {
+                previous = None;
+            }
+        }
+    }
+
+    for col in 1..grid.bounds.width - 1 {
+        let mut previous = None;
+        for row in 1..grid.bounds.height - 1 {
+            let position = Position::new(col, row);
+            if !node_indices.contains_key(&position) {
+                continue;
+            }
+
+            if let Some(previous_position) = previous {
+                let index = *node_indices.get(&position).unwrap();
+                let previous_index = *node_indices.get(&previous_position).unwrap();
+
+                let distance = position.distance(previous_position) as u32;
+
+                nodes.get_mut(index).unwrap().neighbors[Direction::North as usize] =
+                    Some((previous_index, distance));
+                nodes.get_mut(previous_index).unwrap().neighbors[Direction::South as usize] =
+                    Some((index, distance));
+            }
+
+            if matches!(grid.get(Position::new(col, row + 1)), Some('.' | 'S' | 'E')) {
+                previous = Some(position);
+            } else {
+                previous = None;
+            }
+        }
+    }
+
+    let start_index = *node_indices.get(&start_position).unwrap();
+    let end_index = *node_indices.get(&end_position).unwrap();
+
+    (nodes, start_index, end_index)
+}
+
+fn part_one(input: &String) -> AocResult<u32> {
+    let (nodes, start_index, end_index) = parse(input);
+
+    let mut queue = VecDeque::from([(start_index, Direction::East, 0, 0)]);
+    let mut queued = FxHashMap::default();
+    queued.insert((start_index, Direction::East), 0);
+
+    while let Some((index, direction, moves, turns)) = queue.pop_front() {
+        if index == end_index {
+            continue;
+        }
+
+        for new_direction in Direction::directions() {
+            if new_direction == -direction {
+                continue;
+            }
+
+            let Some((new_index, distance)) = nodes[index].neighbors[new_direction as usize] else {
+                continue;
+            };
+
             let mut turns = turns;
-            if neighbor_direction != direction {
+            if new_direction != direction {
                 turns += 1;
             }
 
-            let value = turns * 1000 + moves + 1;
-            if let Some(previous) = queued.get_mut(&(neighbor, neighbor_direction)) {
+            let value = turns * 1000 + moves + distance;
+            if let Some(previous) = queued.get_mut(&(new_index, new_direction)) {
                 if value < *previous {
                     *previous = value;
-                    queue.push_back((neighbor, neighbor_direction, moves + 1, turns));
+                    queue.push_back((new_index, new_direction, moves + distance, turns));
                 }
             } else {
-                queued.insert((neighbor, neighbor_direction), value);
-                queue.push_back((neighbor, neighbor_direction, moves + 1, turns));
+                queued.insert((new_index, new_direction), value);
+                queue.push_back((new_index, new_direction, moves + distance, turns));
             }
         }
     }
 
     Ok(*Direction::directions()
         .into_iter()
-        .filter_map(|direction| queued.get(&(end_position, direction)))
+        .filter_map(|direction| queued.get(&(end_index, direction)))
         .min()
         .unwrap())
 }
 
-fn part_two(input: &String) -> AocResult<usize> {
-    let (grid, start_position, end_position) = parse(input);
+fn part_two(input: &String) -> AocResult<u32> {
+    let (nodes, start_index, end_index) = parse(input);
 
-    let mut queue = VecDeque::from([(start_position, Direction::East, 0, 0)]);
+    let mut queue = VecDeque::from([(start_index, Direction::East, 0, 0)]);
     let mut queued = FxHashMap::default();
-    queued.insert((start_position, Direction::East), (0, Vec::new()));
+    queued.insert((start_index, Direction::East), (0, Vec::new()));
 
-    while let Some((position, direction, moves, turns)) = queue.pop_front() {
-        if position == end_position {
+    while let Some((index, direction, moves, turns)) = queue.pop_front() {
+        if index == end_index {
             continue;
         }
 
-        for (neighbor, neighbor_direction) in position.neighbors() {
-            if neighbor_direction == -direction || !matches!(grid.get(neighbor), Some('.' | 'E')) {
+        for new_direction in Direction::directions() {
+            if new_direction == -direction {
                 continue;
             }
 
+            let Some((new_index, distance)) = nodes[index].neighbors[new_direction as usize] else {
+                continue;
+            };
+
+            let moves = moves + distance;
             let mut turns = turns;
-            if neighbor_direction != direction {
+            if new_direction != direction {
                 turns += 1;
             }
 
-            let value = turns * 1000 + moves + 1;
-            if let Some((previous, from)) = queued.get_mut(&(neighbor, neighbor_direction)) {
+            let value = turns * 1000 + moves;
+            if let Some((previous, from)) = queued.get_mut(&(new_index, new_direction)) {
                 if value < *previous {
                     *previous = value;
                     from.clear();
-                    from.push((position, direction));
-                    queue.push_back((neighbor, neighbor_direction, moves + 1, turns));
-                }
-                if value == *previous {
-                    from.push((position, direction));
+                    from.push((index, direction));
+                    queue.push_back((new_index, new_direction, moves, turns));
+                } else if value == *previous {
+                    from.push((index, direction));
                 }
             } else {
                 queued.insert(
-                    (neighbor, neighbor_direction),
-                    (value, Vec::from([(position, direction)])),
+                    (new_index, new_direction),
+                    (value, Vec::from([(index, direction)])),
                 );
-                queue.push_back((neighbor, neighbor_direction, moves + 1, turns));
+                queue.push_back((new_index, new_direction, moves, turns));
             }
         }
     }
 
     let mut queue = VecDeque::from([(
-        end_position,
+        end_index,
         Direction::directions()
             .into_iter()
             .min_by_key(|direction| {
                 queued
-                    .get(&(end_position, *direction))
+                    .get(&(end_index, *direction))
                     .map(|(value, _)| *value)
                     .unwrap_or(u32::MAX)
             })
@@ -146,25 +235,29 @@ fn part_two(input: &String) -> AocResult<usize> {
     )]);
 
     let mut counted = FxHashSet::default();
-    counted.insert(end_position);
-    while let Some((position, direction)) = queue.pop_front() {
-        let Some((value, from)) = queued.get(&(position, direction)) else {
+    while let Some((index, direction)) = queue.pop_front() {
+        let Some((value, from)) = queued.get(&(index, direction)) else {
             continue;
         };
 
-        for (from_position, from_direction) in from.into_iter().unique() {
-            let Some((from_value, _)) = queued.get(&(*from_position, *from_direction)) else {
+        for (from_index, from_direction) in from {
+            let Some((from_value, _)) = queued.get(&(*from_index, *from_direction)) else {
                 continue;
             };
 
             if from_value < value {
-                counted.insert(*from_position);
-                queue.push_back((*from_position, *from_direction));
+                counted.insert((index, -direction));
+                queue.push_back((*from_index, *from_direction));
             }
         }
     }
 
-    Ok(counted.len())
+    let mut count = counted.iter().map(|(index, _)| index).unique().count() as u32 + 1;
+    for (index, direction) in counted {
+        count += nodes[index].neighbors[direction as usize].unwrap().1 - 1;
+    }
+
+    Ok(count)
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash)]
@@ -205,13 +298,8 @@ impl Position {
         Self { x, y }
     }
 
-    fn neighbors(self) -> [(Position, Direction); 4] {
-        [
-            (self + Position::new(0, -1), Direction::North),
-            (self + Position::new(0, 1), Direction::South),
-            (self + Position::new(1, 0), Direction::East),
-            (self + Position::new(-1, 0), Direction::West),
-        ]
+    fn distance(self, other: Self) -> i32 {
+        (self.x - other.x).abs() + (self.y - other.y).abs()
     }
 }
 
@@ -302,4 +390,9 @@ impl Bounds {
             && position.x < self.width
             && position.y < self.height;
     }
+}
+
+#[derive(Debug)]
+struct Node {
+    neighbors: [Option<(usize, u32)>; 4],
 }
