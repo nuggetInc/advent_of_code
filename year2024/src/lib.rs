@@ -7,6 +7,7 @@ mod day12;
 mod day13;
 mod day14;
 mod day15;
+mod day16;
 mod day2;
 mod day3;
 mod day4;
@@ -26,6 +27,7 @@ pub fn year() -> Year {
     year.add_day(13, day13::day());
     year.add_day(14, day14::day());
     year.add_day(15, day15::day());
+    year.add_day(16, day16::day());
     year.add_day(2, day2::day());
     year.add_day(3, day3::day());
     year.add_day(4, day4::day());
